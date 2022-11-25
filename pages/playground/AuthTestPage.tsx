@@ -10,7 +10,7 @@ const AuthTestPage = () => {
 
       {session ? (
         <>
-          <p>Session: {JSON.stringify(session)}</p>
+          <p>{session.user?.email}</p>
           <button onClick={() => signOut()}>Sign out</button>
         </>
       ) : (
