@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/react';
 import { z } from 'zod';
 import prisma from '../../lib/prisma';
-import { apiItemSchema } from '../../lib/schemas';
+import { itemSchema } from '../../lib/schemas';
 
 export default async function handler(
   req: NextApiRequest,
@@ -19,13 +19,18 @@ export default async function handler(
     return res.status(401).end();
   }
 
-  const { title, price, description } = await apiItemSchema.parseAsync(req.body);
+  const { title, price, description, categoryId } = await itemSchema.parseAsync(req.body);
 
   const result = await prisma.item.create({
     data: {
       title,
       picePerDay: price,
       description,
+      category: {
+        connect: {
+          id: categoryId,
+        },
+      },
       owner: {
         connect: {
           email: session.user.email,

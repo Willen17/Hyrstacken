@@ -1,11 +1,27 @@
 import { useForm } from "react-hook-form";
-import { apiItemSchema } from "../lib/schemas";
+import { itemSchema } from "../lib/schemas";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from "zod";
+import { InferGetServerSidePropsType, NextPage } from "next";
+import prisma from "../lib/prisma";
 
-const CreateItem = () => {
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<z.infer<typeof apiItemSchema>>({
-    resolver: zodResolver(apiItemSchema)
+export async function getServerSideProps() {
+  const categories = await prisma.category.findMany({
+    select: {
+      id: true,
+      name: true,
+    }
+  });
+  return {
+    props: {
+      categories,
+    },
+  };
+};
+
+const CreateItem: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({categories}) => {
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<z.infer<typeof itemSchema>>({
+    resolver: zodResolver(itemSchema)
   });
   const onSubmit = handleSubmit((data) => {
     console.log(data);
@@ -33,6 +49,13 @@ const CreateItem = () => {
       <label className="label">
         Pris per dag
         <input type="number" {...register("price", {valueAsNumber: true})} className="input"/>
+      </label>
+      <label className="label">
+        <select {...register('categoryId')} name="" id="">{
+          categories.map((category) => {
+            return <option key={category.id} value={category.id}>{category.name}</option>
+          })
+        }</select>
       </label>
 
       {errors && <span>{errors.title?.message}</span>}
