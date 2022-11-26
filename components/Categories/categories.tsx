@@ -1,19 +1,34 @@
+import { useState } from "react";
+import Category from "./Category";
+
 const Categories = () => {
+  const categories = [
+    { category: "Allt" },
+    { category: "Verktyg" },
+    { category: "Sport" },
+    { category: "Hem" },
+    { category: "Friluftsliv" },
+    { category: "Övrigt" },
+    { category: "Sport" },
+  ];
+
   return (
-    <div className="inline-flex">
-      <ul className="inline-flex">
-        <li className="m-2">
-          <span className="border-solid border-2 rounded-lg p-1">cykel</span>
-        </li>
-        <li className="m-2">
-          <span className="border-solid border-2 rounded-lg p-1">cykel</span>
-        </li>
-        <li className="m-2">
-          <span className="border-solid border-2 rounded-lg p-1">cykel</span>
-        </li>
-        <li className="m-2">
-          <span className="border-solid border-2 rounded-lg p-1">cykel</span>
-        </li>
+    <div className="flex flex-col w-96 md:w-full">
+      <div className="flex items-center justify-center md:hidden ">
+        <p>Filter</p>
+        <div className="ml-3 bg-veryDarkBlue h-0.5 w-[70%] opacity-20"></div>
+      </div>
+      <ul className="flex-wrap flex flex-row ml-4">
+        {categories.map((category, i) => {
+          return (
+            <Category
+              key={i}
+              category={category.category}
+              // isCategoryActive={isCategoryActive}
+              // setIsCategoryActive={setIsCategoryActive}
+            />
+          );
+        })}
       </ul>
     </div>
   );

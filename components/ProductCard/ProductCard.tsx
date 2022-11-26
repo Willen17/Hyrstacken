@@ -11,16 +11,16 @@ const ProductCard = () => {
   let rating = "4.5 Betyg";
 
   return (
-    <div className="w-96 py-3 px-5 flex-col flex text-sm text-primary font-semibold relative">
+    <div className="w-[350px] md:mx-5 py-3 flex-col flex text-sm text-primary font-semibold relative self-center">
       <div className="flex bg-veryDarkBlue rounded-3xl px-2 py-4 w-24 h-7 absolute top-6 right-8 text-xs justify-center">
         <LocationIcon className="self-center" />
         <p className="pl-1 text-info font-normal self-center">{location}</p>
       </div>
       <div className="flex bg-veryDarkBlue rounded-3xl px-2 py-4 w-24 h-7 absolute top-6 left-8 text-xs justify-center">
         <RatingIcon className="self-center" />
-        <p className="pl-1 text-info font-normal self-center">{rating}</p>
+        <p className="pl-1 text-info font-semibold self-center">{rating}</p>
       </div>
-      <img className="w-96 h-80 rounded-md" alt="Produktkort" src={img}></img>
+      <img className="w-full h-80 rounded-md" alt="Produktkort" src={img}></img>
       <div className="pt-2 flex flex-row justify-between w-full">
         <h2>{title}</h2>
         <p>{price}</p>

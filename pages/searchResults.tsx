@@ -1,7 +1,9 @@
 import { useState } from "react";
-import Categories from "../components/Categories/categories";
+import Categories from "../components/Categories/Categories";
 import ProductCard from "../components/ProductCard/ProductCard";
 import SearchBar from "../components/SearchBar/searchBar";
+import FilterIcon from "../assets/filter.svg";
+import CloseIcon from "../assets/x.svg";
 
 const SearchResults = () => {
   const [isCategoriesOpen, setIsCategoriesOpen] = useState<boolean>(false);
@@ -11,26 +13,40 @@ const SearchResults = () => {
   }
 
   let amountOfProducts = 1094;
+
   return (
-    <div className="font-nunito bg-info flex items-center flex-col w-screen">
-      <div className="flex flex-row">
+    <div className="font-nunito bg-info flex flex-col items-center h-full w-full m-0 p-0">
+      <div className="flex flex-row items-center justify-center w-full md:justify-around">
         <SearchBar />
         <button
           onClick={openCategories}
-          className="w-5 h-5 mx-3 bg-veryDarkBlue self-center"
-        ></button>
+          className="md:hidden w-10 h-10 mx-2 flex justify-center items-center bg-lightRed rounded-md"
+        >
+          {!isCategoriesOpen ? (
+            <FilterIcon />
+          ) : (
+            <CloseIcon className="text-info" />
+          )}
+        </button>
+        <div className="max-md:hidden">
+          <Categories />
+        </div>
       </div>
       {isCategoriesOpen ? <Categories /> : false}
-
-      <div className="text-primary p-5">
+      <div className="flex flex-col text-primary p-5">
         <h2 className="text-3xl py-2">Hyr prylarna av andra</h2>
         <p>
           Visar<span className="p-1 font-bold">{amountOfProducts}</span>prylar
         </p>
       </div>
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
+      <div className="flex justify-center max-md:flex-col flex-wrap w-[90%]">
+        <ProductCard />
+        <ProductCard />
+        <ProductCard />
+        <ProductCard />
+        <ProductCard />
+        <ProductCard />
+      </div>
     </div>
   );
 };

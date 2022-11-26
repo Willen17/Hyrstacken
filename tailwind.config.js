@@ -13,6 +13,7 @@ module.exports = {
       softOrange: "#EAAC8B",
       white: "#FFFFFF",
       lightGray: "#EFEFEF",
+      lightRed: "#E37E7E",
     },
     extend: {
       fontFamily: {
@@ -32,7 +33,7 @@ module.exports = {
           info: "#EFEFEF",
           success: "#EAAC8B",
           warning: "#FBBD23",
-          error: "#F87272",
+          error: "#E37E7E",
         },
       },
     ],
