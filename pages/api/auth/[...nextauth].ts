@@ -6,11 +6,9 @@ import EmailProvider from "next-auth/providers/email";
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
   secret: process.env.NEXTAUTH_SECRET,
-  // pages: {
-  //   signIn: "/auth",
-  //   // signOut: "/auth/logout",
-  //   // error: "/auth/error", // Error code passed in query string as ?error=
-  // },
+  pages: {
+    signIn: "/auth",
+  },
   providers: [
     EmailProvider({
       server: process.env.EMAIL_SERVER,

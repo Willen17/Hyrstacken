@@ -19,13 +19,14 @@ export default async function handler(
     return res.status(401).end();
   }
 
-  const { title, price, description, categoryId } = await itemSchema.parseAsync(req.body);
+  const { title, price, description, imageUrl, categoryId } = await itemSchema.parseAsync(req.body);
 
   const result = await prisma.item.create({
     data: {
       title,
       picePerDay: price,
       description,
+      imageUrl,
       category: {
         connect: {
           id: categoryId,
