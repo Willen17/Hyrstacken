@@ -14,11 +14,11 @@ const Categories = () => {
 
   return (
     <div className="flex flex-col w-96 md:w-full">
-      <div className="flex items-center justify-center md:hidden ">
+      <div className="flex items-center justify-center lg:hidden ">
         <p>Filter</p>
         <div className="ml-3 bg-veryDarkBlue h-0.5 w-[70%] opacity-20"></div>
       </div>
-      <ul className="flex-wrap flex flex-row ml-4">
+      <ul className="flex-wrap flex justify-center flex-row ml-4">
         {categories.map((category, i) => {
           return (
             <Category

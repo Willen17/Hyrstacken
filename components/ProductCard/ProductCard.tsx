@@ -11,7 +11,7 @@ const ProductCard = () => {
   let rating = "4.5 Betyg";
 
   return (
-    <div className="w-[350px] md:mx-5 py-3 flex-col flex text-sm text-primary font-semibold relative self-center">
+    <div className="w-[350px] md:mx-5 py-3 justify-center items-center flex-col flex text-sm text-primary font-semibold relative self-center">
       <div className="flex bg-veryDarkBlue rounded-3xl px-2 py-4 w-24 h-7 absolute top-6 right-8 text-xs justify-center">
         <LocationIcon className="self-center" />
         <p className="pl-1 text-info font-normal self-center">{location}</p>
