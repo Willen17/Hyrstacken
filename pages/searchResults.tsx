@@ -16,17 +16,17 @@ export async function getServerSideProps() {
   });
   return {
     props: {
-      results: items,
+      items,
     },
   };
 }
 
-const SearchResults: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (props) => {
+const SearchResults: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({items}) => {
   return <div className="">
     <h1 className=" font-nunito text-4xl">Annonser</h1>
     <div className="flex flex-wrap gap-2">
     {
-      props.results.map((result) => {
+      items.map((result) => {
         return (
           <div key={result.id} className="card w-96 bg-lightGray shadow-xl">
             {/* {result.imageUrl && <Image src={result.imageUrl as string} alt={result.title} width={300} height={300} />} */}
