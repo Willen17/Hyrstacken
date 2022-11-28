@@ -45,10 +45,10 @@ const ItemForm = ({categories}: ItemFormProps) => {
       <textarea {...register("description")} className="textarea textarea-bordered max-h-28"/>
       </label>
       <label className="label">
-        <select {...register('categoryId')} name="" id="" className='select w-full max-w-xs'>
+        <select name="" id="" className='select w-full max-w-xs'>
           <option disabled selected> Välj kategori</option>
           {categories.map((category) => {
-            return <option key={category.id} value={category.id}>{category.name}</option>
+            return <option {...register("categoryId")} key={category.id} value={category.name}>{category.name}</option>
           })
         }</select>
       </label>
