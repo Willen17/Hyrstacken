@@ -90,7 +90,7 @@ const Product = () => {
             <div className="flex smallPhone:w-auto my-2 bg-veryDarkBlue items-center rounded-3xl px-3 py-1 ">
               <div className="avatar">
                 <div className="rounded-full w-5">
-                  <img src={item.creatorPic} />
+                  <img alt="Profile picture" src={item.creatorPic} />
                 </div>
               </div>
               <p className="pl-1">{item.creator}</p>
