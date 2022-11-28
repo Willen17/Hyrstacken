@@ -1,5 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
+import { useState } from "react";
 import LocationIcon from "../../assets/location.svg";
 import RatingIcon from "../../assets/rating.svg";
+import ImgNotFound from "../../assets/notfound.png";
 
 type ProductCardProps = {
   item: {
@@ -13,10 +16,8 @@ type ProductCardProps = {
 };
 
 const ProductCard = ({ item }: ProductCardProps) => {
-  const img =
-    "https://images.unsplash.com/photo-1602528190586-757f42d99447?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80";
+  const [imgSrc, setImgSrc] = useState(item.imageUrl);
 
-  let price = "3600kr/dag";
   let location = "Hisingen";
   let rating = "4.5 Betyg";
 
@@ -33,11 +34,16 @@ const ProductCard = ({ item }: ProductCardProps) => {
       <img
         className="w-full h-80 rounded-md"
         alt="Produktkort"
-        src={item.imageUrl ?? ""}
+        src={imgSrc ?? ""}
+        onError={() =>
+          setImgSrc(
+            "https://www.bigpharmacy.com.my/scripts/timthumb.php?src=https://www.bigpharmacy.com.my//site_media/img/4101d83b54c7b8d58639aba6fa6622e6.jpg&w=70&zc=1"
+          )
+        }
       ></img>
       <div className="pt-2 flex flex-row justify-between w-full">
         <h2>{item.title}</h2>
-        <p>{item.picePerDay}</p>
+        <p>{item.picePerDay}/dag</p>
       </div>
     </div>
   );
