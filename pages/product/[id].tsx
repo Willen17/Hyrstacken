@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import RatingIcon from "../../assets/productPage/rating.svg";
 import LocationIcon from "../../assets/productPage/location.svg";
 import CalendarIcon from "../../assets/productPage/calendar.svg";
