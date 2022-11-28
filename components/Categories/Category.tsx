@@ -1,7 +1,13 @@
 import { useState } from "react";
 import CloseIcon from "../../assets/x.svg";
 
-const Category = ({ category }: { category: string }) => {
+type categoriesProps = {
+  category: {
+    name: string;
+  };
+};
+
+const Category = ({ category }: categoriesProps) => {
   const [isCategoryActive, setIsCategoryActive] = useState(false);
 
   return (
@@ -17,7 +23,7 @@ const Category = ({ category }: { category: string }) => {
               : "bg-lightRed flex justify-between border-lightRed border-2 rounded-lg px-3 py-1 text-info"
           }
         >
-          {category}
+          <>{category}</>
           {isCategoryActive ? <CloseIcon className="text-info pl-1" /> : false}
         </span>
       </li>

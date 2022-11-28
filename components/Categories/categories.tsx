@@ -1,17 +1,14 @@
 import { useState } from "react";
 import Category from "./Category";
 
-const Categories = () => {
-  const categories = [
-    { category: "Allt" },
-    { category: "Verktyg" },
-    { category: "Sport" },
-    { category: "Hem" },
-    { category: "Friluftsliv" },
-    { category: "Övrigt" },
-    { category: "Sport" },
-  ];
+type categoriesProps = {
+  categories: {
+    id: string;
+    name: string;
+  }[];
+};
 
+const Categories = ({ categories }: categoriesProps) => {
   return (
     <div className="flex flex-col w-96 md:w-full">
       <div className="flex items-center justify-center lg:hidden ">
@@ -19,16 +16,9 @@ const Categories = () => {
         <div className="ml-3 bg-veryDarkBlue h-0.5 w-[70%] opacity-20"></div>
       </div>
       <ul className="flex-wrap flex justify-center flex-row ml-4">
-        {categories.map((category, i) => {
-          return (
-            <Category
-              key={i}
-              category={category.category}
-              // isCategoryActive={isCategoryActive}
-              // setIsCategoryActive={setIsCategoryActive}
-            />
-          );
-        })}
+        {categories.map((category) => (
+          <Category key={category.id} category={category.name} />
+        ))}
       </ul>
     </div>
   );

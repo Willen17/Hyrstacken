@@ -1,11 +1,21 @@
 import LocationIcon from "../../assets/location.svg";
 import RatingIcon from "../../assets/rating.svg";
 
-const ProductCard = () => {
+type ProductCardProps = {
+  item: {
+    title: string;
+    id: string;
+    description: string;
+    imageUrl: string | null;
+    picePerDay: number;
+    category: { name: string };
+  };
+};
+
+const ProductCard = ({ item }: ProductCardProps) => {
   const img =
     "https://images.unsplash.com/photo-1602528190586-757f42d99447?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80";
 
-  let title = "Spezialized MTB - Full carbon";
   let price = "3600kr/dag";
   let location = "Hisingen";
   let rating = "4.5 Betyg";
@@ -20,10 +30,14 @@ const ProductCard = () => {
         <RatingIcon className="self-center" />
         <p className="pl-1 text-info font-semibold self-center">{rating}</p>
       </div>
-      <img className="w-full h-80 rounded-md" alt="Produktkort" src={img}></img>
+      <img
+        className="w-full h-80 rounded-md"
+        alt="Produktkort"
+        src={item.imageUrl ?? ""}
+      ></img>
       <div className="pt-2 flex flex-row justify-between w-full">
-        <h2>{title}</h2>
-        <p>{price}</p>
+        <h2>{item.title}</h2>
+        <p>{item.picePerDay}</p>
       </div>
     </div>
   );
