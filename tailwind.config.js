@@ -16,7 +16,7 @@ module.exports = {
       lightGray: "#EFEFEF",
     },
     screens: {
-      smallPhone: "350px",
+      smallPhone: "370px",
       // => @media (min-width: 350px) { ... }
       tablet: "640px",
       // => @media (min-width: 640px) { ... }
