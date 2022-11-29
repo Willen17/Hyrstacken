@@ -15,6 +15,7 @@
     "@svgr/webpack": "^6.5.1",
     "@types/bcryptjs": "^2.4.2",
     "@types/lodash": "^4.14.190",
+    "@svgr/webpack": "^6.5.1",
     "@types/node": "18.11.9",
     "@types/nodemailer": "^6.4.6",
     "@types/react": "18.0.25",
