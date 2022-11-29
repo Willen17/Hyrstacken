@@ -48,7 +48,7 @@ const SearchResults: NextPage<
     let amountOfProducts = 1094;
     console.log(items);
     return (
-        <div className="font-nunito bg-info flex flex-col items-center justify-center w-full m-0 p-0">
+        <div className="font-nunito bg-info flex flex-col items-center w-full m-0 p-0 min-h-screen">
             <div className="flex flex-row items-center justify-center w-full lg:justify-around">
                 <SearchBar />
                 <button
