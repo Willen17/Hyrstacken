@@ -1,13 +1,13 @@
 import type { NextPage, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import prisma from "../lib/prisma";
-import Categories from "../components/Categories/Categories";
 import ProductCard from "../components/ProductCard/ProductCard";
 import SearchBar from "../components/SearchBar/searchBar";
 import FilterIcon from "../assets/filter.svg";
 import CloseIcon from "../assets/x.svg";
 import { useState } from "react";
 import { string } from "zod";
+import Categories from "../components/Categories/categories";
 
 export async function getServerSideProps() {
     const items = await prisma.item.findMany({
