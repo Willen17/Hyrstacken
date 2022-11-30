@@ -59,7 +59,7 @@ export default function Home() {
                         className="object-center object-cover w-full h-[100%] lg:h-[80%]"
                     />
                     <div className="absolute left-0 top-0 h-[80%] w-full bg-blackish bg-opacity-40" />
-                    <div className="w-[100%] max-w-[1620px] absolute p-[2rem] sm:p-[4rem]">
+                    <div className="w-[100%] max-w-[1620px] left-0 absolute p-[2rem] sm:p-[4rem]">
                         <div className="absolute top-[calc(25vh)]">
                             <p className="font-bold text-white font-cabin 2xl:text-3xl sm:text-xl">
                                 HYRA ÄR DET NYA ÄGA
