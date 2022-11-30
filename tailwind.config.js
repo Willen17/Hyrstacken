@@ -12,32 +12,16 @@ module.exports = {
             redishBrown: "#AA6975",
             softOrange: "#EAAC8B",
             softRed: "#E37E7E",
+            blackish: "#000000",
+            hoverRed: "#CC5E5E",
             white: "#FFFFFF",
             lightGray: "#EFEFEF",
             lightRed: "#E37E7E",
         },
         extend: {
-            screens: {
-                smallPhone: "370px",
-                // => @media (min-width: 350px) { ... }
-                tablet: "640px",
-                // => @media (min-width: 640px) { ... }
-
-                laptop: "1024px",
-                // => @media (min-width: 1024px) { ... }
-
-                desktop: "1280px",
-                // => @media (min-width: 1280px) { ... }
-            },
-            extend: {
-                fontFamily: {
-                    nunito: ['"Nunito"', "sans-serif"],
-                },
-            },
-        },
-        extend: {
             fontFamily: {
                 nunito: ['"Nunito"', "sans-serif"],
+                cabin: ['"Cabin Sketch"', "sans-serif"],
             },
         },
     },
