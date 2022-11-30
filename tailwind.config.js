@@ -13,10 +13,14 @@ module.exports = {
       softOrange: "#EAAC8B",
       white: "#FFFFFF",
       lightGray: "#EFEFEF",
+      softRed: "#E37E7E",
+      blackish: "#000000",
+      hoverRed: "#CC5E5E"
     },
     extend: {
       fontFamily: {
         nunito: ['"Nunito"', "sans-serif"],
+        cabin: ['"Cabin Sketch"', "sans-serif"]
       },
     },
   },
