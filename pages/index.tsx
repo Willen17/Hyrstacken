@@ -17,6 +17,7 @@ import PrimaryButton from "../components/PrimaryButton/PrimaryButton";
 import SecondaryButton from "../components/PrimaryButton/SecondaryButton";
 import { useEffect, useState } from "react";
 import Footer from "../components/Footer/Footer";
+import Link from "next/link";
 
 export default function Home() {
     function useWindowWidth() {
@@ -116,10 +117,12 @@ export default function Home() {
                                 </button>
                             </div>
                             <div className="w-[100%] lg:w-[auto]">
-                                <PrimaryButton styled={true}>
-                                    Sök product
-                                    <ArrowRightIcon />
-                                </PrimaryButton>
+                                <Link href={"/searchResults"}>
+                                    <PrimaryButton styled={true}>
+                                        Sök product
+                                        <ArrowRightIcon />
+                                    </PrimaryButton>
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -182,9 +185,11 @@ export default function Home() {
                             FRAMTID
                         </h1>
                         <div className="mt-[1.5rem]">
-                            <button className="py-[1rem] px-[2rem] hover:bg-veryDarkBlue hover:text-white hover:border-veryDarkBlue transition-[250ms] rounded-[8px] border-[1px] border-white text-white flex items-center gap-10 font-medium text-lg font-nunito">
-                                Visa alla produkter
-                            </button>
+                            <Link href={"/searchResults"}>
+                                <button className="py-[1rem] px-[2rem] hover:bg-veryDarkBlue hover:text-white hover:border-veryDarkBlue transition-[250ms] rounded-[8px] border-[1px] border-white text-white flex items-center gap-10 font-medium text-lg font-nunito">
+                                    Visa alla produkter
+                                </button>
+                            </Link>
                         </div>
                     </div>
                 </section>
