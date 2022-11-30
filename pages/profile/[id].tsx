@@ -45,12 +45,12 @@ const ProfilePage = () => {
       {/* List max 5 ads by user */}
       {/* small ad card, link to ad */}
       <div className="p-2 ">
-        <div className="flex h-24 gap-4 p-2 text-white rounded-md bg-veryDarkBlue">
-            <img className="object-contain rounded-md" src="https://images.unsplash.com/photo-1485965120184-e220f721d03e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" alt="" />
-          <div className="flex-grow ">
+        <div className="flex gap-4 p-2 text-white rounded-md bg-veryDarkBlue">
+            <img className="object-cover w-24 overflow-hidden rounded-lg aspect-square" src="https://images.unsplash.com/photo-1485965120184-e220f721d03e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" alt="" />
+          <div className="self-center flex-grow">
             <p>Spezialized MTB - Full Carbon</p>
             <p>3600kr/dag</p>
-            <p>
+            <div>
             <div className="flex items-center">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="6" cy="6" r="6" fill="#E37E7E"/>
@@ -58,7 +58,7 @@ const ProfilePage = () => {
               </svg>
               <span className="ml-1">Tillfälligt uthyrd</span>
             </div>
-            </p>
+            </div>
           </div>
           <svg className="self-center mr-7" width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" clip-rule="evenodd" d="M7.98483 8.83278L8.83301 7.9846L0.848405 -3.49018e-07L0.000230752 0.848173L7.13538 7.98333L0.000125224 15.1186L0.848299 15.9668L7.98356 8.8315L7.98483 8.83278Z" fill="#FAFAFA"/>
