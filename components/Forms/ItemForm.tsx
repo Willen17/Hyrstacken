@@ -84,7 +84,7 @@ const ItemForm = ({ categories }: ItemFormProps) => {
     ) : (
         <form
             onSubmit={onSubmit}
-            className="container flex flex-col w-full h-full p-5 justify-evenly tablet:p-10"
+            className="container flex flex-col w-full h-full p-5 justify-evenly min-[640px]:p-10"
         >
             <h1 className="text-2xl font-bold text-veryDarkBlue">
                 Skapa ny annons

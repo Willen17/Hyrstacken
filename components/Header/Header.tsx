@@ -7,6 +7,7 @@ import CloseIcon from "../../public/assets/close-icon.svg";
 
 import MenuIcon from "../../public/assets/menu-icon.svg";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 const Header = () => {
     const [menuIsOpen, setMenuIsOpen] = useState(false);
@@ -98,6 +99,11 @@ const Header = () => {
                             onClick={() => setMenuIsOpen(false)}
                         />
 
+                        {session && (
+                            <Link href={"/createItem"}>
+                                <PrimaryButton>Skapa annons</PrimaryButton>
+                            </Link>
+                        )}
                         <PrimaryButton
                             onClick={() => {
                                 session ? signOut() : signIn();
