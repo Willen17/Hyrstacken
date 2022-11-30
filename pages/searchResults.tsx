@@ -8,6 +8,7 @@ import CloseIcon from "../assets/x.svg";
 import { useState } from "react";
 import { string } from "zod";
 import Categories from "../components/Categories/categories";
+import Link from "next/link";
 
 export async function getServerSideProps() {
     const items = await prisma.item.findMany({
@@ -48,12 +49,12 @@ const SearchResults: NextPage<
     let amountOfProducts = 1094;
     console.log(items);
     return (
-        <div className="font-nunito bg-info flex flex-col items-center w-full m-0 p-0 min-h-screen">
+        <div className="flex flex-col items-center w-full min-h-screen p-0 m-0 font-nunito bg-info">
             <div className="flex flex-row items-center justify-center w-full lg:justify-around">
                 <SearchBar />
                 <button
                     onClick={openCategories}
-                    className="lg:hidden w-10 h-10 mx-2 flex justify-center items-center bg-lightRed rounded-md"
+                    className="flex items-center justify-center w-10 h-10 mx-2 rounded-md lg:hidden bg-lightRed"
                 >
                     {!isCategoriesOpen ? (
                         <FilterIcon />
@@ -68,16 +69,18 @@ const SearchResults: NextPage<
             </div>
             {isCategoriesOpen ? <Categories categories={categories} /> : false}
             <div className="flex items-baseline flex-col lg:w-[80%] lg:mt-5 lg:justify-between lg:flex-row text-primary py-2">
-                <h2 className="text-3xl py-2">Hyr prylarna av andra</h2>
+                <h2 className="py-2 text-3xl">Hyr prylarna av andra</h2>
                 <p>
                     Visar
                     <span className="p-1 font-bold">{amountOfProducts}</span>
                     prylar
                 </p>
             </div>
-            <div className="flex justify-center max-md:flex-col flex-wrap w-full">
+            <div className="flex flex-wrap justify-center w-full max-md:flex-col">
                 {items?.map((item) => (
-                    <ProductCard key={item.id} item={item} />
+                    <Link href={`/product/${item.id}`} key={item.id}>
+                        <ProductCard item={item} />                    
+                    </Link>
                 ))}
             </div>
         </div>
