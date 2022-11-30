@@ -1,11 +1,15 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
-import { Fragment } from 'react'
+import "../styles/globals.css";
+import type { AppProps } from "next/app";
+import "react-datepicker/dist/react-datepicker.css";
+import { SessionProvider } from "next-auth/react";
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppProps) {
   return (
-    <Fragment>
+    <SessionProvider session={session}>
       <Component {...pageProps} />
-    </Fragment>
-  )
+    </SessionProvider>
+  );
 }
