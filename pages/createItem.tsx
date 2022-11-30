@@ -27,7 +27,7 @@ const CreateItem: NextPage<
                 <meta name="description" content="Skapa en ny annons" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <div className="flex flex-col items-center justify-center w-full h-fit smallPhone:h-screen font-nunito">
+            <div className="container max-w-2xl mx-auto font-nunito">
                 <ItemForm categories={categories} />
             </div>
         </>

@@ -4,8 +4,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { itemSchema } from "../../lib/schemas";
 import CrossIcon from "../../assets/cross.svg";
-import router from "next/router";
 import Loader from "../Loader/Loader";
+import FormLabel from "../FormLabel/FormLabel";
+import router from "next/router";
 
 type ItemFormProps = {
     categories: {
@@ -16,12 +17,16 @@ type ItemFormProps = {
 
 const ItemForm = ({ categories }: ItemFormProps) => {
     const [loading, setLoading] = useState(false);
+    const [fetchError, setFetchError] = useState<boolean>(false);
+
     const {
         register,
         handleSubmit,
         watch,
+        resetField,
         formState: { errors },
     } = useForm<z.infer<typeof itemSchema>>({
+        mode: "onBlur",
         resolver: zodResolver(itemSchema),
     });
     const onSubmit = handleSubmit((data) => {
@@ -34,7 +39,11 @@ const ItemForm = ({ categories }: ItemFormProps) => {
             },
             body: JSON.stringify(data),
         })
-            .then((data) => console.log("response ", data))
+            .then(async (data) => {
+                setFetchError(data.ok === false);
+                const body = await data.json();
+                data.ok && router.push(`product/${body.id}`);
+            })
             .catch((e) => console.log(e))
             .finally(() => {
                 setLoading(false);
@@ -44,52 +53,90 @@ const ItemForm = ({ categories }: ItemFormProps) => {
     const allFilled = () => {
         let status = true;
         let { description, categoryId, title, price } = watch();
-        if (!description || !categoryId || !title || !price) status = false;
+
+        if (
+            !description ||
+            !categoryId ||
+            categoryId === "DEFAULT" ||
+            !title ||
+            !price
+        )
+            status = false;
         return status;
     };
 
     return loading ? (
-        <Loader />
+        <div className="grid h-screen place-content-center">
+            <Loader />
+        </div>
+    ) : fetchError ? (
+        <div className="flex flex-col items-center justify-center h-screen font-bold gap-y-5">
+            <p>Något gick tyvärr fel...</p>
+            <button
+                onClick={() => {
+                    setFetchError(false);
+                }}
+                className="text-white border-0 btn bg-softRed"
+            >
+                Försök igen
+            </button>
+        </div>
     ) : (
         <form
             onSubmit={onSubmit}
-            className="flex flex-col w-full h-full p-5 justify-evenly tablet:p-10 laptop:w-2/5 tablet:w-3/5 "
+            className="container flex flex-col w-full h-full p-5 justify-evenly tablet:p-10"
         >
             <h1 className="text-2xl font-bold text-veryDarkBlue">
                 Skapa ny annons
             </h1>
-            {allFilled() ? "true" : "false"}
             <div className="relative flex flex-col my-3 gap-y-3">
-                <label className="label-text">Titel</label>
+                <FormLabel required>Titel</FormLabel>
                 <input
                     placeholder="Skiftnyckel"
                     {...register("title", { required: "Måste ha en titel" })}
                     className="pl-2 pr-10 font-bold border-b-[1px] h-9 border-veryDarkBlue"
                 />
-                <CrossIcon className="absolute right-3  top-[65%] cursor-pointer" />
+                <CrossIcon
+                    onClick={() => resetField("title")}
+                    className="absolute right-3  top-[65%] cursor-pointer"
+                />
             </div>
-
+            {errors.title && (
+                <span className="text-error">{errors.title?.message}</span>
+            )}
             <div className="relative flex flex-col my-3 gap-y-3">
-                <label className="label-text">Bild-url</label>
+                <FormLabel>Bild-URL</FormLabel>
+
                 <input
                     {...register("imageUrl")}
                     placeholder="https://dinbild.se/din-bild"
                     className="pl-2 pr-10 font-bold border-b-[1px] h-9 border-veryDarkBlue"
                 />
-                <CrossIcon className="absolute right-3  top-[65%] cursor-pointer" />
+                <CrossIcon
+                    onClick={() => resetField("imageUrl")}
+                    className="absolute right-3  top-[65%] cursor-pointer"
+                />
             </div>
             <div className="relative flex flex-col my-3 gap-y-3">
-                <label className="label-text">Pris per dag</label>
+                <FormLabel required>Pris per dag</FormLabel>
+
                 <input
                     placeholder="10"
                     className="pl-2 pr-10 font-bold border-b-[1px] h-9 border-veryDarkBlue"
                     type="number"
                     {...register("price", { valueAsNumber: true })}
                 />
-                <CrossIcon className="absolute right-3  top-[65%] cursor-pointer" />
+                <CrossIcon
+                    onClick={() => resetField("price")}
+                    className="absolute right-3  top-[65%] cursor-pointer"
+                />
             </div>
+            {errors.price && (
+                <span className="text-error">{errors.price?.message}</span>
+            )}
             <div className="flex flex-col my-3 gap-y-3">
-                <label className="label-text">Beskrivning</label>
+                <FormLabel required>Beskrivning</FormLabel>
+
                 <textarea
                     {...register("description")}
                     className="textarea px-2 border-[1px] font-nunito text-[#000] border-veryDarkBlue leading-snug"
@@ -97,35 +144,39 @@ const ItemForm = ({ categories }: ItemFormProps) => {
                     rows={4}
                 />
             </div>
-            <label className="label-text">Kategori</label>
+            {errors.description && (
+                <span className="text-error">
+                    {errors.description?.message}
+                </span>
+            )}
+            <FormLabel required>Kategori</FormLabel>
+
             <select
-                name=""
                 id=""
                 className=" select  border-veryDarkBlue border-[1px]"
+                {...register("categoryId")}
+                defaultValue={"DEFAULT"}
             >
-                <option disabled selected>
+                <option disabled value="DEFAULT">
                     Välj kategori
                 </option>
                 {categories.map((category) => {
                     return (
-                        <option
-                            {...register("categoryId")}
-                            key={category.id}
-                            value={category.name}
-                        >
+                        <option key={category.id} value={category.id}>
                             {category.name}
                         </option>
                     );
                 })}
             </select>
-
-            {errors && <span>{errors.title?.message}</span>}
-            {errors && <span>{errors.description?.message}</span>}
-            {errors && <span>{errors.price?.message}</span>}
-
+            {errors.categoryId && (
+                <span className="text-error">{errors.categoryId?.message}</span>
+            )}
             <input
                 type="submit"
-                className="my-4 text-white border-0 btn bg-softRed"
+                value={allFilled() ? "Skicka" : "Fyll i obligatoriska fält"}
+                className={`my-4 text-white border-0 btn bg-softRed ${
+                    !allFilled() && "btn-disabled opacity-50"
+                }`}
             />
         </form>
     );
