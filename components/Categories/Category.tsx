@@ -8,7 +8,7 @@ const Category = ({ category }: any) => {
         <div>
             <li
                 onClick={() => setIsCategoryActive(!isCategoryActive)}
-                className="p-2"
+                className="p-2 cursor-pointer"
             >
                 <span
                     className={
@@ -19,7 +19,7 @@ const Category = ({ category }: any) => {
                 >
                     <>{category}</>
                     {isCategoryActive ? (
-                        <CloseIcon className="text-info pl-1" />
+                        <CloseIcon className="pl-1 text-info" />
                     ) : (
                         false
                     )}
