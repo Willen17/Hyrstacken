@@ -45,9 +45,6 @@ const ItemForm = ({ categories }: ItemFormProps) => {
                 data.ok && router.push(`product/${body.id}`);
             })
             .catch((e) => console.log(e))
-            .finally(() => {
-                setLoading(false);
-            });
     });
 
     const allFilled = () => {
