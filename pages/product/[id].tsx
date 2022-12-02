@@ -29,7 +29,7 @@ export const getStaticPaths = async () => {
 
 // get static props from api
 
-type Product = {
+export type Product = {
     id: number;
     title: string;
     description: string;
