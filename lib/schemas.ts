@@ -23,3 +23,11 @@ export const itemSchema = z.object({
     imageUrl: z.string().optional(),
     categoryId: z.string(),
 });
+
+export const profileSchema = z.object({
+    name: z
+        .string()
+        .min(2, { message: "Namn måste vara minst två bokstäver." })
+        .max(15),
+    image: z.string(),
+});
