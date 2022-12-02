@@ -13,7 +13,7 @@ const PrimaryButton = (props: Props) => {
             onClick={props.onClick}
         >
             <button
-                className={`py-[1rem] px-[2rem] flex justify-between items-center hover:bg-hoverRed transition-[250ms] rounded-[8px] bg-softRed text-white gap-10 font-medium text-lg font-nunito ${
+                className={`py-[1rem] px-[2rem] flex justify-between items-center hover:bg-hoverRed transition-[250ms] rounded-[8px] bg-softRed text-white gap-3 font-medium text-lg font-nunito ${
                     props.styled ? "w-[100%] lg:w-auto" : ""
                 }`}
             >

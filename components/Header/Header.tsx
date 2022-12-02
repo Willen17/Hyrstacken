@@ -6,8 +6,10 @@ import PrimaryButton from "../PrimaryButton/PrimaryButton";
 import CloseIcon from "../../public/assets/close-icon.svg";
 
 import MenuIcon from "../../public/assets/menu-icon.svg";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Link from "next/link";
+import SearchIcon from '../../public/assets/search-icon-white.svg'
+import AddIcon from '../../public/assets/add-icon.svg'
 
 const Header = () => {
     const [menuIsOpen, setMenuIsOpen] = useState(false);
@@ -99,26 +101,23 @@ const Header = () => {
                             onClick={() => setMenuIsOpen(false)}
                         />
 
-                        {session && (
-                            <Link href={"/createItem"}>
-                                <PrimaryButton>Skapa annons</PrimaryButton>
-                            </Link>
-                        )}
-                        <PrimaryButton
-                            onClick={() => {
-                                session ? signOut() : signIn();
-                            }}
-                        >
-                            {session ? "Logga ut" : "Registrera / Logga in"}
-                        </PrimaryButton>
+                        <Link href={"/searchResults"} className="flex items-center gap-3">
+                            <SearchIcon />
+                            <span className="text-xl text-white">Annonser</span>
+                        </Link>
 
-                        <button
-                            className={`text-lg md:text-white ${
-                                menuIsOpen ? "text-white" : "text-veryDarkBlue"
-                            }`}
-                        >
-                            Hjälp
-                        </button>
+                        { session ? (
+                            <Fragment>
+                                <Link href={"/createItem"}>
+                                    <PrimaryButton><AddIcon/>Skapa annons</PrimaryButton>
+                                </Link>
+                                <button className={`text-lg md:text-white ${menuIsOpen ? "text-white" : "text-veryDarkBlue"}`} onClick={() => signOut()}>Logga ut</button>
+                            </Fragment>
+                        ) : (
+                            <Fragment>
+                                <PrimaryButton onClick={() => signIn()}>Logga in</PrimaryButton>
+                            </Fragment>  
+                        )}
                     </div>
                 </div>
             </div>

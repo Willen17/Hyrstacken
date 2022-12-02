@@ -59,9 +59,9 @@ export default function Home() {
                         alt="heroImage"
                         className="object-center object-cover w-full h-[100%] lg:h-[80%]"
                     />
-                    <div className="absolute left-0 top-0 h-[80%] w-full bg-blackish bg-opacity-40" />
-                    <div className="w-[100%] max-w-[1620px] left-0 absolute p-[2rem] sm:p-[4rem]">
-                        <div className="absolute top-[calc(25vh)]">
+                    <div className="absolute flex justify-center items-center left-0 top-0 h-[80%] w-full bg-blackish bg-opacity-40" />
+                    <div className="w-[100%] max-w-[1620px] left-0 absolute p-[2rem] sm:p-[4rem] flex justify-start items-center">
+                        <div className="absolute top-[calc(25vh)] px-[0rem] min-[1460px]:px-[4rem]">
                             <p className="font-bold text-white font-cabin 2xl:text-3xl sm:text-xl">
                                 HYRA ÄR DET NYA ÄGA
                             </p>
