@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import Link from "next/link";
 import router from "next/router";
 import { GetStaticProps, NextPage } from "next/types";
 import { useEffect, useState } from "react";
@@ -137,17 +138,19 @@ const Product: NextPage<{ product: Product }> = ({ product }) => {
                             <RatingIcon className="self-center" />
                             <p className="pl-1">{item.score} betyg</p>
                         </div>
-                        <div className="flex items-center px-3 py-1 my-2 bg-veryDarkBlue rounded-3xl ">
-                            <div className="avatar">
-                                <div className="w-5 rounded-full">
-                                    <img
-                                        alt="Profile picture"
-                                        src={item.creatorPic}
-                                    />
+                        <Link href={`/profile/${product.ownerId}`}>
+                            <div className="flex items-center px-3 py-1 my-2 bg-veryDarkBlue rounded-3xl ">
+                                <div className="avatar">
+                                    <div className="w-5 rounded-full">
+                                        <img
+                                            alt="Profile picture"
+                                            src={item.creatorPic}
+                                        />
+                                    </div>
                                 </div>
+                                <p className="pl-1">{item.creator}</p>
                             </div>
-                            <p className="pl-1">{item.creator}</p>
-                        </div>
+                        </Link>
                     </div>
                     <div className="relative flex items-center justify-between pb-5">
                         <p className="mr-2 font-bold whitespace-nowrap">
