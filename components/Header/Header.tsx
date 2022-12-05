@@ -83,7 +83,7 @@ const Header = () => {
         <Fragment>
         {windowWidth && windowWidth > 800 ? (
         <header
-        className={`fixed top-0 left-0 right-0 z-10 duration-[750ms] 
+        className={`fixed z-50 top-0 left-0 right-0 duration-[750ms] 
         ${!visibleHeader ? "top-[-6rem]" : ""} 
         ${!visibleStart ? "bg-veryDarkBlue" : ""}
         ${router.pathname !== "/" ? 'bg-veryDarkBlue' : ''}
