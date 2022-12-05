@@ -86,42 +86,18 @@ const ProfilePage: NextPage<{ user: User; items: Product[] }> = ({
                 <meta name="description" content="Profilsida" />
             </Head>
 
-            <div className="container max-w-2xl mx-auto font-nunito">
-                <div
-                    className="p-2 mt-5 cursor-pointer"
-                    onClick={() => router.back()}
-                >
-                    <svg
-                        width="45"
-                        height="45"
-                        viewBox="0 0 45 45"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <rect
-                            x="0.5"
-                            y="0.5"
-                            width="44"
-                            height="44"
-                            rx="9.5"
-                            fill="#E37E7E"
-                            stroke="#E37E7E"
-                        />
-                        <path
-                            d="M21.3868 31.6445L13.3355 23.8227C13.2135 23.7042 13.1269 23.5758 13.0756 23.4376C13.0252 23.2993 13 23.1512 13 22.9932C13 22.8351 13.0252 22.687 13.0756 22.5487C13.1269 22.4105 13.2135 22.2821 13.3355 22.1636L21.3868 14.3419C21.6105 14.1246 21.8898 14.0108 22.2249 14.0005C22.5608 13.9911 22.8507 14.1048 23.0947 14.3419C23.3387 14.5591 23.466 14.8305 23.4765 15.156C23.4863 15.4823 23.3692 15.764 23.1252 16.001L17.1477 21.8081H30.7801C31.1257 21.8081 31.4157 21.9214 31.6499 22.1482C31.8833 22.3757 32 22.6574 32 22.9932C32 23.3289 31.8833 23.6102 31.6499 23.837C31.4157 24.0645 31.1257 24.1783 30.7801 24.1783H17.1477L23.1252 29.9853C23.3488 30.2026 23.466 30.4791 23.4765 30.8149C23.4863 31.1507 23.3692 31.4272 23.1252 31.6445C22.9016 31.8815 22.6169 32 22.2713 32C21.9256 32 21.6308 31.8815 21.3868 31.6445Z"
-                            fill="#FAFAFA"
-                        />
-                    </svg>
-                </div>
+            <div className="container max-w-2xl mx-auto font-nunito  mt-[110px]">
                 <div className="flex h-24 gap-4 p-2 mt-5">
-                    <img
-                        className="object-cover rounded-lg aspect-square "
-                        src={
-                            user.image ||
-                            "https://scontent.fgse1-1.fna.fbcdn.net/v/t1.18169-9/10468068_754035597969135_5397732734853413913_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=e6HWbmiHtI8AX_U28Zu&_nc_ht=scontent.fgse1-1.fna&oh=00_AfACPcRIoTp4kwKp2K9HDImCpu3bXa01cylf7HgpIdBZyQ&oe=63AD9524"
-                        }
-                        alt=""
-                    />
+                    {user.image && user.image !== null ? (
+                        <img src={user.image} alt="user" />
+                    ) : (
+                        <img
+                            src={
+                                "https://scontent.fgse1-1.fna.fbcdn.net/v/t1.18169-9/10468068_754035597969135_5397732734853413913_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=e6HWbmiHtI8AX_U28Zu&_nc_ht=scontent.fgse1-1.fna&oh=00_AfACPcRIoTp4kwKp2K9HDImCpu3bXa01cylf7HgpIdBZyQ&oe=63AD9524"
+                            }
+                            alt="user"
+                        />
+                    )}
                     <div className="self-center flex-1">
                         <h1 className="text-2xl font-extrabold">
                             {user.name || user.email}

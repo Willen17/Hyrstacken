@@ -48,7 +48,7 @@ const SearchResults: NextPage<
 
     let amountOfProducts = 1094;
     return (
-        <div className="flex flex-col items-center min-h-screen p-0 m-0 mx-auto max-w-7xl font-nunito">
+        <div className="flex flex-col items-center min-h-screen p-0 m-0 mx-auto max-w-7xl mt-[100px] max-[800px]:mt-[50px] font-nunito">
             <div className="flex flex-row items-center justify-center w-full lg:justify-around">
                 <SearchBar />
                 <button
@@ -78,7 +78,7 @@ const SearchResults: NextPage<
             <div className="flex flex-wrap justify-center gap-2">
                 {items?.map((item) => (
                     <Link href={`/product/${item.id}`} key={item.id}>
-                        <ProductCard item={item} />                    
+                        <ProductCard item={item} />
                     </Link>
                 ))}
             </div>

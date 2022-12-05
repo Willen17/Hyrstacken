@@ -6,7 +6,7 @@ import heroImg from "../public/assets/hero-img.jpg";
 import TrainImage from "../public/assets/train-2.png";
 import TrainMob from "../public/assets/train-mob.png";
 import PussleImg from "../public/assets/pussle-img.png";
-import LineIcon from "../public/assets/line-desk.png";
+import Logo from '../public/assets/logo.png';
 
 import FilterIcon from "../public/assets/filter-icon.svg";
 import ArrowRightIcon from "../public/assets/arrow-right.svg";
@@ -51,17 +51,20 @@ export default function Home() {
                 />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <Header />
             <main className="overflow-x-hidden">
                 <section className="flex justify-center w-screen h-screen">
+                    {windowWidth && windowWidth < 800
+                    ? <Image src={Logo} alt="logotype" className="absolute top-[2rem] left-[2rem]"/>
+                    : ''
+                    }
                     <Image
                         src={heroImg}
                         alt="heroImage"
                         className="object-center object-cover w-full h-[100%] lg:h-[80%]"
                     />
-                    <div className="absolute left-0 top-0 h-[80%] w-full bg-blackish bg-opacity-40" />
-                    <div className="w-[100%] max-w-[1620px] left-0 absolute p-[2rem] sm:p-[4rem]">
-                        <div className="absolute top-[calc(25vh)]">
+                    <div className="absolute flex justify-center items-center left-0 top-0 h-[100%] lg:h-[80%] w-full bg-blackish bg-opacity-40" />
+                    <div className="w-[100%] max-w-[1620px] left-0 absolute p-[2rem] sm:p-[4rem] flex justify-start items-center">
+                        <div className="absolute top-[calc(22vh)] sm:top-[calc(25vh)] px-[0rem] min-[1460px]:px-[4rem]">
                             <p className="font-bold text-white font-cabin 2xl:text-3xl sm:text-xl">
                                 HYRA ÄR DET NYA ÄGA
                             </p>
@@ -91,9 +94,9 @@ export default function Home() {
                             </h1>
                         </div>
                     </div>
-                    <div className="absolute p-[2rem] sm:p-[4rem] left-1/2 top-[77%] md:top-[80%] translate-y-[-50%] translate-x-[-50%] w-[100%] flex justify-center">
+                    <div className="absolute p-[1rem] sm:p-[4rem] left-1/2 top-[67%] min-[400px]:top-[70%] min-[800px]:top-[80%] translate-y-[-50%] translate-x-[-50%] w-[100%] flex justify-center">
                         <div className="w-[100%] max-w-[35rem] shadow-2xl bg-veryDarkBlue rounded-[8px] lg:gap-0 gap-5 flex flex-col items-center justify-between py-[1rem] px-[1rem] sm:py-[2rem] sm:px-[2rem] lg:px-[4rem] lg:flex-row lg:max-w-[75rem]">
-                            <div className="flex flex-col items-center gap-[1rem] min-[400px]:flex-row lg:w-auto w-[100%]">
+                            <div className="flex flex-col items-center gap-[1rem] min-[375px]:flex-row lg:w-auto w-[100%]">
                                 <label className="relative w-[100%] flex">
                                     <div className="absolute right-[1.5rem] top-[50%] translate-y-[-50%]">
                                         <SearchIcon />
@@ -106,10 +109,10 @@ export default function Home() {
                                 </label>
                                 <button
                                     type="button"
-                                    className="border-[1px] py-[1rem] px-[2rem] min-[400px]:p-[1rem] rounded-[8px] border-white w-[100%] flex items-center justify-between min-[400px]:w-[auto]"
+                                    className="border-[1px] py-[1rem] px-[2rem] min-[375px]:p-[1rem] rounded-[8px] border-white w-[100%] flex items-center justify-between min-[375px]:w-[auto]"
                                 >
                                     <FilterIcon />
-                                    {windowWidth && windowWidth < 400 ? (
+                                    {windowWidth && windowWidth < 375 ? (
                                         <ArrowRightIcon className="rotate-[90deg]" />
                                     ) : (
                                         ""
@@ -220,9 +223,6 @@ export default function Home() {
                     </div>
                 </section>
             </main>
-            <footer>
-                <Footer />
-            </footer>
         </div>
     );
 }

@@ -95,16 +95,10 @@ const Product: NextPage<{ product: Product }> = ({ product }) => {
     };
 
     return (
-        <div className="w-full h-screen overflow-hidden font-nunito min-[900px]:flex min-[900px]:items-center">
-            <div className="h-1/2  bg-white min-[900px]:h-full min-[900px]:w-[60%] min-[900px]:flex min-[900px]:justify-center min-[900px]:items-center">
-                <div
-                    onClick={() => router.back()}
-                    className="cursor-pointer absolute bg-softRed h-10 w-10 rounded-lg flex items-center justify-center top-[1.2rem] left-[1.2rem]"
-                >
-                    <ArrowBackIcon className="text-white" />
-                </div>
+        <div className="w-full h-screen overflow-hidden font-nunito min-[800px]:flex min-[800px]:items-center min-[800px]:mt-[92px] ">
+            <div className="h-1/2  bg-white min-[800px]:h-full min-[800px]:w-[60%] min-[800px]:flex min-[800px]:justify-center min-[800px]:items-center">
                 {orderSubmitted ? (
-                    <div className="flex flex-col items-center justify-center w-full h-full bg-veryDarkBlue min-[900px]:w-5/6 min-[900px]:h-5/6 min-[900px]:rounded-2xl">
+                    <div className="flex flex-col items-center justify-center w-full h-full bg-veryDarkBlue min-[800px]:w-5/6 min-[800px]:h-5/6 min-[800px]:rounded-2xl">
                         <h1 className="text-2xl font-bold text-white">
                             Förfrågan skickad!
                         </h1>
@@ -120,11 +114,11 @@ const Product: NextPage<{ product: Product }> = ({ product }) => {
                     <img
                         src={product.imageUrl || item.img}
                         alt={product.title}
-                        className="object-cover object-center w-full h-full min-[900px]:w-5/6 min-[900px]:h-5/6 min-[900px]:rounded-2xl "
+                        className="object-cover object-center w-full h-full min-[800px]:w-5/6 min-[800px]:h-5/6 min-[800px]:rounded-2xl "
                     />
                 )}
             </div>
-            <div className="w-full h-fit rounded-t-2xl  absolute top-[45%] bg-white overflow-hidden min-[900px]:relative min-[900px]:rounded-2xl  min-[900px]:h-5/6 min-[900px]:w-1/3 min-[900px]:top-0 min-[900px]:border-veryDarkBlue/[50%] min-[900px]:border-[1px]">
+            <div className="w-full h-fit rounded-t-2xl  absolute top-[45%] bg-white overflow-hidden min-[800px]:relative min-[800px]:rounded-2xl  min-[800px]:h-5/6 min-[800px]:w-1/3 min-[800px]:top-0 min-[800px]:border-veryDarkBlue/[50%] min-[800px]:border-[1px]">
                 <div className="flex flex-col h-full p-8 overflow-hidden justify-evenly">
                     <h1 className="text-2xl font-bold">{product.title}</h1>
                     <p className="font-bold">
