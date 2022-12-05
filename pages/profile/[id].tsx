@@ -114,14 +114,11 @@ const ProfilePage: NextPage<{ user: User; items: Product[] }> = ({
                     </svg>
                 </div>
                 <div className="flex h-24 gap-4 p-2 mt-5">
-                    <img
-                        className="object-cover rounded-lg aspect-square "
-                        src={
-                            user.image ||
-                            "https://scontent.fgse1-1.fna.fbcdn.net/v/t1.18169-9/10468068_754035597969135_5397732734853413913_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=e6HWbmiHtI8AX_U28Zu&_nc_ht=scontent.fgse1-1.fna&oh=00_AfACPcRIoTp4kwKp2K9HDImCpu3bXa01cylf7HgpIdBZyQ&oe=63AD9524"
-                        }
-                        alt=""
-                    />
+                    { user.image && user.image !== null ?
+                        <img src={user.image} alt="user" />
+                    :
+                        <img src={"https://scontent.fgse1-1.fna.fbcdn.net/v/t1.18169-9/10468068_754035597969135_5397732734853413913_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=e6HWbmiHtI8AX_U28Zu&_nc_ht=scontent.fgse1-1.fna&oh=00_AfACPcRIoTp4kwKp2K9HDImCpu3bXa01cylf7HgpIdBZyQ&oe=63AD9524"} alt="user" />
+                    }
                     <div className="self-center flex-1">
                         <h1 className="text-2xl font-extrabold">
                             {user.name || user.email}

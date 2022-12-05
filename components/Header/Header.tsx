@@ -1,10 +1,8 @@
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Logo from "../../public/assets/logo.png";
 import Image from "next/image";
 
 import PrimaryButton from "../PrimaryButton/PrimaryButton";
-
-import MenuIcon from "../../public/assets/menu-icon.svg";
 import { Fragment, useEffect, useState } from "react";
 import { useRouter } from 'next/router';
 import Link from "next/link";
@@ -13,10 +11,10 @@ import AddIcon from '../../public/assets/add-icon.svg'
 import NotisIcon from '../../public/assets/notis-icon.svg'
 import ProfileIcon from '../../public/assets/profile-icon.svg'
 import HomeIcon from '../../public/assets/home-icon.svg'
+import getUserHandler from "../../pages/api/getUser"
 
 const Header = () => {
     const router = useRouter();
-    const [menuIsOpen, setMenuIsOpen] = useState(false);
     const [windowWidth, setWindowWidth] = useState(() => {
         if(typeof window !== 'undefined') {
             return window.innerWidth
@@ -26,10 +24,6 @@ const Header = () => {
     useEffect(() => {
         const windowWidth = () => {
             setWindowWidth(window.innerWidth)
-
-            if (window.innerWidth > 768) {
-                setMenuIsOpen(false);
-            }
         };
         window.addEventListener("resize", windowWidth);
 
@@ -76,8 +70,7 @@ const Header = () => {
     const visibleStart = useVisibleStart();
     const visibleHeader = useWindowOffset();
 
-    const { data: session, status } = useSession();
-    console.log(session);
+    const { data: session } = useSession();
 
     return (
         <Fragment>
@@ -94,43 +87,36 @@ const Header = () => {
                     <Link href={'/'}>
                         <Image src={Logo} alt="Logotype" />
                     </Link>
-                    <div
-                        onClick={() => setMenuIsOpen(false)}
-                        className={`w-screen h-screen top-0 left-0 bg-blackish bg-opacity-60 ${
-                            menuIsOpen ? "absolute block" : "hidden"
-                        }`}
-                    />
-                        { session ? (
-                            <Fragment>
-                                <div className="gap-10 flex-row items-center bg-transparent h-fit top-0 w-fit flex transition-all duration-[450ms]">
-                                    <Link href={"/createItem"}>
-                                        <PrimaryButton><AddIcon/>Ny annons</PrimaryButton>
-                                    </Link>
-                                    <Link href={"/searchResults"} className={router.pathname == "/searchResults" ? 'flex flex-col items-center gap-2 relative before:absolute before:bottom-[calc(100%+1.33rem)] before:w-[3rem] before:h-[2px] before:bg-white before:block' : 'text-white text-xs flex flex-col items-center gap-2'}>
-                                        <SearchIcon />
-                                        <span className="text-xs text-white">Annonser</span>
-                                    </Link>
-                                    <Link href={'/#'} className={router.pathname == "/bla" ? 'flex flex-col items-center gap-2 relative before:absolute before:bottom-[calc(100%+1.33rem)] before:w-[3rem] before:h-[2px] before:bg-white before:block' : 'text-white text-xs flex flex-col items-center gap-2'}>
-                                        <NotisIcon />
-                                        <span className="text-xs text-white">Notiser</span>
-                                    </Link>
-                                    <Link href={'/#'} className={router.pathname == "/bla" ? 'flex flex-col items-center gap-2 relative before:absolute before:bottom-[calc(100%+1.33rem)] before:w-[3rem] before:h-[2px] before:bg-white before:block' : 'text-white text-xs flex flex-col items-center gap-2'}>
-                                        <ProfileIcon />
-                                        <span className="text-xs text-white">Profil</span>
-                                    </Link>
-                                </div>
-                            </Fragment>
-                        ) : (
-                            
-                            <Fragment>
-                                <PrimaryButton onClick={() => signIn()}>Logga in</PrimaryButton>
-                            </Fragment>  
-                        )}
+                    { session ? (
+                        <Fragment>
+                            <div className="gap-10 flex-row items-center bg-transparent h-fit top-0 w-fit flex transition-all duration-[450ms]">
+                                <Link href={"/createItem"}>
+                                    <PrimaryButton><AddIcon/>Ny annons</PrimaryButton>
+                                </Link>
+                                <Link href={"/searchResults"} className={router.pathname == "/searchResults" ? 'flex flex-col items-center gap-2 relative before:absolute before:bottom-[calc(100%+1.33rem)] before:w-[3rem] before:h-[2px] before:bg-white before:block' : 'text-white text-xs flex flex-col items-center gap-2'}>
+                                    <SearchIcon />
+                                    <span className="text-xs text-white">Annonser</span>
+                                </Link>
+                                <Link href={'/#'} className={router.pathname == "/bla" ? 'flex flex-col items-center gap-2 relative before:absolute before:bottom-[calc(100%+1.33rem)] before:w-[3rem] before:h-[2px] before:bg-white before:block' : 'text-white text-xs flex flex-col items-center gap-2'}>
+                                    <NotisIcon />
+                                    <span className="text-xs text-white">Notiser</span>
+                                </Link>
+                                <Link href={`/profile/${session.user?.email}`} className={router.pathname == "/bla" ? 'flex flex-col items-center gap-2 relative before:absolute before:bottom-[calc(100%+1.33rem)] before:w-[3rem] before:h-[2px] before:bg-white before:block' : 'text-white text-xs flex flex-col items-center gap-2'}>
+                                    <ProfileIcon />
+                                    <span className="text-xs text-white">Profil</span>
+                                </Link>
+                            </div>
+                        </Fragment>
+                    ) : (                          
+                        <Fragment>
+                            <PrimaryButton onClick={() => signIn()}>Logga in</PrimaryButton>
+                        </Fragment>  
+                    )}
                 </div>
             </div>
         </header>
        ) : (
-           <Fragment>
+        <Fragment>
         { session ? (
             <nav className="fixed bottom-0 bg-veryDarkBlue w-screen flex items-center z-10 justify-center py-[1rem]">
                 <ul className="flex items-center gap-7 min-[500px]:gap-10">
