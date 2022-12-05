@@ -11,6 +11,7 @@ import Categories from "../components/Categories/categories";
 import Link from "next/link";
 
 export async function getServerSideProps() {
+    const itemCount = await prisma.item.count();
     const items = await prisma.item.findMany({
         select: {
             id: true,
@@ -32,6 +33,7 @@ export async function getServerSideProps() {
     return {
         props: {
             items,
+            itemCount,
             categories,
         },
     };
@@ -39,14 +41,13 @@ export async function getServerSideProps() {
 
 const SearchResults: NextPage<
     InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ items, categories }) => {
+> = ({ items, categories, itemCount }) => {
     const [isCategoriesOpen, setIsCategoriesOpen] = useState<boolean>(false);
 
     function openCategories() {
         setIsCategoriesOpen(!isCategoriesOpen);
     }
 
-    let amountOfProducts = 1094;
     return (
         <div className="flex flex-col items-center min-h-screen p-0 m-0 mx-auto max-w-7xl mt-[100px] max-[800px]:mt-[50px] font-nunito">
             <div className="flex flex-row items-center justify-center w-full lg:justify-around">
@@ -71,7 +72,7 @@ const SearchResults: NextPage<
                 <h2 className="py-2 text-3xl">Hyr prylarna av andra</h2>
                 <p>
                     Visar
-                    <span className="p-1 font-bold">{amountOfProducts}</span>
+                    <span className="p-1 font-bold">{itemCount}</span>
                     prylar
                 </p>
             </div>
