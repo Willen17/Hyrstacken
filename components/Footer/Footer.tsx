@@ -110,7 +110,7 @@ const Footer = () => {
                 alt="train and mountain"
                 className="absolute top-0 left-0 object-cover object-top h-[100%]"
             />
-            <div className="absolute w-screen max-w-[1234px] top-[56%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-10 flex flex-col gap-[4rem] px-[2rem] md:px-[4rem]">
+            <div className="absolute w-full max-w-[1234px] top-[56%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-10 flex flex-col gap-[4rem] px-[2rem] md:px-[4rem]">
                 <Image src={Logo} alt="logotype" />
                 <div className="flex justify-between flex-col gap-[3rem] lg:flex-row">
                     <ul className="text-white flex flex-col gap-[2rem] lg:flex-row lg:gap-[5rem]">
