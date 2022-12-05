@@ -1,10 +1,8 @@
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Logo from "../../public/assets/logo.png";
 import Image from "next/image";
 
 import PrimaryButton from "../PrimaryButton/PrimaryButton";
-
-import MenuIcon from "../../public/assets/menu-icon.svg";
 import { Fragment, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
