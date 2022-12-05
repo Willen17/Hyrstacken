@@ -17,6 +17,21 @@ import HomeIcon from "../../public/assets/home-icon.svg";
 const Header = () => {
     const router = useRouter();
     const [menuIsOpen, setMenuIsOpen] = useState(false);
+    const [id, setId] = useState<string>();
+
+    useEffect(() => {
+        fetch("/api/getSessionUser", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then(async (data) => {
+                const user = await data.json();
+                setId(user.id);
+            })
+            .catch((e) => console.log(e));
+    }, []);
 
     function useWindowOffset() {
         const [position, setPosition] = useState<number>(0);
@@ -116,7 +131,7 @@ const Header = () => {
                                         </span>
                                     </Link>
                                     <Link
-                                        href={"/#"}
+                                        href={`/profile/${id}`}
                                         className={
                                             router.pathname == "/bla"
                                                 ? "flex flex-col items-center gap-2 relative before:absolute before:bottom-[calc(100%+1.33rem)] before:w-[3rem] before:h-[2px] before:bg-white before:block"
@@ -221,7 +236,7 @@ const Header = () => {
                                 </li>
                             </Link>
                             <Link
-                                href={"/#"}
+                                href={`/profile/${id}`}
                                 className={
                                     router.pathname == "/bla"
                                         ? "flex flex-col items-center gap-2 relative before:absolute before:bottom-[calc(0%-1.1rem)] before:w-[2rem] before:h-[2px] before:bg-white before:block"
@@ -238,7 +253,7 @@ const Header = () => {
                         </ul>
                     </nav>
                 ) : (
-                    <nav className="fixed bottom-0 bg-veryDarkBlue w-screen flex items-center z-10 justify-center py-[1rem]">
+                    <nav className="fixed bottom-0 bg-veryDarkBlue w-screen flex items-center z-10 justify-center py-[1rem] min-[800px]:hidden">
                         <ul className="flex justify-center items-center gap-7 min-[500px]:gap-10 w-screen px-[2rem]">
                             <Link
                                 href={"/"}
