@@ -47,27 +47,6 @@ const SearchResults: NextPage<
 > = ({ items, categories }) => {
     const [isCategoriesOpen, setIsCategoriesOpen] = useState<boolean>(false);
 
-    function useWindowWidth() {
-        const [windowWidth, setWindowWidth] = useState<number | undefined>(undefined)
-        useEffect(() => {
-            const handleResize = () => {
-                setWindowWidth(window.innerWidth)
-                if(window.innerWidth >= 1360) {
-                    setIsCategoriesOpen(true)
-                }
-            };
-
-            window.addEventListener("resize", handleResize);
-
-            handleResize();
-
-            return () => window.removeEventListener("resize", handleResize);
-        });
-        return windowWidth
-    }
-
-    const windowWidth = useWindowWidth()
-
     function openCategories() {
         setIsCategoriesOpen(!isCategoriesOpen);
     }
