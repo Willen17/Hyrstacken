@@ -130,6 +130,22 @@ const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
         setOrderSubmitted(true);
     };
 
+    const deleteItem = async (itemId: string) => {
+        console.log(itemId);
+        fetch(`/api/items/delete/${itemId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then(async (data) => {
+                const deletedItem = await data.json();
+                console.log("Deleted item: ", deletedItem.title);
+                router.push(`/profile/${id}`);
+            })
+            .catch((e) => console.log(e));
+    };
+
     return (
         <div className="w-full h-screen overflow-hidden font-nunito min-[800px]:flex min-[800px]:items-center min-[800px]:mt-[92px] ">
             <div className="h-1/2  bg-white min-[800px]:h-full min-[800px]:w-[60%] min-[800px]:flex min-[800px]:justify-center min-[800px]:items-center">
@@ -204,7 +220,11 @@ const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                             <div className="justify-center pt-5 card-actions">
                                 <button
                                     className={`btn rounded-full font-bold tracking-widest w-full bg-transparent border-softRed border-2 text-softRed `}
-                                    onClick={() => submitOrder()}
+                                    onClick={() =>
+                                        router.push(
+                                            `/editItem/${product.owner.id}`
+                                        )
+                                    }
                                 >
                                     Redigera annons
                                 </button>
@@ -212,7 +232,7 @@ const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                             <div className="justify-center pt-5 card-actions">
                                 <button
                                     className={`btn text-white rounded-full font-bold tracking-widest w-full border-0 bg-softRed `}
-                                    onClick={() => submitOrder()}
+                                    onClick={() => deleteItem(product.id)}
                                 >
                                     Ta bort annons
                                 </button>
