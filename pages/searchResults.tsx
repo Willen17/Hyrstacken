@@ -75,12 +75,12 @@ const SearchResults: NextPage<
     let amountOfProducts = 1094;
     return (
         <Fragment>
-        <Image src={bg} alt="background" className="absolute top-[-1.5rem] min-[800px]:top-0 left-0 object-cover h-[45vh] max-[800px]:h-[300px] max-[640px]:h-[250px]"/>
-        <div className="absolute top-[23vh] left-[50%] max-[1350px]:justify-center max-[800px]:top-[6rem] max-[640px]:top-[3rem] max-[640px]:pl-[2rem] max-[640px]:max-w-[20rem] max-[640px]:justify-start max-[640px]:left-[9rem] translate-x-[-50%] w-[100%] max-w-[1200px] flex items-center justify-start">
-            <h1 className="text-7xl max-[1350px]:text-6xl max-[800px]:text-5xl font-bold text-white font-cabin">Sök tusentals prylar</h1>
+        <Image src={bg} alt="background" className={`absolute top-[-1.5rem] min-[800px]:top-0 left-0 object-cover min-[1050px]:h-[425px] min-[460px]:h-[350px] h-[300px]`}/>
+        <div className="absolute left-[50%] max-[1350px]:justify-center top-[200px] max-[1050px]:top-[150px] max-[800px]:top-[6rem] max-[460px]:top-[3rem] max-[640px]:pl-[2rem] max-[400px]:max-w-[20rem] max-[640px]:max-w-[25rem] max-[640px]:justify-start max-[400px]:left-[9rem] max-[640px]:left-[12rem] translate-x-[-50%] w-[100%] max-w-[1200px] flex items-center justify-start">
+            <h1 className="text-7xl max-[1350px]:text-6xl max-[800px]:text-6xl max-[400px]:text-5xl font-bold text-white font-cabin">Sök tusentals prylar</h1>
         </div>
         <div className="flex max-[610px]:px-[1rem] lg:px-[4rem] flex-col items-center min-h-screen p-0 m-0 mx-auto max-w-[1360px] mt-[100px] max-[800px]:mt-[50px] font-nunito">
-            <div className="absolute p-[1rem] sm:p-[4rem] max-[1360px]:max-w-[64rem] max-[1050px]:max-w-[45rem] max-[800px]:top-[275px] max-[640px]:top-[225px] left-1/2 top-[45vh] translate-y-[-50%] translate-x-[-50%] w-[100%] flex justify-center">
+            <div className={`absolute p-[1rem] sm:p-[4rem] max-[1360px]:max-w-[64rem] max-[1050px]:max-w-[45rem] left-1/2 translate-y-[-50%] translate-x-[-50%] w-[100%] flex justify-center min-[1050px]:top-[425px] min-[800px]:top-[350px] min-[460px]:top-[325px] top-[275px] ${isCategoriesOpen ? 'min-[1050px]:top-[425px] min-[800px]:top-[464px] min-[525px]:top-[379px] min-[460px]:top-[406px] min-[300px]:top-[356px]' : ''}`}>
                 <div className="w-[100%] h-[100%] max-w-[35rem] shadow-2xl bg-veryDarkBlue rounded-[8px] lg:gap-0 gap-5 flex flex-col items-center justify-between pt-[1rem] pb-[0rem] min-[640px]:pb-[1rem]  px-[1rem] sm:pt-[2rem] min-[1025px]:pb-[2rem] sm:px-[2rem] min-[1360px]:flex-row lg:px-[2rem] md:max-w-[75rem]">
                     <div className="max-[1360px]:flex max-[1360px]:items-center max-[1360px]:justify-between max-[1360px]:w-[100%]">
                         <div className="flex justify-between items-center gap-[1rem] min-[375px]:flex-row w-[100%]">
@@ -115,7 +115,7 @@ const SearchResults: NextPage<
                     </div>
                 </div>
                 </div>
-            <div className={`mt-[47vh] max-[640px]:px-[0] max-[460px]:flex-col max-[800px]:mt-[22rem] max-[640px]:mt-[18rem] max-[1360px]:max-w-[58rem] max-[1050px]:max-w-[38rem] max-[770px]:max-w-[36rem] flex items-baseline w-[100%] justify-between lg:flex-row text-primary px-[1rem] ${isCategoriesOpen ? 'min-[1050px]:mt-[53vh] min-[800px]:mt-[58vh] min-[640px]:mt-[23rem] min-[300px]:mt-[23rem]' : ''} `}>
+            <div className={`min-[1050px]:mt-[29rem] min-[460px]:mt-[23rem] min-[300px]:mt-[20rem] max-[640px]:px-[0] max-[460px]:flex-col max-[1360px]:max-w-[58rem] max-[1050px]:max-w-[38rem] max-[770px]:max-w-[36rem] flex items-baseline w-[100%] justify-between lg:flex-row text-primary px-[1rem] ${isCategoriesOpen ? 'min-[800px]:mt-[36rem] min-[460px]:mt-[33rem] min-[300px]:mt-[30rem]' : ''} `}>
                 <h2 className="text-2xl font-bold">Resultat prylar</h2>
                 <p>
                     Visar
