@@ -80,7 +80,6 @@ const CreateItem: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
     product,
     categories,
 }) => {
-    console.log(product, categories);
     return (
         <>
             <Head>

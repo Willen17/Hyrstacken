@@ -36,7 +36,6 @@ const ProfileForm = (props: Props) => {
             data.image ||
             props.image ||
             "https://miro.medium.com/max/720/1*W35QUSvGpcLuxPo3SRTH4w.png";
-        console.log(data);
         setLoading(true);
         fetch("/api/editProfile", {
             method: "POST",

@@ -60,7 +60,6 @@ const ItemForm = ({ categories, product }: ItemFormProps) => {
     });
 
     const onSubmit = handleSubmit(async (data) => {
-        console.log(data);
         if (product) {
             data.id = product.id;
             const resp = await fetch("/api/updateItem", {

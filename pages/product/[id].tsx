@@ -129,7 +129,6 @@ const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
     };
 
     const deleteItem = async (itemId: string) => {
-        console.log(itemId);
         fetch(`/api/items/delete/${itemId}`, {
             method: "DELETE",
             headers: {
@@ -138,7 +137,6 @@ const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
         })
             .then(async (data) => {
                 const deletedItem = await data.json();
-                console.log("Deleted item: ", deletedItem.title);
                 router.push(`/profile/${id}`);
             })
             .catch((e) => console.log(e));
@@ -219,9 +217,7 @@ const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                                 <button
                                     className={`btn rounded-full font-bold tracking-widest w-full bg-transparent border-softRed border-2 text-softRed `}
                                     onClick={() =>
-                                        router.push(
-                                            `/editItem/${product.owner.id}`
-                                        )
+                                        router.push(`/editItem/${product.id}`)
                                     }
                                 >
                                     Redigera annons
