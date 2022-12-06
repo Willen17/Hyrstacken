@@ -1,6 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import { GetStaticPropsContext, InferGetStaticPropsType, NextPage } from "next/types";
+import router from "next/router";
+import {
+    GetStaticPropsContext,
+    InferGetStaticPropsType,
+    NextPage,
+} from "next/types";
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import CalendarIcon from "../../assets/productPage/calendar.svg";
@@ -27,7 +32,9 @@ export const getStaticPaths = async () => {
 };
 
 // get static props from api
-export const getStaticProps = async ({ params }: GetStaticPropsContext<{ id: string }>) => {
+export const getStaticProps = async ({
+    params,
+}: GetStaticPropsContext<{ id: string }>) => {
     if (!params) {
         return {
             notFound: true,
@@ -49,8 +56,8 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext<{ id: str
                     id: true,
                     name: true,
                     image: true,
-                }
-            }
+                },
+            },
         },
     });
 
@@ -68,14 +75,34 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext<{ id: str
     };
 };
 
-const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ product }) => {
+const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
+    product,
+}) => {
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [dateError, setDateError] = useState<boolean>();
     const [orderSubmitted, setOrderSubmitted] = useState(false);
     const [touched, setTouched] = useState(false);
+
+    const [id, setId] = useState<string>();
     const parsedStartDate = startDate.toISOString().split("T")[0];
     const parsedEndDate = endDate.toISOString().split("T")[0];
+
+    const ownItem = id === product.owner.id;
+
+    useEffect(() => {
+        fetch("/api/getSessionUser", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then(async (data) => {
+                const user = await data.json();
+                setId(user.id);
+            })
+            .catch((e) => console.log(e));
+    }, []);
 
     useEffect(() => {
         const currentDate = new Date().toISOString().split("T")[0];
@@ -99,6 +126,20 @@ const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ pro
     const submitOrder = () => {
         console.log("start: ", parsedStartDate, " end: ", parsedEndDate);
         setOrderSubmitted(true);
+    };
+
+    const deleteItem = async (itemId: string) => {
+        fetch(`/api/items/delete/${itemId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then(async (data) => {
+                const deletedItem = await data.json();
+                router.push(`/profile/${id}`);
+            })
+            .catch((e) => console.log(e));
     };
 
     return (
@@ -150,70 +191,100 @@ const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ pro
                                     <div className="w-5 rounded-full">
                                         <img
                                             alt="Profile picture"
-                                            src={product.owner.image || item.creatorPic}
+                                            src={
+                                                product.owner.image ||
+                                                item.creatorPic
+                                            }
                                         />
                                     </div>
                                 </div>
-                                <p className="pl-1">{product.owner.name || 'Anonym användare'}</p>
+                                <p className="pl-1">
+                                    {product.owner.name || "Anonym användare"}
+                                </p>
                             </div>
                         </Link>
                     </div>
                     <div className="relative flex items-center justify-between pb-5">
                         <p className="mr-2 font-bold whitespace-nowrap">
-                            Boka produkt
+                            {ownItem ? "Ändra annons" : "Boka produkt"}
                         </p>
                         <div className="bg-[#26324540] w-full h-px" />
                     </div>
 
-                    <div className="flex justify-between w-full font-bold">
-                        <p>Hämta:</p>
-                        <div className="flex  w-[6rem]">
-                            <CalendarIcon className="absolute -translate-x-5" />
-                            <DatePicker
-                                className="ml-3 cursor-pointer "
-                                selected={startDate}
-                                onChange={(date: Date) => {
-                                    setStartDate(date);
-                                }}
-                            />
+                    {ownItem ? (
+                        <div>
+                            <div className="justify-center pt-5 card-actions">
+                                <button
+                                    className={`btn rounded-full font-bold tracking-widest w-full bg-transparent border-softRed border-2 text-softRed `}
+                                    onClick={() =>
+                                        router.push(`/editItem/${product.id}`)
+                                    }
+                                >
+                                    Redigera annons
+                                </button>
+                            </div>
+                            <div className="justify-center pt-5 card-actions">
+                                <button
+                                    className={`btn text-white rounded-full font-bold tracking-widest w-full border-0 bg-softRed `}
+                                    onClick={() => deleteItem(product.id)}
+                                >
+                                    Ta bort annons
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    <div className="flex justify-between w-full py-5 font-bold">
-                        <p>Lämna:</p>
-                        <div className="flex  w-[6rem]">
-                            <CalendarIcon className="absolute -translate-x-5" />
-                            <DatePicker
-                                className="ml-3 cursor-pointer "
-                                selected={endDate}
-                                onChange={(date: Date) => {
-                                    setTouched(true), setEndDate(date);
-                                }}
-                            />
-                        </div>
-                    </div>
-                    <p className="text-xs text-error">
-                        {touched &&
-                            dateError &&
-                            "Vänligen fyll i ett korrekt datum. Startdatum kan inte vara efter slutdatum."}
-                    </p>
+                    ) : (
+                        <>
+                            <div className="flex justify-between w-full font-bold">
+                                <p>Hämta:</p>
+                                <div className="flex  w-[6rem]">
+                                    <CalendarIcon className="absolute -translate-x-5" />
+                                    <DatePicker
+                                        className="ml-3 cursor-pointer "
+                                        selected={startDate}
+                                        onChange={(date: Date) => {
+                                            setStartDate(date);
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                            <div className="flex justify-between w-full py-5 font-bold">
+                                <p>Lämna:</p>
+                                <div className="flex  w-[6rem]">
+                                    <CalendarIcon className="absolute -translate-x-5" />
+                                    <DatePicker
+                                        className="ml-3 cursor-pointer "
+                                        selected={endDate}
+                                        onChange={(date: Date) => {
+                                            setTouched(true), setEndDate(date);
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                            <p className="text-xs text-error">
+                                {touched &&
+                                    dateError &&
+                                    "Vänligen fyll i ett korrekt datum. Startdatum kan inte vara efter slutdatum."}
+                            </p>
 
-                    <div className="justify-center pt-5 card-actions">
-                        <button
-                            className={`btn text-white rounded-full font-bold tracking-widest w-full border-0 bg-softRed ${
-                                dateError && "btn-disabled opacity-50"
-                            } ${
-                                orderSubmitted &&
-                                "bg-transparent border-softRed border-2 text-softRed"
-                            }`}
-                            onClick={() => submitOrder()}
-                        >
-                            {dateError
-                                ? "Välj datum först"
-                                : orderSubmitted
-                                ? "Avbryt förfrågan"
-                                : "Boka"}
-                        </button>
-                    </div>
+                            <div className="justify-center pt-5 card-actions">
+                                <button
+                                    className={`btn text-white rounded-full font-bold tracking-widest w-full border-0 bg-softRed ${
+                                        dateError && "btn-disabled opacity-50"
+                                    } ${
+                                        orderSubmitted &&
+                                        "bg-transparent border-softRed border-2 text-softRed"
+                                    }`}
+                                    onClick={() => submitOrder()}
+                                >
+                                    {dateError
+                                        ? "Välj datum först"
+                                        : orderSubmitted
+                                        ? "Avbryt förfrågan"
+                                        : "Boka"}
+                                </button>
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
         </div>
