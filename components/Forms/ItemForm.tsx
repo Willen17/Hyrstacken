@@ -16,53 +16,31 @@ type ItemFormProps = {
 };
 
 const ItemForm = ({ categories }: ItemFormProps) => {
-    const [loading, setLoading] = useState(false);
     const [fetchError, setFetchError] = useState<boolean>(false);
 
     const {
         register,
         handleSubmit,
-        watch,
         resetField,
-        formState: { errors },
+        formState: { errors, isSubmitting, isValid },
     } = useForm<z.infer<typeof itemSchema>>({
         mode: "onBlur",
         resolver: zodResolver(itemSchema),
     });
-    const onSubmit = handleSubmit((data) => {
-        console.log(data);
-        setLoading(true);
-        fetch("/api/createItem", {
+    const onSubmit = handleSubmit(async (data) => {
+        const resp = await fetch("/api/createItem", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(data),
-        })
-            .then(async (data) => {
-                setFetchError(data.ok === false);
-                const body = await data.json();
-                data.ok && router.push(`product/${body.id}`);
-            })
-            .catch((e) => console.log(e))
+        });
+        setFetchError(resp.ok === false);
+        const body = await resp.json();
+        resp.ok && await router.push(`product/${body.id}`);
     });
 
-    const allFilled = () => {
-        let status = true;
-        let { description, categoryId, title, price } = watch();
-
-        if (
-            !description ||
-            !categoryId ||
-            categoryId === "DEFAULT" ||
-            !title ||
-            !price
-        )
-            status = false;
-        return status;
-    };
-
-    return loading ? (
+    return isSubmitting ? (
         <div className="grid h-screen place-content-center">
             <Loader />
         </div>
@@ -152,9 +130,9 @@ const ItemForm = ({ categories }: ItemFormProps) => {
                 id=""
                 className=" select  border-veryDarkBlue border-[1px]"
                 {...register("categoryId")}
-                defaultValue={"DEFAULT"}
+                defaultValue={""}
             >
-                <option disabled value="DEFAULT">
+                <option disabled value="">
                     Välj kategori
                 </option>
                 {categories.map((category) => {
@@ -170,9 +148,9 @@ const ItemForm = ({ categories }: ItemFormProps) => {
             )}
             <input
                 type="submit"
-                value={allFilled() ? "Skicka" : "Fyll i obligatoriska fält"}
+                value={isValid ? "Skicka" : "Fyll i obligatoriska fält"}
                 className={`my-4 text-white border-0 btn bg-softRed ${
-                    !allFilled() && "btn-disabled opacity-50"
+                    !isValid && "btn-disabled opacity-50"
                 }`}
             />
         </form>

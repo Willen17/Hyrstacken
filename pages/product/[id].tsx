@@ -1,9 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
-import router from "next/router";
-import { GetStaticProps, NextPage } from "next/types";
+import Link from "next/link";
+import { GetStaticPropsContext, InferGetStaticPropsType, NextPage } from "next/types";
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
-import ArrowBackIcon from "../../assets/productPage/arrowBack.svg";
 import CalendarIcon from "../../assets/productPage/calendar.svg";
 import LocationIcon from "../../assets/productPage/location.svg";
 import RatingIcon from "../../assets/productPage/rating.svg";
@@ -28,18 +27,13 @@ export const getStaticPaths = async () => {
 };
 
 // get static props from api
-
-export type Product = {
-    id: number;
-    title: string;
-    description: string;
-    picePerDay: number;
-    imageUrl: string;
-    ownerId: string;
-};
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-    const { id } = params as { id: string };
+export const getStaticProps = async ({ params }: GetStaticPropsContext<{ id: string }>) => {
+    if (!params) {
+        return {
+            notFound: true,
+        };
+    }
+    const { id } = params;
     const product = await prisma.item.findUnique({
         where: {
             id,
@@ -50,9 +44,22 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
             description: true,
             picePerDay: true,
             imageUrl: true,
-            ownerId: true,
+            owner: {
+                select: {
+                    id: true,
+                    name: true,
+                    image: true,
+                }
+            }
         },
     });
+
+    if (!product) {
+        return {
+            notFound: true,
+        };
+    }
+
     return {
         props: {
             product,
@@ -61,7 +68,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     };
 };
 
-const Product: NextPage<{ product: Product }> = ({ product }) => {
+const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ product }) => {
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [dateError, setDateError] = useState<boolean>();
@@ -137,17 +144,19 @@ const Product: NextPage<{ product: Product }> = ({ product }) => {
                             <RatingIcon className="self-center" />
                             <p className="pl-1">{item.score} betyg</p>
                         </div>
-                        <div className="flex items-center px-3 py-1 my-2 bg-veryDarkBlue rounded-3xl ">
-                            <div className="avatar">
-                                <div className="w-5 rounded-full">
-                                    <img
-                                        alt="Profile picture"
-                                        src={item.creatorPic}
-                                    />
+                        <Link href={`/profile/${product.owner.id}`}>
+                            <div className="flex items-center px-3 py-1 my-2 bg-veryDarkBlue rounded-3xl ">
+                                <div className="avatar">
+                                    <div className="w-5 rounded-full">
+                                        <img
+                                            alt="Profile picture"
+                                            src={product.owner.image || item.creatorPic}
+                                        />
+                                    </div>
                                 </div>
+                                <p className="pl-1">{product.owner.name || 'Anonym användare'}</p>
                             </div>
-                            <p className="pl-1">{item.creator}</p>
-                        </div>
+                        </Link>
                     </div>
                     <div className="relative flex items-center justify-between pb-5">
                         <p className="mr-2 font-bold whitespace-nowrap">
