@@ -1,9 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
-import { GetStaticProps, NextPage, InferGetStaticPropsType, GetStaticPropsContext } from "next";
+import { GetStaticPropsContext, InferGetStaticPropsType, NextPage } from "next";
 import { signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import router from "next/router";
 import { useState } from "react";
 import ProfileForm from "../../components/Forms/ProfileForm";
 import SecondaryButton from "../../components/PrimaryButton/SecondaryButton";
@@ -75,13 +74,6 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext<{ id: str
         },
         revalidate: 1,
     };
-};
-
-type User = {
-    id: string;
-    name: string | null;
-    email: string;
-    image: string | null;
 };
 
 const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
@@ -177,7 +169,7 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                     </p>
                     <div className="bg-[#26324540] w-full h-px" />
                 </div>
-                {/* List max 5 ads by user */}
+                {/* TODO: List max 5 ads by user */}
                 {/* small ad card, link to ad */}
                 {items.map((item) => (
                     <Link key={item.id} href={`/product/${item.id}`}>

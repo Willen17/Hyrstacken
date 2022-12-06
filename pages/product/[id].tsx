@@ -1,10 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import router from "next/router";
-import { GetStaticProps, NextPage, InferGetStaticPropsType, GetStaticPropsContext } from "next/types";
+import { GetStaticPropsContext, InferGetStaticPropsType, NextPage } from "next/types";
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
-import ArrowBackIcon from "../../assets/productPage/arrowBack.svg";
 import CalendarIcon from "../../assets/productPage/calendar.svg";
 import LocationIcon from "../../assets/productPage/location.svg";
 import RatingIcon from "../../assets/productPage/rating.svg";

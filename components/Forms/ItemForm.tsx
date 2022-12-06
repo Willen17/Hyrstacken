@@ -28,7 +28,6 @@ const ItemForm = ({ categories }: ItemFormProps) => {
         resolver: zodResolver(itemSchema),
     });
     const onSubmit = handleSubmit(async (data) => {
-        console.log(data);
         const resp = await fetch("/api/createItem", {
             method: "POST",
             headers: {
