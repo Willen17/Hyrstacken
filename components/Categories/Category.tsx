@@ -1,13 +1,53 @@
-import { useState } from "react";
+import { indexOf } from "lodash";
+import { Dispatch, SetStateAction, useState } from "react";
 import CloseIcon from "../../assets/x.svg";
 
-const Category = ({ category }: any) => {
+type categoriesProps = {
+    category: string;
+    setFilterByCategory: Dispatch<
+        SetStateAction<{
+            Verktyg: boolean;
+            Övrigt: boolean;
+            Sport: boolean;
+            Friluftsliv: boolean;
+            Hem: boolean;
+        }>
+    >;
+    filterByCategory: {
+        Verktyg: boolean;
+        Övrigt: boolean;
+        Sport: boolean;
+        Friluftsliv: boolean;
+        Hem: boolean;
+    };
+};
+
+const Category = ({
+    category,
+    setFilterByCategory,
+    filterByCategory,
+}: categoriesProps) => {
     const [isCategoryActive, setIsCategoryActive] = useState(false);
+
+    function setCategory(category: string) {
+        let newFilter = filterByCategory;
+        for (let key in newFilter) {
+            if (key == category) {
+                newFilter[key as keyof typeof filterByCategory] =
+                    !filterByCategory[key as keyof typeof filterByCategory];
+            }
+        }
+        setFilterByCategory(newFilter);
+        console.log(filterByCategory);
+    }
 
     return (
         <div>
             <li
-                onClick={() => setIsCategoryActive(!isCategoryActive)}
+                onClick={() => {
+                    setIsCategoryActive(!isCategoryActive);
+                    setCategory(category);
+                }}
                 className="p-2 cursor-pointer"
             >
                 <span
