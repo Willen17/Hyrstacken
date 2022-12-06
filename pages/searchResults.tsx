@@ -47,6 +47,24 @@ const SearchResults: NextPage<
 > = ({ items, categories }) => {
     const [isCategoriesOpen, setIsCategoriesOpen] = useState<boolean>(false);
 
+    function useWindowWidth() {
+        useEffect(() => {
+            const handleResize = () => {
+                if(window.innerWidth >= 1360) {
+                    setIsCategoriesOpen(true)
+                }
+            };
+
+            window.addEventListener("resize", handleResize);
+
+            handleResize();
+
+            return () => window.removeEventListener("resize", handleResize);
+        })
+    }
+
+    useWindowWidth()
+
     function openCategories() {
         setIsCategoriesOpen(!isCategoriesOpen);
     }
@@ -59,7 +77,7 @@ const SearchResults: NextPage<
             <h1 className="text-7xl max-[1350px]:text-6xl max-[800px]:text-6xl max-[400px]:text-5xl font-bold text-white font-cabin">Sök tusentals prylar</h1>
         </div>
         <div className="flex max-[610px]:px-[1rem] lg:px-[4rem] flex-col items-center min-h-screen p-0 m-0 mx-auto max-w-[1360px] mt-[100px] max-[800px]:mt-[50px] font-nunito">
-            <div className={`absolute p-[1rem] sm:p-[4rem] max-[1360px]:max-w-[64rem] max-[1050px]:max-w-[45rem] left-1/2 translate-y-[-50%] translate-x-[-50%] w-[100%] flex justify-center min-[1050px]:top-[425px] min-[800px]:top-[350px] min-[460px]:top-[325px] top-[275px] ${isCategoriesOpen ? 'min-[1050px]:top-[425px] min-[800px]:top-[464px] min-[525px]:top-[379px] min-[460px]:top-[406px] min-[300px]:top-[356px]' : ''}`}>
+            <div className={`absolute p-[1rem] sm:p-[4rem] max-[1360px]:max-w-[64rem] max-[1050px]:max-w-[45rem] left-1/2 translate-y-[-50%] translate-x-[-50%] w-[100%] flex justify-center min-[1360px]:top-[425px] min-[1050px]:top-[425px] min-[800px]:top-[350px] min-[460px]:top-[325px] top-[275px] ${isCategoriesOpen ? 'min-[1050px]:top-[486px] min-[800px]:top-[464px] min-[525px]:top-[379px] min-[460px]:top-[406px] min-[300px]:top-[356px]' : ''}`}>
                 <div className="w-[100%] h-[100%] max-w-[35rem] shadow-2xl bg-veryDarkBlue rounded-[8px] lg:gap-0 gap-5 flex flex-col items-center justify-between pt-[1rem] pb-[0rem] min-[640px]:pb-[1rem]  px-[1rem] sm:pt-[2rem] min-[1025px]:pb-[2rem] sm:px-[2rem] min-[1360px]:flex-row lg:px-[2rem] md:max-w-[75rem]">
                     <div className="max-[1360px]:flex max-[1360px]:items-center max-[1360px]:justify-between max-[1360px]:w-[100%]">
                         <div className="flex justify-between items-center gap-[1rem] min-[375px]:flex-row w-[100%]">
@@ -94,7 +112,7 @@ const SearchResults: NextPage<
                     </div>
                 </div>
                 </div>
-            <div className={`min-[1050px]:mt-[29rem] min-[460px]:mt-[23rem] min-[300px]:mt-[20rem] max-[640px]:px-[0] max-[460px]:flex-col max-[1360px]:max-w-[58rem] max-[1050px]:max-w-[38rem] max-[770px]:max-w-[36rem] flex items-baseline w-[100%] justify-between lg:flex-row text-primary px-[1rem] ${isCategoriesOpen ? 'min-[800px]:mt-[36rem] min-[460px]:mt-[33rem] min-[300px]:mt-[30rem]' : ''} `}>
+            <div className={`min-[1050px]:mt-[29rem] min-[460px]:mt-[23rem] min-[300px]:mt-[20rem] max-[640px]:px-[0] max-[460px]:flex-col max-[1360px]:max-w-[58rem] max-[1050px]:max-w-[38rem] max-[770px]:max-w-[36rem] flex items-baseline w-[100%] justify-between lg:flex-row text-primary px-[1rem] ${isCategoriesOpen ? 'min-[1360px]:mt-[29rem] min-[1050px]:mt-[36rem] min-[800px]:mt-[36rem] min-[460px]:mt-[33rem] min-[300px]:mt-[30rem]' : ''} `}>
                 <h2 className="text-2xl font-bold">Resultat prylar</h2>
                 <p>
                     Visar
