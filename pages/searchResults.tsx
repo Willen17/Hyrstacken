@@ -80,11 +80,6 @@ const SearchResults: NextPage<
         return count;
     }
 
-    useEffect(() => {
-        // console.log(filterByCategory);
-        console.log(noCategory);
-    }, [filterByCategory]);
-
     return (
         <div className="flex flex-col items-center min-h-screen p-0 m-0 mx-auto max-w-7xl mt-[100px] max-[800px]:mt-[50px] font-nunito">
             <div className="flex flex-row items-center justify-center w-full lg:justify-around">
@@ -108,11 +103,13 @@ const SearchResults: NextPage<
                 />
             </div>
             {isCategoriesOpen ? (
-                <Categories
-                    categories={categories}
-                    setFilterByCategory={setFilterByCategory}
-                    filterByCategory={filterByCategory}
-                />
+                <div className="lg:hidden">
+                    <Categories
+                        categories={categories}
+                        setFilterByCategory={setFilterByCategory}
+                        filterByCategory={filterByCategory}
+                    />
+                </div>
             ) : (
                 false
             )}
