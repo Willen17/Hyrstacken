@@ -7,6 +7,7 @@ import CrossIcon from "../../assets/cross.svg";
 import Loader from "../Loader/Loader";
 import FormLabel from "../FormLabel/FormLabel";
 import router from "next/router";
+import { useSession } from "next-auth/react";
 
 type ItemFormProps = {
     categories: {
@@ -48,6 +49,7 @@ const ItemForm = ({ categories, product }: ItemFormProps) => {
         }
     }, [product]);
 
+    const { data: session } = useSession();
     const ownItem = id === product?.owner.id;
     const {
         register,
@@ -102,9 +104,9 @@ const ItemForm = ({ categories, product }: ItemFormProps) => {
                 Försök igen
             </button>
         </div>
-    ) : product && !ownItem ? (
+    ) : !session || (product && !ownItem) ? (
         <div className="flex flex-col items-center justify-center h-screen font-bold gap-y-5">
-            <p>Denna annons går inte att redigera...</p>
+            <p>Du har inte tillgång till denna sidan...</p>
             <button
                 onClick={() => {
                     router.back();
