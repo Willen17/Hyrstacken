@@ -35,7 +35,7 @@ const Categories = ({
                 <p>Filter</p>
                 <div className="ml-3 bg-veryDarkBlue h-0.5 w-[70%] opacity-20"></div>
             </div>
-            <ul className="flex flex-row flex-wrap justify-center ml-4">
+            <ul className="flex-wrap gap-3 flex justify-start min-[1360px]:justify-end flex-row h-[100%]">
                 {categories.map((category) => (
                     <Category
                         key={category.id}

@@ -21,21 +21,21 @@ const ProductCard = ({ item }: ProductCardProps) => {
     let rating = "4.5 Betyg";
 
     return (
-        <div className="w-[340px] max-[370px]:w-[310px] md:m-4 py-3 justify-center items-center flex-col flex text-sm text-primary font-semibold relative self-center">
-            <div className="absolute flex justify-center w-24 px-2 py-4 text-xs bg-veryDarkBlue rounded-3xl h-7 top-6 right-8">
+        <div className="w-full min-[610px]:w-[270px] md:m-4 py-3 justify-center items-center flex-col flex text-sm text-primary font-semibold relative self-center">
+            <div className="absolute flex justify-center w-24 px-2 py-4 text-xs bg-veryDarkBlue rounded-3xl h-7 top-6 right-3">
                 <LocationIcon className="self-center" />
                 <p className="self-center pl-1 font-normal text-info">
                     {location}
                 </p>
             </div>
-            <div className="absolute flex justify-center w-24 px-2 py-4 text-xs bg-veryDarkBlue rounded-3xl h-7 top-6 left-8">
+            <div className="absolute flex justify-center w-24 px-2 py-4 text-xs bg-veryDarkBlue rounded-3xl h-7 top-6 left-3">
                 <RatingIcon className="self-center" />
                 <p className="self-center pl-1 font-semibold text-info">
                     {rating}
                 </p>
             </div>
             <img
-                className="w-full rounded-md h-80"
+                className="w-full h-[270px] rounded-md max-[610px]:h-[350px] max-[460px]:h-[275px] max-[610px]:object-cover"
                 alt="Produktkort"
                 src={imgSrc ?? ""}
                 onError={() =>
@@ -45,8 +45,10 @@ const ProductCard = ({ item }: ProductCardProps) => {
                 }
             ></img>
             <div className="flex flex-row justify-between w-full pt-2">
-                <h2>{item.title}</h2>
-                <p>{item.picePerDay}kr/dag</p>
+                <h2 className="ml-3 text-lg font-bold">{item.title}</h2>
+                <p className="mr-3 text-lg font-bold">
+                    {item.picePerDay}Kr<span className="font-light">/dag</span>
+                </p>
             </div>
         </div>
     );

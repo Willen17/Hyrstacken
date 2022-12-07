@@ -47,13 +47,13 @@ const Category = ({
                 onClick={() => {
                     setCategory(category);
                 }}
-                className="p-2 cursor-pointer"
+                className="cursor-pointer"
             >
                 <span
                     className={
                         !isCategoryActive
-                            ? "flex justify-between border-solid border-2 rounded-lg px-3 py-1"
-                            : "bg-lightRed flex justify-between border-lightRed border-2 rounded-lg px-3 py-1 text-info"
+                            ? "flex justify-between border-solid border-[1px] rounded-[6px] h-[100%] py-[1rem] px-[2rem] max-[800px]:py-[.5rem] max-[800px]:px-[1rem] border-white text-white"
+                            : "bg-lightRed flex justify-between border-lightRed border-[1px] rounded-[6px] py-[1rem] px-[1.6rem] h-[100%] text-info"
                     }
                 >
                     <>{category}</>
