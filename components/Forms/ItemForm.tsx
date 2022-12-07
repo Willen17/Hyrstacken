@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { itemSchema } from "../../lib/schemas";
@@ -13,56 +13,80 @@ type ItemFormProps = {
         id: string;
         name: string;
     }[];
+    product?: {
+        id: string;
+        title: string;
+        description: string;
+        picePerDay: number;
+        imageUrl: string | null;
+        categoryId: string;
+        owner: {
+            id: string;
+            name: string | null;
+            image: string | null;
+        };
+    };
 };
 
-const ItemForm = ({ categories }: ItemFormProps) => {
-    const [loading, setLoading] = useState(false);
+const ItemForm = ({ categories, product }: ItemFormProps) => {
     const [fetchError, setFetchError] = useState<boolean>(false);
+    const [id, setId] = useState<string>();
 
+    useEffect(() => {
+        if (product) {
+            fetch("/api/getSessionUser", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+                .then(async (data) => {
+                    const user = await data.json();
+                    setId(user.id);
+                })
+                .catch((e) => console.log(e));
+        }
+    }, [product]);
+
+    const ownItem = id === product?.owner.id;
     const {
         register,
         handleSubmit,
-        watch,
         resetField,
-        formState: { errors },
+        formState: { errors, isSubmitting, isValid },
     } = useForm<z.infer<typeof itemSchema>>({
         mode: "onBlur",
         resolver: zodResolver(itemSchema),
     });
-    const onSubmit = handleSubmit((data) => {
-        console.log(data);
-        setLoading(true);
-        fetch("/api/createItem", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        })
-            .then(async (data) => {
-                setFetchError(data.ok === false);
-                const body = await data.json();
-                data.ok && router.push(`product/${body.id}`);
-            })
-            .catch((e) => console.log(e))
+
+    const onSubmit = handleSubmit(async (data) => {
+        if (product) {
+            data.id = product.id;
+            const resp = await fetch("/api/updateItem", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+            setFetchError(resp.ok === false);
+            const body = await resp.json();
+            resp.ok && (await router.push(`/product/${body.id}`));
+        } else {
+            const resp = await fetch("/api/createItem", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+            setFetchError(resp.ok === false);
+            const body = await resp.json();
+            resp.ok && (await router.push(`/product/${body.id}`));
+        }
     });
 
-    const allFilled = () => {
-        let status = true;
-        let { description, categoryId, title, price } = watch();
-
-        if (
-            !description ||
-            !categoryId ||
-            categoryId === "DEFAULT" ||
-            !title ||
-            !price
-        )
-            status = false;
-        return status;
-    };
-
-    return loading ? (
+    return isSubmitting ? (
         <div className="grid h-screen place-content-center">
             <Loader />
         </div>
@@ -78,13 +102,25 @@ const ItemForm = ({ categories }: ItemFormProps) => {
                 Försök igen
             </button>
         </div>
+    ) : product && !ownItem ? (
+        <div className="flex flex-col items-center justify-center h-screen font-bold gap-y-5">
+            <p>Denna annons går inte att redigera...</p>
+            <button
+                onClick={() => {
+                    router.back();
+                }}
+                className="text-white border-0 btn bg-softRed"
+            >
+                Gå tillbaka
+            </button>
+        </div>
     ) : (
         <form
             onSubmit={onSubmit}
             className="container flex flex-col w-full h-full p-5 justify-evenly min-[640px]:p-10"
         >
             <h1 className="text-2xl font-bold text-veryDarkBlue">
-                Skapa ny annons
+                {ownItem && product ? "Redigera din" : "Skapa"} annons
             </h1>
             <div className="relative flex flex-col my-3 gap-y-3">
                 <FormLabel required>Titel</FormLabel>
@@ -92,6 +128,7 @@ const ItemForm = ({ categories }: ItemFormProps) => {
                     placeholder="Skiftnyckel"
                     {...register("title", { required: "Måste ha en titel" })}
                     className="pl-2 pr-10 font-bold border-b-[1px] h-9 border-veryDarkBlue"
+                    defaultValue={product ? product.title : undefined}
                 />
                 <CrossIcon
                     onClick={() => resetField("title")}
@@ -108,6 +145,9 @@ const ItemForm = ({ categories }: ItemFormProps) => {
                     {...register("imageUrl")}
                     placeholder="https://dinbild.se/din-bild"
                     className="pl-2 pr-10 font-bold border-b-[1px] h-9 border-veryDarkBlue"
+                    defaultValue={
+                        product ? product.imageUrl || undefined : undefined
+                    }
                 />
                 <CrossIcon
                     onClick={() => resetField("imageUrl")}
@@ -122,6 +162,7 @@ const ItemForm = ({ categories }: ItemFormProps) => {
                     className="pl-2 pr-10 font-bold border-b-[1px] h-9 border-veryDarkBlue"
                     type="number"
                     {...register("price", { valueAsNumber: true })}
+                    defaultValue={product ? product.picePerDay : undefined}
                 />
                 <CrossIcon
                     onClick={() => resetField("price")}
@@ -139,6 +180,7 @@ const ItemForm = ({ categories }: ItemFormProps) => {
                     className="textarea px-2 border-[1px] font-nunito text-[#000] border-veryDarkBlue leading-snug"
                     placeholder="Denna skiftnyckel köptes in för tre år sedan och är i mycket bra skick..."
                     rows={4}
+                    defaultValue={product ? product.description : undefined}
                 />
             </div>
             {errors.description && (
@@ -152,14 +194,18 @@ const ItemForm = ({ categories }: ItemFormProps) => {
                 id=""
                 className=" select  border-veryDarkBlue border-[1px]"
                 {...register("categoryId")}
-                defaultValue={"DEFAULT"}
+                defaultValue={product ? product.categoryId : ""}
             >
-                <option disabled value="DEFAULT">
+                <option disabled value="">
                     Välj kategori
                 </option>
                 {categories.map((category) => {
                     return (
-                        <option key={category.id} value={category.id}>
+                        <option
+                            key={category.id}
+                            defaultChecked={category.id === product?.categoryId}
+                            value={category.id}
+                        >
                             {category.name}
                         </option>
                     );
@@ -170,9 +216,9 @@ const ItemForm = ({ categories }: ItemFormProps) => {
             )}
             <input
                 type="submit"
-                value={allFilled() ? "Skicka" : "Fyll i obligatoriska fält"}
+                value={isValid ? "Skicka" : "Fyll i obligatoriska fält"}
                 className={`my-4 text-white border-0 btn bg-softRed ${
-                    !allFilled() && "btn-disabled opacity-50"
+                    !isValid && "btn-disabled opacity-50"
                 }`}
             />
         </form>

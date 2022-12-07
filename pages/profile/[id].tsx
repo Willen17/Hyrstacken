@@ -1,15 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
-import { GetStaticProps, NextPage } from "next";
+import { GetStaticPropsContext, InferGetStaticPropsType, NextPage } from "next";
 import { signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import router from "next/router";
 import { useState } from "react";
 import ProfileForm from "../../components/Forms/ProfileForm";
 import SecondaryButton from "../../components/PrimaryButton/SecondaryButton";
 import SmallProductCard from "../../components/ProductCard/SmallProductCard";
 import prisma from "../../lib/prisma";
-import { Product } from "../product/[id]";
 
 // typed function getStaticPaths from api for user profile
 export const getStaticPaths = async () => {
@@ -30,8 +28,13 @@ export const getStaticPaths = async () => {
 };
 
 // typed function getStaticProps from api for user profile
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-    const { id } = params as { id: string };
+export const getStaticProps = async ({ params }: GetStaticPropsContext<{ id: string }>) => {
+    if (!params) {
+        return {
+            notFound: true,
+        };
+    }
+    const { id } = params;
     const user = await prisma.user.findUnique({
         where: {
             id,
@@ -43,6 +46,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
             image: true,
         },
     });
+
     const items = await prisma.item.findMany({
         where: {
             ownerId: id,
@@ -56,6 +60,13 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
             ownerId: true,
         },
     });
+
+    if (!user || !items) {
+        return {
+            notFound: true,
+        };
+    }
+
     return {
         props: {
             user,
@@ -65,14 +76,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     };
 };
 
-type User = {
-    id: string;
-    name: string | null;
-    email: string;
-    image: string | null;
-};
-
-const ProfilePage: NextPage<{ user: User; items: Product[] }> = ({
+const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
     user,
     items,
 }) => {
@@ -165,7 +169,7 @@ const ProfilePage: NextPage<{ user: User; items: Product[] }> = ({
                     </p>
                     <div className="bg-[#26324540] w-full h-px" />
                 </div>
-                {/* List max 5 ads by user */}
+                {/* TODO: List max 5 ads by user */}
                 {/* small ad card, link to ad */}
                 {items.map((item) => (
                     <Link key={item.id} href={`/product/${item.id}`}>

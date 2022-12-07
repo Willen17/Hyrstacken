@@ -16,6 +16,7 @@ import ArrowRightIcon from "../public/assets/arrow-right.svg";
 import SearchIcon from "../public/assets/search-icon.svg";
 
 export async function getServerSideProps() {
+    const itemCount = await prisma.item.count();
     const items = await prisma.item.findMany({
         select: {
             id: true,
@@ -37,6 +38,7 @@ export async function getServerSideProps() {
     return {
         props: {
             items,
+            itemCount,
             categories,
         },
     };
@@ -44,7 +46,7 @@ export async function getServerSideProps() {
 
 const SearchResults: NextPage<
     InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ items, categories }) => {
+> = ({ items, categories, itemCount }) => {
     const [isCategoriesOpen, setIsCategoriesOpen] = useState<boolean>(false);
 
     function useWindowWidth() {
@@ -69,7 +71,6 @@ const SearchResults: NextPage<
         setIsCategoriesOpen(!isCategoriesOpen);
     }
 
-    let amountOfProducts = 1094;
     return (
         <Fragment>
         <Image src={bg} alt="background" className={`absolute top-[-1.5rem] min-[800px]:top-0 left-0 object-cover min-[1050px]:h-[425px] min-[460px]:h-[350px] h-[300px]`}/>
@@ -116,7 +117,7 @@ const SearchResults: NextPage<
                 <h2 className="text-2xl font-bold">Resultat prylar</h2>
                 <p>
                     Visar
-                    <span className="p-1 font-bold">{amountOfProducts}</span>
+                    <span className="p-1 font-bold">{itemCount}</span>
                     prylar
                 </p>
             </div>
