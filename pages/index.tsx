@@ -14,10 +14,19 @@ import SearchIcon from "../public/assets/search-icon.svg";
 
 import PrimaryButton from "../components/PrimaryButton/PrimaryButton";
 import SecondaryButton from "../components/PrimaryButton/SecondaryButton";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+
+let isFirstLoad: boolean = true;
 
 export default function Home() {
+    const router = useRouter()
+    const session = useSession()
+    const [id, setId] = useState<string>();
+    const [fireRequestModal, setFireRequestModal] = useState<boolean>(false)
+
     function useWindowWidth() {
         const [windowWidth, setWindowWidth] = useState<number | undefined>(
             undefined
@@ -39,8 +48,43 @@ export default function Home() {
 
     const windowWidth = useWindowWidth();
 
+    useEffect(() => {
+        fetch("/api/getSessionUser", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        .then(async (data) => {
+            const user = await data.json();
+            setId(user.id);
+        })
+        .catch((e) => console.log(e));
+    }) 
+
+    const useRequestModal = () => {
+
+        useEffect(() => {
+            const handler = () => {
+                if(isFirstLoad && session && !session.data?.user?.name && id) {
+                    isFirstLoad = false
+                    setFireRequestModal(true)
+                }
+            }
+            if (document.readyState === "complete") {
+                handler();
+            } else {
+                window.addEventListener('load', handler);
+                return () => document.removeEventListener('load', handler);
+            }
+        })
+        return fireRequestModal
+    }
+
+    useRequestModal()
+
     return (
-        <div>
+        <div className="overflow-y-hidden">
             <Head>
                 <title>Hyrstacken</title>
                 <meta
@@ -203,7 +247,7 @@ export default function Home() {
                                 <span className="text-softRed">SÄKERT</span>{" "}
                                 SÄTT ATT GÖRA AFFÄRER MED VARANDRA
                             </h2>
-                            <p className="">
+                            <p>
                                 Genom verifiering med BankID gör du alltid
                                 affärer med legitimerade personer, och med tiden
                                 kommer både konsumenter och annonsörer att
@@ -221,6 +265,21 @@ export default function Home() {
                     </div>
                 </section>
             </main>
+            { fireRequestModal ? 
+            <Fragment>
+                <div className="absolute left-0 top-0 h-full w-full bg-blackish bg-opacity-80" />
+                <div className="absolute top-[45%] min-[460px]:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full p-8 max-w-[20rem] min-[460px]:max-w-[25rem] min-[630px]:max-w-[30rem] min-[730px]:max-w-[40rem] min-[930px]:max-w-[50rem] h-full max-h-[30rem] rounded-lg bg-white flex gap-6 flex-col justify-center items-center">
+                    <h2 className="text-3xl min-[460px]:text-4xl min-[730px]:text-5xl text-center font-cabin font-bold text-softRed">Hej {session.data?.user?.email}</h2>
+                    <p className="max-w-lg text-center">Sätt prägel på din profil med ett nickname och en bild, och öka chanserna att få hyra andras prylar och hyra ut dina egna.</p>
+                    <div className="flex flex-col min-[460px]:flex-row gap-5">
+                        <PrimaryButton onClick={() => router.push(`/profile/${id}`)}>Ja tack!</PrimaryButton>
+                        <SecondaryButton onClick={() => setFireRequestModal(false)}>Senare</SecondaryButton>
+                    </div>
+                </div>
+            </Fragment>
+            :
+                ''
+            }
         </div>
     );
 }
