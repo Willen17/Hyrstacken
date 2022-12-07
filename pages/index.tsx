@@ -12,11 +12,9 @@ import FilterIcon from "../public/assets/filter-icon.svg";
 import ArrowRightIcon from "../public/assets/arrow-right.svg";
 import SearchIcon from "../public/assets/search-icon.svg";
 
-import Header from "../components/Header/Header";
 import PrimaryButton from "../components/PrimaryButton/PrimaryButton";
 import SecondaryButton from "../components/PrimaryButton/SecondaryButton";
 import { useEffect, useState } from "react";
-import Footer from "../components/Footer/Footer";
 import Link from "next/link";
 
 export default function Home() {
