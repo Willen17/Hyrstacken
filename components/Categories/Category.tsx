@@ -1,5 +1,5 @@
 import { indexOf } from "lodash";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import CloseIcon from "../../assets/x.svg";
 
 type categoriesProps = {
@@ -30,7 +30,7 @@ const Category = ({
     const [isCategoryActive, setIsCategoryActive] = useState(false);
 
     function setCategory(category: string) {
-        let newFilter = filterByCategory;
+        let newFilter = { ...filterByCategory };
         for (let key in newFilter) {
             if (key == category) {
                 newFilter[key as keyof typeof filterByCategory] =
@@ -38,14 +38,13 @@ const Category = ({
             }
         }
         setFilterByCategory(newFilter);
-        console.log(filterByCategory);
+        setIsCategoryActive(!isCategoryActive);
     }
 
     return (
         <div>
             <li
                 onClick={() => {
-                    setIsCategoryActive(!isCategoryActive);
                     setCategory(category);
                 }}
                 className="p-2 cursor-pointer"
