@@ -22,20 +22,20 @@ const ProductCard = ({ item }: ProductCardProps) => {
 
     return (
         <div className="w-[340px] max-[370px]:w-[310px] md:m-4 py-3 justify-center items-center flex-col flex text-sm text-primary font-semibold relative self-center">
-            <div className="flex bg-veryDarkBlue rounded-3xl px-2 py-4 w-24 h-7 absolute top-6 right-8 text-xs justify-center">
+            <div className="absolute flex justify-center w-24 px-2 py-4 text-xs bg-veryDarkBlue rounded-3xl h-7 top-6 right-8">
                 <LocationIcon className="self-center" />
-                <p className="pl-1 text-info font-normal self-center">
+                <p className="self-center pl-1 font-normal text-info">
                     {location}
                 </p>
             </div>
-            <div className="flex bg-veryDarkBlue rounded-3xl px-2 py-4 w-24 h-7 absolute top-6 left-8 text-xs justify-center">
+            <div className="absolute flex justify-center w-24 px-2 py-4 text-xs bg-veryDarkBlue rounded-3xl h-7 top-6 left-8">
                 <RatingIcon className="self-center" />
-                <p className="pl-1 text-info font-semibold self-center">
+                <p className="self-center pl-1 font-semibold text-info">
                     {rating}
                 </p>
             </div>
             <img
-                className="w-full h-80 rounded-md"
+                className="w-full rounded-md h-80"
                 alt="Produktkort"
                 src={imgSrc ?? ""}
                 onError={() =>
@@ -44,9 +44,9 @@ const ProductCard = ({ item }: ProductCardProps) => {
                     )
                 }
             ></img>
-            <div className="pt-2 flex flex-row justify-between w-full">
+            <div className="flex flex-row justify-between w-full pt-2">
                 <h2>{item.title}</h2>
-                <p>{item.picePerDay}/dag</p>
+                <p>{item.picePerDay}kr/dag</p>
             </div>
         </div>
     );
