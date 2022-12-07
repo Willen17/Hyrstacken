@@ -93,7 +93,7 @@ const SearchResults: NextPage<
                             </label>
                             <button
                                 type="button"
-                                className={`min-[1360px]:hidden border-[1px] py-[1rem] px-[2rem] min-[325px]:p-[1rem] rounded-[8px] border-white w-[100%] flex items-center justify-between min-[325px]:w-[auto] ${isCategoriesOpen ? 'bg-softRed border-none' : ''}`}
+                                className={`min-[1360px]:hidden border-[1px] py-[1rem] px-[2rem] min-[320px]:p-[1rem] rounded-[8px] border-white w-[100%] flex items-center justify-between min-[320px]:w-[auto] ${isCategoriesOpen ? 'bg-softRed border-none' : ''}`}
                                 onClick={openCategories}
                             >
                             <FilterIcon />
