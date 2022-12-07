@@ -26,7 +26,7 @@ const ProfileForm = (props: Props) => {
         handleSubmit,
         watch,
         resetField,
-        formState: { errors },
+        formState: { errors, isSubmitting, isValid },
     } = useForm<z.infer<typeof profileSchema>>({
         mode: "onBlur",
         resolver: zodResolver(profileSchema),
@@ -117,8 +117,15 @@ const ProfileForm = (props: Props) => {
                 {errors.image && (
                     <span className="text-error">{errors.image?.message}</span>
                 )}
+                {!isValid && <span className="text-error">Fyll i namn</span>}
                 <div className="pb-5 mt-10">
-                    <PrimaryButton>Spara ändringar</PrimaryButton>
+                    <input
+                        type="submit"
+                        value={"Spara ändringar"}
+                        className={`my-4 text-white border-0 btn bg-softRed ${
+                            !isValid && "btn-disabled opacity-50"
+                        }`}
+                    />
                 </div>
             </form>
         </>
