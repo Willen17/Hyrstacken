@@ -53,7 +53,7 @@ const Category = ({
                     className={
                         !isCategoryActive
                             ? "flex justify-between border-solid border-[1px] rounded-[6px] h-[100%] py-[1rem] px-[2rem] max-[800px]:py-[.5rem] max-[800px]:px-[1rem] border-white text-white"
-                            : "bg-lightRed flex justify-between border-lightRed border-[1px] rounded-[6px] py-[1rem] px-[1.6rem] h-[100%] text-info"
+                            : "bg-lightRed flex justify-between border-lightRed border-[1px] rounded-[6px] py-[1rem] px-[1.6rem] max-[800px]:py-[.5rem] max-[800px]:px-[1rem] h-[100%] text-info"
                     }
                 >
                     <>{category}</>
