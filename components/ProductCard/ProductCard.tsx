@@ -22,15 +22,15 @@ const ProductCard = ({ item }: ProductCardProps) => {
 
     return (
         <div className="w-full min-[610px]:w-[270px] md:m-4 py-3 justify-center items-center flex-col flex text-sm text-primary font-semibold relative self-center">
-            <div className="flex bg-veryDarkBlue rounded-3xl px-2 py-4 w-24 h-7 absolute top-6 right-3 text-xs justify-center">
+            <div className="absolute flex justify-center w-24 px-2 py-4 text-xs bg-veryDarkBlue rounded-3xl h-7 top-6 right-3">
                 <LocationIcon className="self-center" />
-                <p className="pl-1 text-info font-normal self-center">
+                <p className="self-center pl-1 font-normal text-info">
                     {location}
                 </p>
             </div>
-            <div className="flex bg-veryDarkBlue rounded-3xl px-2 py-4 w-24 h-7 absolute top-6 left-3 text-xs justify-center">
+            <div className="absolute flex justify-center w-24 px-2 py-4 text-xs bg-veryDarkBlue rounded-3xl h-7 top-6 left-3">
                 <RatingIcon className="self-center" />
-                <p className="pl-1 text-info font-semibold self-center">
+                <p className="self-center pl-1 font-semibold text-info">
                     {rating}
                 </p>
             </div>
@@ -44,9 +44,11 @@ const ProductCard = ({ item }: ProductCardProps) => {
                     )
                 }
             ></img>
-            <div className="pt-2 flex flex-row justify-between w-full">
-                <h2 className="ml-3 font-bold text-lg">{item.title}</h2>
-                <p className="mr-3 text-lg font-bold">{item.picePerDay}Kr<span className="font-light">/dag</span></p>
+            <div className="flex flex-row justify-between w-full pt-2">
+                <h2 className="ml-3 text-lg font-bold">{item.title}</h2>
+                <p className="mr-3 text-lg font-bold">
+                    {item.picePerDay}Kr<span className="font-light">/dag</span>
+                </p>
             </div>
         </div>
     );
