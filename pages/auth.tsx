@@ -70,40 +70,7 @@ const Auth: NextPage<
                     </svg>
                 </div>
 
-                <h1 className="flex-grow text-3xl font-semibold text-center font-nunito">
-                    Logga in / Skapa konto
-                </h1>
-                <form
-                    method="post"
-                    action="/api/auth/signin/email"
-                    className="space-y-4 form-control"
-                >
-                    <input
-                        name="csrfToken"
-                        type="hidden"
-                        defaultValue={csrfToken}
-                    />
-                    <label
-                        htmlFor="email"
-                        className=" input-group input-group-vertical"
-                    >
-                        Email
-                        <input
-                            className="input input-bordered"
-                            id="email"
-                            name="email"
-                            type="text"
-                            placeholder="dinmail@mail.se"
-                        />
-                    </label>
-                    <button type="submit" className="btn btn-primary">
-                        Logga in
-                    </button>
-                </form>
-                <p className="mt-4 text-center ">
-                    Klicka på länken som skickats till din mail. Kolla i din
-                    skräppost om du inte ser mailet från Hyrstacken.
-                </p>
+                
 
 
         <h1 className="font-nunito font-semibold text-3xl text-center flex-grow">Logga in / Skapa konto</h1>
