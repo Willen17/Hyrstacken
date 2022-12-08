@@ -150,9 +150,11 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                         </svg>
                     )}
                 </div>
-                <div className="p-2 m-2 mt-5 rounded-lg bg-lightGray">
-                    <p className="p-2 font-normal">{user.bio}</p>
-                </div>
+                {user.bio && (
+                    <div className="p-2 m-2 mt-5 rounded-lg bg-lightGray">
+                        <p className="p-2 font-normal">{user.bio}</p>
+                    </div>
+                )}
                 {session && session.user?.email === user.email && (
                     <>
                         <div className="px-2 pb-5 mt-10 ">
