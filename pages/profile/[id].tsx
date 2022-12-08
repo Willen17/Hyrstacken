@@ -46,6 +46,7 @@ export const getStaticProps = async ({
             name: true,
             email: true,
             image: true,
+            bio: true,
         },
     });
 
@@ -149,6 +150,9 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                         </svg>
                     )}
                 </div>
+                <div className="p-2 m-2 mt-5 rounded-lg bg-lightGray">
+                    <p className="p-2 font-normal">{user.bio}</p>
+                </div>
                 {session && session.user?.email === user.email && (
                     <>
                         <div className="px-2 pb-5 mt-10 ">
@@ -167,6 +171,7 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                                 id={user.id}
                                 name={user.name}
                                 image={user.image}
+                                bio={user.bio}
                                 setFormVisible={setFormVisible}
                             />
                         )}

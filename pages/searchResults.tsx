@@ -24,6 +24,9 @@ export async function getServerSideProps() {
             description: true,
             picePerDay: true,
             imageUrl: true,
+            location: {
+                select: { name: true },
+            },
             category: {
                 select: { name: true },
             },

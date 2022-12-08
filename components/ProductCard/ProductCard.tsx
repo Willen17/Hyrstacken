@@ -10,6 +10,7 @@ type ProductCardProps = {
         description: string;
         imageUrl: string | null;
         picePerDay: number;
+        location: { name: string };
         category: { name: string };
     };
 };
@@ -17,7 +18,6 @@ type ProductCardProps = {
 const ProductCard = ({ item }: ProductCardProps) => {
     const [imgSrc, setImgSrc] = useState(item.imageUrl);
 
-    let location = "Hisingen";
     let rating = "4.5 Betyg";
 
     return (
@@ -25,7 +25,7 @@ const ProductCard = ({ item }: ProductCardProps) => {
             <div className="absolute flex justify-center w-24 px-2 py-4 text-xs bg-veryDarkBlue rounded-3xl h-7 top-6 right-3">
                 <LocationIcon className="self-center" />
                 <p className="self-center pl-1 font-normal text-info">
-                    {location}
+                    {item.location.name}
                 </p>
             </div>
             <div className="absolute flex justify-center w-24 px-2 py-4 text-xs bg-veryDarkBlue rounded-3xl h-7 top-6 left-3">
@@ -47,7 +47,8 @@ const ProductCard = ({ item }: ProductCardProps) => {
             <div className="flex flex-row justify-between w-full pt-2">
                 <h2 className="ml-3 text-lg font-bold">{item.title}</h2>
                 <p className="mr-3 text-lg font-bold">
-                    {item.picePerDay}Kr<span className="font-light">/dag</span>
+                    {item.picePerDay} kr
+                    <span className="font-normal">/dag</span>
                 </p>
             </div>
         </div>
