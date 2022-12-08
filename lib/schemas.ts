@@ -35,3 +35,12 @@ export const profileSchema = z.object({
         .max(15),
     image: z.string(),
 });
+
+export const bookingSchema = z.object({
+    startDate: z.date(),
+    endDate: z.date(),
+    itemId: z.string(),
+    item: itemSchema,
+    renter: profileSchema,
+    id: z.string().optional(),
+});
