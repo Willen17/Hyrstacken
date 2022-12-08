@@ -18,6 +18,14 @@ model Category {
   items     Item[]
 }
 
+model Location {
+  id        String      @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  items     Item[]
+}
+
 model Item {
   id          String       @id @default(cuid())
   title       String
@@ -33,6 +41,8 @@ model Item {
   ratings     Rating[]
   categoryId  String
   category    Category @relation(fields: [categoryId], references: [id])
+    locationId  String
+  location    Location @relation(fields: [locationId], references: [id])
 }
 
 model Booking {
@@ -90,6 +100,7 @@ model User {
   id            String    @id @default(cuid())
   name          String?
   email         String?   @unique
+  bio           String? 
   emailVerified DateTime?
   image         String?
   accounts      Account[]

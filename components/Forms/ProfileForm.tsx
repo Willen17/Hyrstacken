@@ -14,6 +14,7 @@ type Props = {
     name?: string | null;
     id: string;
     image?: string | null;
+    bio?: string | null;
     setFormVisible?: Dispatch<SetStateAction<boolean>>;
     fromModal?: boolean;
 };
@@ -89,7 +90,6 @@ const ProfileForm = (props: Props) => {
                     <FormLabel required>Namn</FormLabel>
                     <input
                         placeholder="Ditt förnamn"
-                        // {...register("title", { required: "Måste ha en titel" })}
                         className="pl-2 pr-10 font-bold border-b-[1px] h-9 border-veryDarkBlue"
                         {...register("name", {
                             required: "Måste ha ett namn",
@@ -105,10 +105,22 @@ const ProfileForm = (props: Props) => {
                     <span className="text-error">{errors.name?.message}</span>
                 )}
                 <div className="relative flex flex-col my-3 gap-y-3">
+                    <FormLabel>Profilbeskrivning</FormLabel>
+                    <textarea
+                        placeholder="Info om mig..."
+                        className="pl-2   border-b-[1px]  border-veryDarkBlue"
+                        {...register("bio")}
+                        rows={3}
+                        defaultValue={props.bio || undefined}
+                    />
+                </div>
+                {errors.bio && (
+                    <span className="text-error">{errors.bio?.message}</span>
+                )}
+                <div className="relative flex flex-col my-3 gap-y-3">
                     <FormLabel>Profilbild</FormLabel>
                     <input
                         placeholder="Bild-URL"
-                        // {...register("title", { required: "Måste ha en titel" })}
                         className="pl-2 pr-10 font-bold border-b-[1px] h-9 border-veryDarkBlue"
                         {...register("image")}
                         defaultValue={props.image || undefined}

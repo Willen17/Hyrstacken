@@ -10,16 +10,23 @@ export async function getServerSideProps() {
             name: true,
         },
     });
+    const locations = await prisma.location.findMany({
+        select: {
+            id: true,
+            name: true,
+        },
+    });
     return {
         props: {
             categories,
+            locations,
         },
     };
 }
 
 const CreateItem: NextPage<
     InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ categories }) => {
+> = ({ categories, locations }) => {
     return (
         <>
             <Head>
@@ -28,7 +35,7 @@ const CreateItem: NextPage<
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <div className="container max-w-2xl mx-auto font-nunito mt-[70px] min-[800px]:mt-[100px]">
-                <ItemForm categories={categories} />
+                <ItemForm categories={categories} locations={locations} />
             </div>
         </>
     );

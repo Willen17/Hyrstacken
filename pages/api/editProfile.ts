@@ -19,13 +19,14 @@ export default async function handler(
         return res.status(401).end();
     }
 
-    const { name, image } = await profileSchema.parseAsync(req.body);
+    const { name, image, bio } = await profileSchema.parseAsync(req.body);
 
     const updatedUser = await prisma.user.update({
         where: { email: session.user.email },
         data: {
             name,
             image,
+            bio,
         },
     });
 

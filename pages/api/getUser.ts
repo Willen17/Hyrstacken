@@ -6,28 +6,29 @@ import prisma from "../../lib/prisma";
 import { profileSchema } from "../../lib/schemas";
 
 export default async function getUserHandler(
-  req: NextApiRequest,
-  res: NextApiResponse
+    req: NextApiRequest,
+    res: NextApiResponse
 ) {
-  const session = await getSession({ req });
+    const session = await getSession({ req });
 
-  if (req.method !== "GET") {
-    return res.status(405).end();
-  }
+    if (req.method !== "GET") {
+        return res.status(405).end();
+    }
 
-  if (!session?.user?.email) {
-    return res.status(401).end();
-  }
+    if (!session?.user?.email) {
+        return res.status(401).end();
+    }
 
-  const { name, image } = await profileSchema.parseAsync(req.body);
+    const { name, image, bio } = await profileSchema.parseAsync(req.body);
 
-  const updatedUser = await prisma.user.update({
-    where: { email: session.user.email },
-    data: {
-      name,
-      image,
-    },
-  });
+    const updatedUser = await prisma.user.update({
+        where: { email: session.user.email },
+        data: {
+            name,
+            image,
+            bio,
+        },
+    });
 
-  res.status(200).json({ id: updatedUser.id });
+    res.status(200).json({ id: updatedUser.id });
 }
