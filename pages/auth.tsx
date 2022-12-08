@@ -56,7 +56,7 @@ const Auth: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
           }
           return (
           <div key={provider.name}>
-            <button className="btn" onClick={() => signIn(provider.id)}>
+            <button className="btn" onClick={() => signIn(provider.id, {callbackUrl: `${window.location.origin}`})}>
               Sign in with {provider.name}
             </button>
           </div>

@@ -63,7 +63,6 @@ export default function Home() {
     }) 
 
     const useRequestModal = () => {
-
         useEffect(() => {
             const handler = () => {
                 if(isFirstLoad && session && !session.data?.user?.name && id) {

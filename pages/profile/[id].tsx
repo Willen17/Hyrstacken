@@ -3,6 +3,7 @@ import { GetStaticPropsContext, InferGetStaticPropsType, NextPage } from "next";
 import { signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import ProfileForm from "../../components/Forms/ProfileForm";
 import SecondaryButton from "../../components/PrimaryButton/SecondaryButton";
@@ -82,6 +83,7 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
 }) => {
     const { data: session } = useSession();
     const [formVisible, setFormVisible] = useState(false);
+    const route = useRouter()
 
     return (
         <>
@@ -149,7 +151,9 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                 </div>
                 {session && session.user?.email === user.email && (
                     <div className="px-2 pb-5 mt-10 ">
-                        <SecondaryButton onClick={() => signOut()}>
+                        <SecondaryButton onClick={() => {
+                            signOut({callbackUrl: `${window.location.origin}`})
+                        }}>
                             Logga ut
                         </SecondaryButton>
                     </div>
