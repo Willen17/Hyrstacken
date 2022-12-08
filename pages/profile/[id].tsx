@@ -3,7 +3,6 @@ import { GetStaticPropsContext, InferGetStaticPropsType, NextPage } from "next";
 import { signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import ProfileForm from "../../components/Forms/ProfileForm";
 import SecondaryButton from "../../components/PrimaryButton/SecondaryButton";
@@ -29,7 +28,9 @@ export const getStaticPaths = async () => {
 };
 
 // typed function getStaticProps from api for user profile
-export const getStaticProps = async ({ params }: GetStaticPropsContext<{ id: string }>) => {
+export const getStaticProps = async ({
+    params,
+}: GetStaticPropsContext<{ id: string }>) => {
     if (!params) {
         return {
             notFound: true,
@@ -83,7 +84,6 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
 }) => {
     const { data: session } = useSession();
     const [formVisible, setFormVisible] = useState(false);
-    const route = useRouter()
 
     return (
         <>
@@ -106,7 +106,7 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                     )}
                     <div className="self-center flex-1">
                         <h1 className="text-2xl font-extrabold">
-                            {user.name || user.email}
+                            {user.name || "Anonym"}
                         </h1>
                         <span>Medlem Sedan 2022</span>
                     </div>
@@ -150,21 +150,27 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                     )}
                 </div>
                 {session && session.user?.email === user.email && (
-                    <div className="px-2 pb-5 mt-10 ">
-                        <SecondaryButton onClick={() => {
-                            signOut({callbackUrl: `${window.location.origin}`})
-                        }}>
-                            Logga ut
-                        </SecondaryButton>
-                    </div>
-                )}
-                {formVisible && (
-                    <ProfileForm
-                        id={user.id}
-                        name={user.name}
-                        image={user.image}
-                        setFormVisible={setFormVisible}
-                    />
+                    <>
+                        <div className="px-2 pb-5 mt-10 ">
+                            <SecondaryButton
+                                onClick={() => {
+                                    signOut({
+                                        callbackUrl: `${window.location.origin}`,
+                                    });
+                                }}
+                            >
+                                Logga ut
+                            </SecondaryButton>
+                        </div>
+                        {formVisible && (
+                            <ProfileForm
+                                id={user.id}
+                                name={user.name}
+                                image={user.image}
+                                setFormVisible={setFormVisible}
+                            />
+                        )}
+                    </>
                 )}
                 <div className="relative flex items-center justify-between px-2 pb-5 mt-10">
                     <p className="mr-2 font-bold whitespace-nowrap">
