@@ -121,7 +121,9 @@ const ProfileForm = (props: Props) => {
                 {errors.image && (
                     <span className="text-error">{errors.image?.message}</span>
                 )}
-                {!isValid && <span className="text-error">Fyll i namn</span>}
+                {!isValid && (
+                    <span className="text-error">Fyll i ett korrekt namn</span>
+                )}
                 <div className="pb-5 mt-10">
                     <input
                         type="submit"
