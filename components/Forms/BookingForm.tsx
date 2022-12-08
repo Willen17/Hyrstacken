@@ -1,34 +1,31 @@
-import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { bookingSchema } from "../../lib/schemas";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { z } from "zod";
+import { Dispatch, SetStateAction } from "react";
+import { useForm } from "react-hook-form";
 import SuperJSON from "superjson";
+import { z } from "zod";
+import { bookingSchema } from "../../lib/schemas";
 
-
-export default function BookingForm({ itemId, userId, orderSubmitted}: { itemId: string, userId: string, orderSubmitted: Dispatch<SetStateAction<boolean>> }) {
-
-    
-
-    const { register, handleSubmit, formState: { errors, isSubmitting, isValid }, watch, setError, control } = useForm<z.infer<typeof bookingSchema>>({
+export default function BookingForm({
+    itemId,
+    userId,
+    orderSubmitted,
+}: {
+    itemId: string;
+    userId: string;
+    orderSubmitted: Dispatch<SetStateAction<boolean>>;
+}) {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting, isValid },
+        watch,
+        setError,
+        control,
+    } = useForm<z.infer<typeof bookingSchema>>({
         resolver: zodResolver(bookingSchema),
     });
 
-    // const validateDate = () => {
-    //     const currentDate = new Date();
-    //     if(watch("startDate") >= watch("endDate") || watch("startDate") < currentDate) {
-    //         return true
-
-    //     } else return false;
-    // }
-
-    // const startDate = useWatch({
-    //     control,
-    //     name: "startDate",
-    // });
-
-
-    const onSubmit = handleSubmit(async(data) => {
+    const onSubmit = handleSubmit(async (data) => {
         if (userId) {
             try {
                 const res = await fetch("/api/booking/add", {
@@ -37,7 +34,7 @@ export default function BookingForm({ itemId, userId, orderSubmitted}: { itemId:
                         "Content-Type": "application/json",
                     },
                     body: SuperJSON.stringify(data),
-                })
+                });
                 if (!res.ok) {
                     throw new Error("Something went wrong");
                 } else {
@@ -45,23 +42,17 @@ export default function BookingForm({ itemId, userId, orderSubmitted}: { itemId:
                     console.log(result);
                     orderSubmitted(true);
                 }
-            }
-            catch (error) {
+            } catch (error) {
                 console.log(error);
             }
-        }
-        else {
+        } else {
             alert("Du måste vara inloggad för att kunna göra en förfrågan");
-        } 
+        }
     });
 
     return (
         <form onSubmit={onSubmit}>
-            <input
-                type="hidden"
-                {...register("itemId")}
-                value={itemId}
-            />
+            <input type="hidden" {...register("itemId")} value={itemId} />
             <div className="flex flex-col">
                 <label htmlFor="startDate">Start Date</label>
                 <input
@@ -76,12 +67,13 @@ export default function BookingForm({ itemId, userId, orderSubmitted}: { itemId:
                     type="date"
                     {...register("endDate", { valueAsDate: true })}
                 />
-                {errors.endDate && <p>{errors.endDate.message}</p>
-                }
-
+                {errors.endDate && <p>{errors.endDate.message}</p>}
             </div>
-            <input type="submit" value={isValid ? "Skicka förfrågan" : "Ange datum"} className="btn btn-primary" />
+            <input
+                type="submit"
+                value={isValid ? "Skicka förfrågan" : "Ange datum"}
+                className="btn btn-primary"
+            />
         </form>
     );
 }
-
