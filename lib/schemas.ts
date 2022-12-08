@@ -27,6 +27,7 @@ export const itemSchema = z.object({
     categoryId: z.string().min(1, { message: "Kategori måste väljas." }),
     locationId: z.string().min(1, { message: "En stadsdel måste väljas." }),
     id: z.string().optional(),
+    ownerId: z.string().optional(),
 });
 
 export const profileSchema = z.object({
@@ -38,4 +39,10 @@ export const profileSchema = z.object({
         message: "Profilbeskrivning får inte vara mer än 150 tecken.",
     }),
     image: z.string(),
+});
+
+export const bookingSchema = z.object({
+    startDate: z.date().min(new Date(), { message: "Startdatum får inte vara före idag." }),
+    endDate: z.date().min(new Date(), { message: "Slutdatum får inte vara före idag." }),
+    itemId: z.string(),
 });

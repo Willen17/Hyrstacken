@@ -1,89 +1,85 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model Category {
-  id        String      @id @default(cuid())
-  name      String
+  id        String   @id @default(cuid())
+  name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   items     Item[]
 }
 
 model Location {
-  id        String      @id @default(cuid())
-  name      String
+  id        String   @id @default(cuid())
+  name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   items     Item[]
 }
 
 model Item {
-  id          String       @id @default(cuid())
+  id          String    @id @default(cuid())
   title       String
   description String
   picePerDay  Float
   ownerId     String
-  owner       User      @relation(fields: [ownerId], references: [id])
-  bookings    Booking[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
   imageUrl    String?
-  ratings     Rating[]
   categoryId  String
-  category    Category @relation(fields: [categoryId], references: [id])
-    locationId  String
-  location    Location @relation(fields: [locationId], references: [id])
+  locationId  String
+  category    Category  @relation(fields: [categoryId], references: [id])
+  location    Location  @relation(fields: [locationId], references: [id])
+  owner       User      @relation(fields: [ownerId], references: [id])
+  bookings    Booking[]
+  ratings     Rating[]
 }
 
 model Booking {
-  id        String   @id @default(cuid())
-  itemId    String @unique
+  id        String        @id @default(cuid())
+  itemId    String
   renterId  String
-  item      Item  @relation(fields: [itemId], references: [id])
-  renter    User     @relation(fields: [renterId], references: [id])
   startDate DateTime
   endDate   DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  status    BookingStatus @default(pending)
+  item      Item          @relation(fields: [itemId], references: [id])
+  renter    User          @relation(fields: [renterId], references: [id])
 }
 
 model Rating {
   id        String   @id @default(cuid())
   itemId    String
   userId    String
-  item      Item  @relation(fields: [itemId], references: [id])
-  user      User     @relation(fields: [userId], references: [id])
   rating    Float
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  item      Item     @relation(fields: [itemId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 }
 
-// Start NextAuth
 model Account {
   id                String  @id @default(cuid())
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -100,14 +96,14 @@ model User {
   id            String    @id @default(cuid())
   name          String?
   email         String?   @unique
-  bio           String? 
   emailVerified DateTime?
   image         String?
+  bio           String?
   accounts      Account[]
-  sessions      Session[]
-  items         Item[]
   bookings      Booking[]
+  items         Item[]
   ratings       Rating[]
+  sessions      Session[]
 }
 
 model VerificationToken {
@@ -118,4 +114,11 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-// End NextAuth
+enum BookingStatus {
+  pending
+  accepted
+  declined
+  expired
+  cancelled
+  done
+}
