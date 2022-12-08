@@ -32,6 +32,6 @@ export const profileSchema = z.object({
     name: z
         .string()
         .min(2, { message: "Namn måste vara minst två bokstäver." })
-        .max(15),
+        .max(15, { message: "Namn får inte var mer än 15 bokstäver." }),
     image: z.string(),
 });
