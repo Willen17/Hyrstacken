@@ -3,19 +3,21 @@ import Image from "next/image";
 import Typewriter from "typewriter-effect";
 
 import heroImg from "../public/assets/hero-img.jpg";
+import Logo from "../public/assets/logo.png";
+import PussleImg from "../public/assets/pussle-img.png";
 import TrainImage from "../public/assets/train-2.png";
 import TrainMob from "../public/assets/train-mob.png";
-import PussleImg from "../public/assets/pussle-img.png";
-import Logo from '../public/assets/logo.png';
 
-import FilterIcon from "../public/assets/filter-icon.svg";
 import ArrowRightIcon from "../public/assets/arrow-right.svg";
+import FilterIcon from "../public/assets/filter-icon.svg";
 import SearchIcon from "../public/assets/search-icon.svg";
 
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import PrimaryButton from "../components/PrimaryButton/PrimaryButton";
 import SecondaryButton from "../components/PrimaryButton/SecondaryButton";
-import { useEffect, useState } from "react";
-import Link from "next/link";
+
+let isFirstLoad: boolean = true;
 
 export default function Home() {
     function useWindowWidth() {
@@ -40,7 +42,7 @@ export default function Home() {
     const windowWidth = useWindowWidth();
 
     return (
-        <div>
+        <div className="overflow-y-hidden">
             <Head>
                 <title>Hyrstacken</title>
                 <meta
@@ -49,12 +51,18 @@ export default function Home() {
                 />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
+
             <main className="overflow-x-hidden">
                 <section className="flex justify-center w-screen h-screen">
-                    {windowWidth && windowWidth < 800
-                    ? <Image src={Logo} alt="logotype" className="absolute top-[2rem] left-[2rem]"/>
-                    : ''
-                    }
+                    {windowWidth && windowWidth < 800 ? (
+                        <Image
+                            src={Logo}
+                            alt="logotype"
+                            className="absolute top-[2rem] left-[2rem]"
+                        />
+                    ) : (
+                        ""
+                    )}
                     <Image
                         src={heroImg}
                         alt="heroImage"
@@ -203,7 +211,7 @@ export default function Home() {
                                 <span className="text-softRed">SÄKERT</span>{" "}
                                 SÄTT ATT GÖRA AFFÄRER MED VARANDRA
                             </h2>
-                            <p className="">
+                            <p>
                                 Genom verifiering med BankID gör du alltid
                                 affärer med legitimerade personer, och med tiden
                                 kommer både konsumenter och annonsörer att
