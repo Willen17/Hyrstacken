@@ -104,7 +104,7 @@ const footerLinks: FooterLinks[] = [
 
 const Footer = () => {
     return (
-        <div className="relative flex lg:flex-col justify-center h-[1300px] lg:h-[700px]">
+        <div className="relative bottom-0 flex lg:flex-col justify-center h-[1300px] lg:h-[700px]">
             <Image
                 src={BackgroundImg}
                 alt="train and mountain"

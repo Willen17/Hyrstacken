@@ -7,6 +7,7 @@ import CrossIcon from "../../assets/cross.svg";
 import Loader from "../Loader/Loader";
 import FormLabel from "../FormLabel/FormLabel";
 import router from "next/router";
+import { useSession } from "next-auth/react";
 
 type ItemFormProps = {
     categories: {
@@ -20,15 +21,20 @@ type ItemFormProps = {
         picePerDay: number;
         imageUrl: string | null;
         categoryId: string;
+        locationId: string;
         owner: {
             id: string;
             name: string | null;
             image: string | null;
         };
     };
+    locations: {
+        id: string;
+        name: string;
+    }[];
 };
 
-const ItemForm = ({ categories, product }: ItemFormProps) => {
+const ItemForm = ({ categories, product, locations }: ItemFormProps) => {
     const [fetchError, setFetchError] = useState<boolean>(false);
     const [id, setId] = useState<string>();
 
@@ -48,6 +54,7 @@ const ItemForm = ({ categories, product }: ItemFormProps) => {
         }
     }, [product]);
 
+    const { data: session } = useSession();
     const ownItem = id === product?.owner.id;
     const {
         register,
@@ -102,9 +109,9 @@ const ItemForm = ({ categories, product }: ItemFormProps) => {
                 Försök igen
             </button>
         </div>
-    ) : product && !ownItem ? (
+    ) : !session || (product && !ownItem) ? (
         <div className="flex flex-col items-center justify-center h-screen font-bold gap-y-5">
-            <p>Denna annons går inte att redigera...</p>
+            <p>Du har inte tillgång till denna sidan...</p>
             <button
                 onClick={() => {
                     router.back();
@@ -188,31 +195,64 @@ const ItemForm = ({ categories, product }: ItemFormProps) => {
                     {errors.description?.message}
                 </span>
             )}
-            <FormLabel required>Kategori</FormLabel>
+            <div className="flex flex-col my-3 gap-y-3">
+                <FormLabel required>Kategori</FormLabel>
 
-            <select
-                id=""
-                className=" select  border-veryDarkBlue border-[1px]"
-                {...register("categoryId")}
-                defaultValue={product ? product.categoryId : ""}
-            >
-                <option disabled value="">
-                    Välj kategori
-                </option>
-                {categories.map((category) => {
-                    return (
-                        <option
-                            key={category.id}
-                            defaultChecked={category.id === product?.categoryId}
-                            value={category.id}
-                        >
-                            {category.name}
-                        </option>
-                    );
-                })}
-            </select>
+                <select
+                    id=""
+                    className=" select  border-veryDarkBlue border-[1px]"
+                    {...register("categoryId")}
+                    defaultValue={product ? product.categoryId : ""}
+                >
+                    <option disabled value="">
+                        Välj kategori
+                    </option>
+                    {categories.map((category) => {
+                        return (
+                            <option
+                                key={category.id}
+                                defaultChecked={
+                                    category.id === product?.categoryId
+                                }
+                                value={category.id}
+                            >
+                                {category.name}
+                            </option>
+                        );
+                    })}
+                </select>
+            </div>
             {errors.categoryId && (
                 <span className="text-error">{errors.categoryId?.message}</span>
+            )}
+            <div className="flex flex-col my-3 gap-y-3">
+                <FormLabel required>Stadsdel</FormLabel>
+                <select
+                    id=""
+                    className=" select  border-veryDarkBlue border-[1px]"
+                    {...register("locationId")}
+                    defaultValue={product ? product.locationId : ""}
+                >
+                    <option disabled value="">
+                        Välj stadsdel
+                    </option>
+                    {locations.map((location) => {
+                        return (
+                            <option
+                                key={location.id}
+                                defaultChecked={
+                                    location.id === product?.locationId
+                                }
+                                value={location.id}
+                            >
+                                {location.name}
+                            </option>
+                        );
+                    })}
+                </select>
+            </div>
+            {errors.locationId && (
+                <span className="text-error">{errors.locationId?.message}</span>
             )}
             <input
                 type="submit"

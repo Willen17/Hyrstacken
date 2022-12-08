@@ -25,6 +25,7 @@ export const itemSchema = z.object({
         }),
     imageUrl: z.string().optional(),
     categoryId: z.string().min(1, { message: "Kategori måste väljas." }),
+    locationId: z.string().min(1, { message: "En stadsdel måste väljas." }),
     id: z.string().optional(),
 });
 
@@ -32,7 +33,10 @@ export const profileSchema = z.object({
     name: z
         .string()
         .min(2, { message: "Namn måste vara minst två bokstäver." })
-        .max(15),
+        .max(15, { message: "Namn får inte var mer än 15 bokstäver." }),
+    bio: z.string().max(150, {
+        message: "Profilbeskrivning får inte vara mer än 150 tecken.",
+    }),
     image: z.string(),
 });
 

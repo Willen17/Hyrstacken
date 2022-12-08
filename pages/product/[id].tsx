@@ -51,6 +51,16 @@ export const getStaticProps = async ({
             description: true,
             picePerDay: true,
             imageUrl: true,
+            category: {
+                select: {
+                    name: true,
+                },
+            },
+            location: {
+                select: {
+                    name: true,
+                },
+            },
             owner: {
                 select: {
                     id: true,
@@ -170,7 +180,7 @@ const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                 <div className="flex flex-col h-full p-8 overflow-hidden justify-evenly">
                     <h1 className="text-2xl font-bold">{product.title}</h1>
                     <p className="font-bold">
-                        {product.picePerDay} SEK
+                        {product.picePerDay} kr
                         <span className="font-normal">/dag</span>
                     </p>
                     <p className="w-[95%] text-sm py-2">
@@ -179,7 +189,7 @@ const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                     <div className="flex flex-row flex-wrap items-center w-full py-5 text-sm text-white gap-x-5 ">
                         <div className="flex px-3 py-1 my-2 bg-veryDarkBlue rounded-3xl">
                             <LocationIcon className="self-center " />
-                            <p className="pl-1">{item.location}</p>
+                            <p className="pl-1">{product.location.name}</p>
                         </div>
                         <div className="flex px-3 py-1 my-2 bg-veryDarkBlue rounded-3xl">
                             <RatingIcon className="self-center" />

@@ -44,6 +44,7 @@ export const getStaticProps = async ({
             picePerDay: true,
             imageUrl: true,
             categoryId: true,
+            locationId: true,
             owner: {
                 select: {
                     id: true,
@@ -51,6 +52,13 @@ export const getStaticProps = async ({
                     image: true,
                 },
             },
+        },
+    });
+
+    const locations = await prisma.location.findMany({
+        select: {
+            id: true,
+            name: true,
         },
     });
 
@@ -71,6 +79,7 @@ export const getStaticProps = async ({
         props: {
             product,
             categories,
+            locations,
         },
         revalidate: 1,
     };
@@ -79,6 +88,7 @@ export const getStaticProps = async ({
 const CreateItem: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
     product,
     categories,
+    locations,
 }) => {
     return (
         <>
@@ -88,7 +98,11 @@ const CreateItem: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <div className="container max-w-2xl mx-auto font-nunito mt-[70px] min-[800px]:mt-[100px]">
-                <ItemForm categories={categories} product={product} />
+                <ItemForm
+                    categories={categories}
+                    product={product}
+                    locations={locations}
+                />
             </div>
         </>
     );

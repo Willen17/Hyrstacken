@@ -28,7 +28,9 @@ export const getStaticPaths = async () => {
 };
 
 // typed function getStaticProps from api for user profile
-export const getStaticProps = async ({ params }: GetStaticPropsContext<{ id: string }>) => {
+export const getStaticProps = async ({
+    params,
+}: GetStaticPropsContext<{ id: string }>) => {
     if (!params) {
         return {
             notFound: true,
@@ -44,6 +46,7 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext<{ id: str
             name: true,
             email: true,
             image: true,
+            bio: true,
         },
     });
 
@@ -104,7 +107,7 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                     )}
                     <div className="self-center flex-1">
                         <h1 className="text-2xl font-extrabold">
-                            {user.name || user.email}
+                            {user.name || "Anonym"}
                         </h1>
                         <span>Medlem Sedan 2022</span>
                     </div>
@@ -147,20 +150,34 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                         </svg>
                     )}
                 </div>
-                {session && session.user?.email === user.email && (
-                    <div className="px-2 pb-5 mt-10 ">
-                        <SecondaryButton onClick={() => signOut()}>
-                            Logga ut
-                        </SecondaryButton>
+                {user.bio && (
+                    <div className="p-2 m-2 mt-5 rounded-lg bg-lightGray">
+                        <p className="p-2 font-normal">{user.bio}</p>
                     </div>
                 )}
-                {formVisible && (
-                    <ProfileForm
-                        id={user.id}
-                        name={user.name}
-                        image={user.image}
-                        setFormVisible={setFormVisible}
-                    />
+                {session && session.user?.email === user.email && (
+                    <>
+                        <div className="px-2 pb-5 mt-10 ">
+                            <SecondaryButton
+                                onClick={() => {
+                                    signOut({
+                                        callbackUrl: `${window.location.origin}`,
+                                    });
+                                }}
+                            >
+                                Logga ut
+                            </SecondaryButton>
+                        </div>
+                        {formVisible && (
+                            <ProfileForm
+                                id={user.id}
+                                name={user.name}
+                                image={user.image}
+                                bio={user.bio}
+                                setFormVisible={setFormVisible}
+                            />
+                        )}
+                    </>
                 )}
                 <div className="relative flex items-center justify-between px-2 pb-5 mt-10">
                     <p className="mr-2 font-bold whitespace-nowrap">

@@ -19,7 +19,7 @@ export default async function handler(
         return res.status(401).end();
     }
 
-    const { title, price, description, imageUrl, categoryId, id } =
+    const { title, price, description, imageUrl, categoryId, id, locationId } =
         await itemSchema.parseAsync(req.body);
 
     const updatedItem = await prisma.item.update({
@@ -29,6 +29,11 @@ export default async function handler(
             picePerDay: price,
             description,
             imageUrl,
+            location: {
+                connect: {
+                    id: locationId,
+                },
+            },
             category: {
                 connect: {
                     id: categoryId,
