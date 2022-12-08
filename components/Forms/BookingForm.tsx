@@ -1,47 +1,86 @@
-//create a booking form using react-hook-form the form will be used to create a booking for a user on the front end. the api will be used to create a booking on the backend. the enpoint is /api/booking/add and there is a bookingschema from zod. the form has two date input fields, one for startdate and the other for enddate
-
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { bookingSchema } from "../../lib/schemas";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { z } from "zod";
+import SuperJSON from "superjson";
 
-export default function BookingForm() {
 
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
+export default function BookingForm({ itemId, userId, orderSubmitted}: { itemId: string, userId: string, orderSubmitted: Dispatch<SetStateAction<boolean>> }) {
 
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    
+
+    const { register, handleSubmit, formState: { errors, isSubmitting, isValid }, watch, setError, control } = useForm<z.infer<typeof bookingSchema>>({
         resolver: zodResolver(bookingSchema),
     });
 
-    const onSubmit = (data: any) => {
-        console.log(data);
-    };
+    // const validateDate = () => {
+    //     const currentDate = new Date();
+    //     if(watch("startDate") >= watch("endDate") || watch("startDate") < currentDate) {
+    //         return true
+
+    //     } else return false;
+    // }
+
+    // const startDate = useWatch({
+    //     control,
+    //     name: "startDate",
+    // });
+
+
+    const onSubmit = handleSubmit(async(data) => {
+        if (userId) {
+            try {
+                const res = await fetch("/api/booking/add", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: SuperJSON.stringify(data),
+                })
+                if (!res.ok) {
+                    throw new Error("Something went wrong");
+                } else {
+                    const result = await res.json();
+                    console.log(result);
+                    orderSubmitted(true);
+                }
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        else {
+            alert("Du måste vara inloggad för att kunna göra en förfrågan");
+        } 
+    });
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={onSubmit}>
+            <input
+                type="hidden"
+                {...register("itemId")}
+                value={itemId}
+            />
             <div className="flex flex-col">
                 <label htmlFor="startDate">Start Date</label>
                 <input
                     type="date"
-                    {...register("startDate")}
-                    value={startDate.toISOString().substring(0, 10)}
-                    onChange={(e) => setStartDate(new Date(e.target.value))}
+                    {...register("startDate", { valueAsDate: true })}
                 />
-                {errors.startDate && <p>fel start</p>}
+                {errors.startDate && <p>{errors.startDate.message}</p>}
             </div>
             <div className="flex flex-col">
                 <label htmlFor="endDate">End Date</label>
                 <input
                     type="date"
-                    {...register("endDate")}
-                    value={endDate.toISOString().substring(0, 10)}
-                    onChange={(e) => setEndDate(new Date(e.target.value))}
+                    {...register("endDate", { valueAsDate: true })}
                 />
-                {errors.endDate && <p>fel slut</p>}
+                {errors.endDate && <p>{errors.endDate.message}</p>
+                }
+
             </div>
-            <button type="submit">Submit</button>
+            <input type="submit" value={isValid ? "Skicka förfrågan" : "Ange datum"} className="btn btn-primary" />
         </form>
     );
 }

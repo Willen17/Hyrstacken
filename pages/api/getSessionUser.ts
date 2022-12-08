@@ -2,8 +2,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
 import { z } from "zod";
-import prisma from "../../lib/prisma";
+import prisma, { getUserIdFromEmail } from "../../lib/prisma";
 import { profileSchema } from "../../lib/schemas";
+
 
 export default async function handler(
     req: NextApiRequest,
@@ -15,9 +16,7 @@ export default async function handler(
         return res.status(401).end();
     }
 
-    const userId = await prisma.user.findUnique({
-        where: { email: session.user.email },
-    });
+    const userId = await getUserIdFromEmail(session.user.email);
 
-    res.status(200).json({ id: userId?.id });
+    res.status(200).json({ id: userId });
 }

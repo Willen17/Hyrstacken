@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
-import prisma from '../../../lib/prisma';
+import prisma, { getUserIdFromEmail } from '../../../lib/prisma';
 import { bookingSchema } from "../../../lib/schemas";
-
+import SuperJSON from "superjson";
 
 
 export default async function handle(
@@ -20,23 +20,29 @@ export default async function handle(
     return res.status(401).end();
   }
 
-  const { startDate, endDate, itemId, renter, item } = await bookingSchema.parseAsync(req.body);
+  const renterId = await getUserIdFromEmail(session.user.email);
+  if (!renterId) {
+    return res.status(401).end();
+  }
+
+  const { startDate, endDate, itemId} = await bookingSchema.parseAsync(SuperJSON.deserialize(req.body));
 
   const booking = await prisma.booking.create({
-              data: {
-                startDate,
-                endDate,
-                renter: {
-                  connect: {
-                    email: renter.name || session.user.email,
-                  },
-                },
-                item: {
-                  connect: {
-                    id: item.id,
-                  },
-                },
-              },
-            });
-            res.status(200).json(booking);
+    data: {
+      startDate,
+      endDate,
+      renter: {
+        connect: {
+          id: renterId,
+        },
+      },
+      item: {
+        connect: {
+          id: itemId,
+        },
+      },
+    },
+  });
+  
+  res.status(200).json({id: booking.id});
 }

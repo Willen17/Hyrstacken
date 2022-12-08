@@ -9,6 +9,14 @@ declare let global: { prisma: PrismaClient };
 
 let prisma: PrismaClient
 
+export const getUserIdFromEmail = async (email: string) => {
+  const user = await prisma.user.findUnique({
+      where: { email },
+  });
+  return user?.id || null;
+};
+
+
 if (process.env.NODE_ENV === 'production') {
   prisma = new PrismaClient()
 } else {
