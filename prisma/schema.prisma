@@ -50,7 +50,7 @@ model Booking {
   endDate   DateTime
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
-  status    BookingStatus @default(pending)
+  status    BookingStatus @default(PENDING)
   item      Item          @relation(fields: [itemId], references: [id])
   renter    User          @relation(fields: [renterId], references: [id])
 }
@@ -115,10 +115,10 @@ model VerificationToken {
 }
 
 enum BookingStatus {
-  pending
-  accepted
-  declined
-  expired
-  cancelled
-  done
+  PENDING
+  ACCEPTED
+  DECLINED
+  EXPIRED
+  CANCELLED
+  DONE
 }

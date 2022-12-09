@@ -42,7 +42,22 @@ export const profileSchema = z.object({
 });
 
 export const bookingSchema = z.object({
-    startDate: z.date().min(new Date(), { message: "Startdatum får inte vara före idag." }),
-    endDate: z.date().min(new Date(), { message: "Slutdatum får inte vara före idag." }),
+    startDate: z
+        .date()
+        .min(new Date(), { message: "Startdatum får inte vara före idag." }),
+    endDate: z
+        .date()
+        .min(new Date(), { message: "Slutdatum får inte vara före idag." }),
     itemId: z.string(),
+    renterId: z.string().optional(),
+    status: z
+        .enum([
+            "pending",
+            "accepted",
+            "declined",
+            "expired",
+            "cancelled",
+            "done",
+        ])
+        .optional(),
 });

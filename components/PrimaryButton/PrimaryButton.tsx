@@ -4,17 +4,22 @@ interface Props {
     children: ReactNode;
     styled?: boolean;
     onClick?: () => void;
+    small?: boolean;
 }
 
 const PrimaryButton = (props: Props) => {
     return (
         <div
-            className={`PrimaryButton ${props.styled ? "w-[100%]" : ""}`}
+            className={`PrimaryButton ${props.styled && "w-full"}`}
             onClick={props.onClick}
         >
             <button
-                className={`py-[1rem] px-[2rem] flex justify-between items-center hover:bg-hoverRed transition-[250ms] rounded-[8px] bg-softRed text-white gap-3 font-medium text-lg font-nunito ${
-                    props.styled ? "w-[100%] lg:w-auto" : ""
+                className={`${
+                    props.small
+                        ? "py-2 px-4 border-softRed border hover:border-hoverRed"
+                        : "py-4 px-8"
+                } flex justify-between items-center hover:bg-hoverRed transition-[250ms] rounded-md bg-softRed text-white gap-3 font-medium text-lg font-nunito ${
+                    props.styled ? "w-full lg:w-auto" : ""
                 }`}
             >
                 {props.children}

@@ -4,10 +4,13 @@ import { signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
 import { useState } from "react";
+import Collapse from "../../components/Collapse/Collapse";
 import ProfileForm from "../../components/Forms/ProfileForm";
 import SecondaryButton from "../../components/PrimaryButton/SecondaryButton";
 import SmallProductCard from "../../components/ProductCard/SmallProductCard";
+import RequestCard from "../../components/RequestCard/RequestCard";
 import prisma from "../../lib/prisma";
+import Chevron from "/public/assets/chevron.svg";
 
 // typed function getStaticPaths from api for user profile
 export const getStaticPaths = async () => {
@@ -61,6 +64,29 @@ export const getStaticProps = async ({
             picePerDay: true,
             imageUrl: true,
             ownerId: true,
+            bookings: true,
+        },
+    });
+
+    const bookings = await prisma.booking.findMany({
+        where: {
+            renterId: id,
+        },
+        select: {
+            item: {
+                select: {
+                    owner: true,
+                    imageUrl: true,
+                    picePerDay: true,
+                    title: true,
+                },
+            },
+            renter: true,
+            createdAt: true,
+            startDate: true,
+            endDate: true,
+            id: true,
+            renterId: true,
         },
     });
 
@@ -74,6 +100,7 @@ export const getStaticProps = async ({
         props: {
             user,
             items,
+            bookings,
         },
         revalidate: 1,
     };
@@ -82,6 +109,7 @@ export const getStaticProps = async ({
 const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
     user,
     items,
+    bookings,
 }) => {
     const { data: session } = useSession();
     const [formVisible, setFormVisible] = useState(false);
@@ -179,20 +207,63 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                         )}
                     </>
                 )}
-                <div className="relative flex items-center justify-between px-2 pb-5 mt-10">
-                    <p className="mr-2 font-bold whitespace-nowrap">
-                        Aktiva Annonser {/* get total ads by user */}
-                        <span>({items.length})</span>
-                    </p>
-                    <div className="bg-[#26324540] w-full h-px" />
-                </div>
-                {/* TODO: List max 5 ads by user */}
-                {/* small ad card, link to ad */}
-                {items.map((item) => (
-                    <Link key={item.id} href={`/product/${item.id}`}>
-                        <SmallProductCard item={item} />
-                    </Link>
-                ))}
+                <Collapse title="Mina annonser" length={items.length}>
+                    <div className="flex flex-col w-full py-10 gap-y-4">
+                        {items.map((item, index) => (
+                            <Link
+                                tabIndex={index}
+                                key={item.id}
+                                href={`/product/${item.id} `}
+                                className="grow"
+                            >
+                                <SmallProductCard item={item} />
+                            </Link>
+                        ))}
+                    </div>
+                </Collapse>
+                <Collapse title="Förfrågningar" length={2}>
+                    <RequestCard
+                        createdAt="2022-12-09"
+                        itemName="dji mavic pro"
+                        startDate="2022-12-13"
+                        endDate="2022-12-14 "
+                        renter="Jesper"
+                    />
+                </Collapse>
+                <Collapse title="Hyrda prylar" length={0}>
+                    <div className="flex flex-col w-full py-10 gap-y-4">
+                        {bookings.map((booking) => (
+                            <div
+                                key={booking.id}
+                                className="w-full p-2 cursor-pointer"
+                            >
+                                <div className="flex gap-4 p-2 text-white rounded-md bg-veryDarkBlue">
+                                    <img
+                                        className="object-cover w-24 overflow-hidden rounded-lg aspect-square"
+                                        src={
+                                            booking.item.imageUrl ||
+                                            "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
+                                        }
+                                        alt=""
+                                    />
+                                    <div className="self-center flex-grow">
+                                        <p>{booking.item.title}</p>
+                                        <p>{booking.item.picePerDay}</p>
+                                        <div className="flex">
+                                            <p>
+                                                {booking.startDate.toDateString()}
+                                                -
+                                                {booking.endDate.toDateString()}
+                                            </p>
+                                        </div>
+                                        <p>{booking.item.owner.name}</p>
+                                    </div>
+                                    <Chevron className="self-center mr-7 fill-white" />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </Collapse>
             </div>
         </>
     );
