@@ -180,32 +180,6 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
     //      );
     //  }
 
-    useEffect(() => {
-        console.log(requests);
-    }, []);
-
-    const getRequestCount = (
-        requests: (Booking & {
-            renter: User;
-            item: Item & {
-                owner: User;
-            };
-        })[]
-    ) => {
-        let amount = 0;
-        for (let i = 0; i < requests.length; i++) {
-            const currentRequest = requests[i];
-
-            if (
-                currentRequest.status === BookingStatus.PENDING &&
-                currentRequest.item.owner.email === session?.user?.email
-            ) {
-                amount = amount + 1;
-            }
-        }
-        return amount;
-    };
-
     return (
         <>
             <Head>
