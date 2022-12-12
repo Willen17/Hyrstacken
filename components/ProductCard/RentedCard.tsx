@@ -1,9 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
-import { BookingStatus } from "@prisma/client";
+
 import Chevron from "../../public/assets/chevron.svg";
 import Waiting from "../../public/assets/waiting.svg";
 import Confirmed from "../../public/assets/confirmed.svg";
 import router from "next/router";
+import { BookingStatus } from "../../types";
 
 type Props = {
     bookingId: string;

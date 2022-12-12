@@ -1,4 +1,4 @@
-import { BookingStatus } from "@prisma/client";
+import { BookingStatus } from "../../types";
 import router from "next/router";
 import SuperJSON from "superjson";
 import PrimaryButton from "../PrimaryButton/PrimaryButton";
