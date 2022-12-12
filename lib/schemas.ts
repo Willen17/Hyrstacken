@@ -52,8 +52,3 @@ export const bookingSchema = z.object({
     itemId: z.string(),
     renterId: z.string().optional(),
 });
-
-export const bookingRequestSchema = z.object({
-    status: z.nativeEnum(BookingStatus),
-    id: z.string(),
-});

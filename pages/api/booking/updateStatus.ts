@@ -1,10 +1,15 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { BookingStatus } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
 import SuperJSON from "superjson";
+import { z } from "zod";
 import prisma from "../../../lib/prisma";
-import { bookingRequestSchema } from "../../../lib/schemas";
 
+export const bookingRequestSchema = z.object({
+    status: z.nativeEnum(BookingStatus),
+    id: z.string(),
+});
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
