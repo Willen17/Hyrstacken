@@ -1,12 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
+import { BookingStatus } from "@prisma/client";
 import { GetStaticPropsContext, InferGetStaticPropsType, NextPage } from "next";
-import { signOut, useSession } from "next-auth/react";
+import { getSession, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import { useState } from "react";
+import { Fragment, useState } from "react";
+import Collapse from "../../components/Collapse/Collapse";
 import ProfileForm from "../../components/Forms/ProfileForm";
 import SecondaryButton from "../../components/PrimaryButton/SecondaryButton";
+import RentedCard from "../../components/ProductCard/RentedCard";
 import SmallProductCard from "../../components/ProductCard/SmallProductCard";
+import RequestCard from "../../components/RequestCard/RequestCard";
 import prisma from "../../lib/prisma";
 
 // typed function getStaticPaths from api for user profile
@@ -37,6 +41,7 @@ export const getStaticProps = async ({
         };
     }
     const { id } = params;
+    const session = await getSession();
     const user = await prisma.user.findUnique({
         where: {
             id,
@@ -61,6 +66,70 @@ export const getStaticProps = async ({
             picePerDay: true,
             imageUrl: true,
             ownerId: true,
+            bookings: true,
+        },
+    });
+
+    const requests = await prisma.booking.findMany({
+        where: {
+            item: {
+                owner: {
+                    id,
+                },
+            },
+        },
+        include: { item: { include: { owner: true } }, renter: true },
+    });
+
+    const requestCount = await prisma.booking.count({
+        where: {
+            item: {
+                owner: {
+                    id,
+                },
+            },
+            status: BookingStatus.PENDING,
+        },
+    });
+
+    const bookingCount = await prisma.booking.count({
+        where: {
+            renterId: id,
+            OR: [
+                { status: BookingStatus.PENDING },
+                { status: BookingStatus.ACCEPTED },
+            ],
+        },
+    });
+
+    const declinedCount = await prisma.booking.count({
+        where: {
+            renterId: id,
+
+            status: BookingStatus.DECLINED,
+        },
+    });
+
+    const bookings = await prisma.booking.findMany({
+        where: {
+            renterId: id,
+        },
+        select: {
+            item: {
+                select: {
+                    owner: true,
+                    imageUrl: true,
+                    picePerDay: true,
+                    title: true,
+                },
+            },
+            status: true,
+            renter: true,
+            createdAt: true,
+            startDate: true,
+            endDate: true,
+            id: true,
+            renterId: true,
         },
     });
 
@@ -74,6 +143,11 @@ export const getStaticProps = async ({
         props: {
             user,
             items,
+            bookings,
+            requests,
+            requestCount,
+            bookingCount,
+            declinedCount,
         },
         revalidate: 1,
     };
@@ -82,9 +156,27 @@ export const getStaticProps = async ({
 const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
     user,
     items,
+    bookings,
+    requests,
+    requestCount,
+    bookingCount,
+    declinedCount,
 }) => {
     const { data: session } = useSession();
     const [formVisible, setFormVisible] = useState(false);
+
+    //  function treatAsUTC(date) {
+    //      var result = new Date(date);
+    //      result.setMinutes(result.getMinutes() - result.getTimezoneOffset());
+    //      return result;
+    //  }
+
+    //  function daysBetween(startDate, endDate) {
+    //      var millisecondsPerDay = 24 * 60 * 60 * 1000;
+    //      return (
+    //          (treatAsUTC(endDate) - treatAsUTC(startDate)) / millisecondsPerDay
+    //      );
+    //  }
 
     return (
         <>
@@ -179,20 +271,152 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                         )}
                     </>
                 )}
-                <div className="relative flex items-center justify-between px-2 pb-5 mt-10">
-                    <p className="mr-2 font-bold whitespace-nowrap">
-                        Aktiva Annonser {/* get total ads by user */}
-                        <span>({items.length})</span>
-                    </p>
-                    <div className="bg-[#26324540] w-full h-px" />
-                </div>
-                {/* TODO: List max 5 ads by user */}
-                {/* small ad card, link to ad */}
-                {items.map((item) => (
-                    <Link key={item.id} href={`/product/${item.id}`}>
-                        <SmallProductCard item={item} />
-                    </Link>
-                ))}
+                <Collapse
+                    title={
+                        session && session.user?.email === user.email
+                            ? "Mina annonser"
+                            : "Annonser"
+                    }
+                    length={items.length}
+                    disabled={items.length === 0}
+                >
+                    <div className="flex flex-col w-full py-10 gap-y-4">
+                        {items.map((item, index) => (
+                            <Link
+                                tabIndex={index}
+                                key={item.id}
+                                href={`/product/${item.id} `}
+                                className="grow"
+                            >
+                                <SmallProductCard item={item} />
+                            </Link>
+                        ))}
+                    </div>
+                </Collapse>
+                {session && session.user?.email === user.email && (
+                    <>
+                        {requests && (
+                            <Collapse
+                                title="Förfrågningar"
+                                length={requestCount}
+                                disabled={requestCount === 0}
+                            >
+                                <>
+                                    {requests.map((request) => {
+                                        return (
+                                            request.status ===
+                                                BookingStatus.PENDING && (
+                                                <Fragment key={request.id}>
+                                                    <RequestCard
+                                                        createdAt={
+                                                            request.createdAt
+                                                        }
+                                                        itemName={
+                                                            request.item.title
+                                                        }
+                                                        startDate={
+                                                            request.startDate
+                                                        }
+                                                        endDate={
+                                                            request.endDate
+                                                        }
+                                                        renter={
+                                                            request.renter.name
+                                                        }
+                                                        renterImg={
+                                                            request.renter.image
+                                                        }
+                                                        status={request.status}
+                                                        bookingId={request.id}
+                                                        itemId={request.itemId}
+                                                    />
+                                                </Fragment>
+                                            )
+                                        );
+                                    })}
+                                </>
+                            </Collapse>
+                        )}
+                        <Collapse
+                            title="Hyrda prylar"
+                            length={bookingCount}
+                            disabled={bookingCount === 0}
+                        >
+                            <div className="flex flex-col w-full py-10 gap-y-4">
+                                {bookings.map(
+                                    (booking) =>
+                                        booking.status !==
+                                            BookingStatus.DECLINED && (
+                                            <Fragment key={booking.id}>
+                                                <RentedCard
+                                                    bookingId={booking.id}
+                                                    itemImage={
+                                                        booking.item.imageUrl
+                                                    }
+                                                    itemTitle={
+                                                        booking.item.title
+                                                    }
+                                                    pricePerDay={
+                                                        booking.item.picePerDay
+                                                    }
+                                                    startDate={
+                                                        booking.startDate
+                                                    }
+                                                    endDate={booking.endDate}
+                                                    ownerName={
+                                                        booking.item.owner.name
+                                                    }
+                                                    ownerImage={
+                                                        booking.item.owner.image
+                                                    }
+                                                    status={booking.status}
+                                                />
+                                            </Fragment>
+                                        )
+                                )}
+                            </div>
+                        </Collapse>
+                        <Collapse
+                            title="Nekade ordrar"
+                            length={declinedCount}
+                            disabled={declinedCount === 0}
+                        >
+                            <div className="flex flex-col w-full py-10 gap-y-4">
+                                {bookings.map(
+                                    (booking) =>
+                                        booking.status ===
+                                            BookingStatus.DECLINED && (
+                                            <Fragment key={booking.id}>
+                                                <RentedCard
+                                                    bookingId={booking.id}
+                                                    itemImage={
+                                                        booking.item.imageUrl
+                                                    }
+                                                    itemTitle={
+                                                        booking.item.title
+                                                    }
+                                                    pricePerDay={
+                                                        booking.item.picePerDay
+                                                    }
+                                                    startDate={
+                                                        booking.startDate
+                                                    }
+                                                    endDate={booking.endDate}
+                                                    ownerName={
+                                                        booking.item.owner.name
+                                                    }
+                                                    ownerImage={
+                                                        booking.item.owner.image
+                                                    }
+                                                    status={booking.status}
+                                                />
+                                            </Fragment>
+                                        )
+                                )}
+                            </div>
+                        </Collapse>
+                    </>
+                )}
             </div>
         </>
     );

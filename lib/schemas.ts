@@ -1,4 +1,5 @@
-import { z } from "zod";
+import { BookingStatus } from "@prisma/client";
+import { optional, z } from "zod";
 
 export const itemSchema = z.object({
     title: z
@@ -42,7 +43,17 @@ export const profileSchema = z.object({
 });
 
 export const bookingSchema = z.object({
-    startDate: z.date().min(new Date(), { message: "Startdatum får inte vara före idag." }),
-    endDate: z.date().min(new Date(), { message: "Slutdatum får inte vara före idag." }),
+    startDate: z
+        .date()
+        .min(new Date(), { message: "Startdatum får inte vara före idag." }),
+    endDate: z
+        .date()
+        .min(new Date(), { message: "Slutdatum får inte vara före idag." }),
     itemId: z.string(),
+    renterId: z.string().optional(),
+});
+
+export const bookingRequestSchema = z.object({
+    status: z.nativeEnum(BookingStatus),
+    id: z.string(),
 });
