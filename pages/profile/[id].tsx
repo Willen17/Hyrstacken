@@ -1,12 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
+import { forEach } from "lodash";
 import { GetStaticPropsContext, InferGetStaticPropsType, NextPage } from "next";
-import { signOut, useSession } from "next-auth/react";
+import { getSession, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import { useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Collapse from "../../components/Collapse/Collapse";
 import ProfileForm from "../../components/Forms/ProfileForm";
 import SecondaryButton from "../../components/PrimaryButton/SecondaryButton";
+import RentedCard from "../../components/ProductCard/RentedCard";
 import SmallProductCard from "../../components/ProductCard/SmallProductCard";
 import RequestCard from "../../components/RequestCard/RequestCard";
 import prisma from "../../lib/prisma";
@@ -40,6 +42,7 @@ export const getStaticProps = async ({
         };
     }
     const { id } = params;
+    const session = await getSession();
     const user = await prisma.user.findUnique({
         where: {
             id,
@@ -68,6 +71,17 @@ export const getStaticProps = async ({
         },
     });
 
+    const requests = await prisma.booking.findMany({
+        where: {
+            item: {
+                owner: {
+                    email: session?.user?.email,
+                },
+            },
+        },
+        include: { item: true, renter: true },
+    });
+
     const bookings = await prisma.booking.findMany({
         where: {
             renterId: id,
@@ -81,6 +95,7 @@ export const getStaticProps = async ({
                     title: true,
                 },
             },
+            status: true,
             renter: true,
             createdAt: true,
             startDate: true,
@@ -101,6 +116,7 @@ export const getStaticProps = async ({
             user,
             items,
             bookings,
+            requests,
         },
         revalidate: 1,
     };
@@ -110,9 +126,27 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
     user,
     items,
     bookings,
+    requests,
 }) => {
     const { data: session } = useSession();
     const [formVisible, setFormVisible] = useState(false);
+
+    //  function treatAsUTC(date) {
+    //      var result = new Date(date);
+    //      result.setMinutes(result.getMinutes() - result.getTimezoneOffset());
+    //      return result;
+    //  }
+
+    //  function daysBetween(startDate, endDate) {
+    //      var millisecondsPerDay = 24 * 60 * 60 * 1000;
+    //      return (
+    //          (treatAsUTC(endDate) - treatAsUTC(startDate)) / millisecondsPerDay
+    //      );
+    //  }
+
+    useEffect(() => {
+        console.log(requests);
+    }, []);
 
     return (
         <>
@@ -207,7 +241,14 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                         )}
                     </>
                 )}
-                <Collapse title="Mina annonser" length={items.length}>
+                <Collapse
+                    title={
+                        session && session.user?.email === user.email
+                            ? "Mina annonser"
+                            : "Annonser"
+                    }
+                    length={items.length}
+                >
                     <div className="flex flex-col w-full py-10 gap-y-4">
                         {items.map((item, index) => (
                             <Link
@@ -221,49 +262,74 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                         ))}
                     </div>
                 </Collapse>
-                <Collapse title="Förfrågningar" length={2}>
-                    <RequestCard
-                        createdAt="2022-12-09"
-                        itemName="dji mavic pro"
-                        startDate="2022-12-13"
-                        endDate="2022-12-14 "
-                        renter="Jesper"
-                    />
-                </Collapse>
-                <Collapse title="Hyrda prylar" length={0}>
-                    <div className="flex flex-col w-full py-10 gap-y-4">
-                        {bookings.map((booking) => (
-                            <div
-                                key={booking.id}
-                                className="w-full p-2 cursor-pointer"
-                            >
-                                <div className="flex gap-4 p-2 text-white rounded-md bg-veryDarkBlue">
-                                    <img
-                                        className="object-cover w-24 overflow-hidden rounded-lg aspect-square"
-                                        src={
-                                            booking.item.imageUrl ||
-                                            "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
-                                        }
-                                        alt=""
-                                    />
-                                    <div className="self-center flex-grow">
-                                        <p>{booking.item.title}</p>
-                                        <p>{booking.item.picePerDay}</p>
-                                        <div className="flex">
-                                            <p>
-                                                {booking.startDate.toDateString()}
-                                                -
-                                                {booking.endDate.toDateString()}
-                                            </p>
-                                        </div>
-                                        <p>{booking.item.owner.name}</p>
-                                    </div>
-                                    <Chevron className="self-center mr-7 fill-white" />
-                                </div>
+                {session && session.user?.email === user.email && (
+                    <>
+                        {requests && (
+                            <Collapse title="Förfrågningar" length={2}>
+                                <>
+                                    {requests.map((request) => {
+                                        return (
+                                            request.status === "PENDING" && (
+                                                <Fragment key={request.id}>
+                                                    <RequestCard
+                                                        createdAt={
+                                                            request.createdAt
+                                                                .toISOString()
+                                                                .split("T")[0]
+                                                        }
+                                                        itemName={
+                                                            request.item.title
+                                                        }
+                                                        startDate={
+                                                            request.startDate
+                                                                .toISOString()
+                                                                .split("T")[0]
+                                                        }
+                                                        endDate={
+                                                            request.endDate
+                                                                .toISOString()
+                                                                .split("T")[0]
+                                                        }
+                                                        renter={
+                                                            request.renter.name
+                                                        }
+                                                        renterImg={
+                                                            request.renter.image
+                                                        }
+                                                        status={request.status}
+                                                    />
+                                                </Fragment>
+                                            )
+                                        );
+                                    })}
+                                </>
+                            </Collapse>
+                        )}
+                        <Collapse title="Hyrda prylar" length={0}>
+                            <div className="flex flex-col w-full py-10 gap-y-4">
+                                {bookings.map((booking) => (
+                                    <Fragment key={booking.id}>
+                                        <RentedCard
+                                            bookingId={booking.id}
+                                            itemImage={booking.item.imageUrl}
+                                            itemTitle={booking.item.title}
+                                            pricePerDay={
+                                                booking.item.picePerDay
+                                            }
+                                            startDate={booking.startDate}
+                                            endDate={booking.endDate}
+                                            ownerName={booking.item.owner.name}
+                                            ownerImage={
+                                                booking.item.owner.image
+                                            }
+                                            status={booking.status}
+                                        />
+                                    </Fragment>
+                                ))}
                             </div>
-                        ))}
-                    </div>
-                </Collapse>
+                        </Collapse>
+                    </>
+                )}
             </div>
         </>
     );

@@ -1,4 +1,5 @@
-import { z } from "zod";
+import { BookingStatus } from "@prisma/client";
+import { optional, z } from "zod";
 
 export const itemSchema = z.object({
     title: z
@@ -50,14 +51,6 @@ export const bookingSchema = z.object({
         .min(new Date(), { message: "Slutdatum får inte vara före idag." }),
     itemId: z.string(),
     renterId: z.string().optional(),
-    status: z
-        .enum([
-            "pending",
-            "accepted",
-            "declined",
-            "expired",
-            "cancelled",
-            "done",
-        ])
-        .optional(),
+    status: z.nativeEnum(BookingStatus).optional(),
+    id: z.string().optional(),
 });
