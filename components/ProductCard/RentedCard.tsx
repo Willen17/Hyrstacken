@@ -9,6 +9,7 @@ import Link from "next/link";
 
 type Props = {
     bookingId: string;
+    itemId: string;
     itemImage: string | null;
     itemTitle: string;
     pricePerDay: number;
@@ -21,6 +22,7 @@ type Props = {
 };
 const RentedCard = ({
     bookingId,
+    itemId,
     itemImage,
     itemTitle,
     pricePerDay,
@@ -72,36 +74,37 @@ const RentedCard = ({
                 </div>
             )}
             <div className="flex flex-col flex-grow gap-4 p-2 text-white rounded-md bg-veryDarkBlue">
-                <div className="flex justify-between w-full cursor-pointer gap-x-4">
-                    <img
-                        className="object-cover w-24 h-24 overflow-hidden rounded-lg aspect-square"
-                        src={
-                            itemImage ||
-                            "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
-                        }
-                        alt=""
-                    />
-                    <div className="flex flex-col flex-grow gap-y-2">
-                        <p className="font-bold">{itemTitle}</p>
-                        <div className="flex justify-between w-2/3">
-                            <p className="text-sm">{pricePerDay} kr/dag</p>
-                            <p className="text-sm">
-                                Totalt:
-                                <span className="font-bold">
-                                    {" "}
-                                    {pricePerDay * daysBetween(startDate, endDate)}{" kr"}
-                                </span>
-                            </p>
+                <Link href={`/product/${itemId}`}>
+                    <div className="flex justify-between w-full cursor-pointer gap-x-4">
+                        <img
+                            className="object-cover w-24 h-24 overflow-hidden rounded-lg aspect-square"
+                            src={
+                                itemImage ||
+                                "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
+                            }
+                            alt=""
+                        />
+                        <div className="flex flex-col flex-grow gap-y-2">
+                            <p className="font-bold">{itemTitle}</p>
+                            <div className="flex justify-between w-2/3">
+                                <p className="text-sm">{pricePerDay} kr/dag</p>
+                                <p className="text-sm">
+                                    Totalt:
+                                    <span className="font-bold">
+                                        {" "}
+                                        {pricePerDay * daysBetween(startDate, endDate)}{" kr"}
+                                    </span>
+                                </p>
+                            </div>
+                            <div className="flex justify-between w-2/3 text-sm font-light">
+                                <p>{startDate.toISOString().split("T")[0]}</p>
+                                <p>-</p>
+                                <p>{endDate.toISOString().split("T")[0]}</p>
+                            </div>
                         </div>
-                        <div className="flex justify-between w-2/3 text-sm font-light">
-                            <p>{startDate.toISOString().split("T")[0]}</p>
-                            <p>-</p>
-                            <p>{endDate.toISOString().split("T")[0]}</p>
-                        </div>
+                        <Chevron className="self-center mr-7 fill-white" />
                     </div>
-
-                    <Chevron className="self-center mr-7 fill-white" />
-                </div>
+                </Link>
                 <Link href={`/profile/${ownerId}`}>
 
                     <div className="flex justify-between">
