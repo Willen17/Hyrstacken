@@ -1,11 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
-import { Booking, BookingStatus, Item, User } from "@prisma/client";
-import { forEach } from "lodash";
+import { BookingStatus } from "@prisma/client";
 import { GetStaticPropsContext, InferGetStaticPropsType, NextPage } from "next";
 import { getSession, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import Collapse from "../../components/Collapse/Collapse";
 import ProfileForm from "../../components/Forms/ProfileForm";
 import SecondaryButton from "../../components/PrimaryButton/SecondaryButton";
@@ -13,7 +12,6 @@ import RentedCard from "../../components/ProductCard/RentedCard";
 import SmallProductCard from "../../components/ProductCard/SmallProductCard";
 import RequestCard from "../../components/RequestCard/RequestCard";
 import prisma from "../../lib/prisma";
-import Chevron from "/public/assets/chevron.svg";
 
 // typed function getStaticPaths from api for user profile
 export const getStaticPaths = async () => {

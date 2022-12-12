@@ -1,11 +1,10 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { BookingStatus } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
 import SuperJSON from "superjson";
-import { z } from "zod";
 import prisma from "../../../lib/prisma";
 import { bookingRequestSchema } from "../../../lib/schemas";
-import { BookingStatus } from "../../../types";
 
 export default async function handler(
     req: NextApiRequest,
@@ -32,7 +31,7 @@ export default async function handler(
     const updatedBooking = await prisma.booking.update({
         where: { id },
         data: {
-            status: BookingStatus[status as keyof typeof BookingStatus],
+            status: status as unknown as BookingStatus,
         },
     });
 
