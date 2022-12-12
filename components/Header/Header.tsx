@@ -144,11 +144,24 @@ const Header = () => {
                                 </div>
                             </Fragment>
                         ) : (
-                            <Fragment>
+                            <div className="flex flex-row items-center gap-10">
+                                <Link
+                                        href={"/searchResults"}
+                                        className={
+                                            router.pathname == "/searchResults"
+                                                ? "flex flex-col items-center gap-2 relative before:absolute before:bottom-[calc(100%+1.33rem)] before:w-[3rem] before:h-[2px] before:bg-white before:block"
+                                                : "text-white text-xs flex flex-col items-center gap-2"
+                                        }
+                                    >
+                                        <SearchIcon />
+                                        <span className="text-xs text-white">
+                                            Annonser
+                                        </span>
+                                    </Link>
                                 <PrimaryButton onClick={() => signIn()}>
                                     Logga in
                                 </PrimaryButton>
-                            </Fragment>
+                            </div>
                         )}
                     </div>
                 </div>
