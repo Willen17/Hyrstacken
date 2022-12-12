@@ -1,5 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
+import { BookingStatus } from "@prisma/client";
 import Chevron from "../../public/assets/chevron.svg";
+import Waiting from "../../public/assets/waiting.svg";
+import Confirmed from "../../public/assets/confirmed.svg";
+import router from "next/router";
 
 type Props = {
     bookingId: string;
@@ -10,13 +14,7 @@ type Props = {
     endDate: Date;
     ownerName: string | null;
     ownerImage: string | null;
-    status:
-        | "PENDING"
-        | "ACCEPTED"
-        | "DECLINED"
-        | "EXPIRED"
-        | "CANCELLED"
-        | "DONE";
+    status: BookingStatus;
 };
 const RentedCard = ({
     bookingId,
@@ -29,9 +27,38 @@ const RentedCard = ({
     ownerImage,
     status,
 }: Props) => {
+    const deleteBooking = async (bookingId: string) => {
+        fetch(`/api/booking/${bookingId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then(async (data) => {
+                const deletedItem = await data.json();
+                router.reload();
+            })
+            .catch((e) => console.log(e));
+    };
+
     return (
         <div key={bookingId} className="relative w-full p-2">
             <span className="absolute left-0 w-full border-t border-white border-opacity-25 bottom-12" />
+            {status !== BookingStatus.DECLINED && (
+                <div className="flex items-center mb-4 gap-x-2">
+                    {status === BookingStatus.PENDING ? (
+                        <Waiting className="w-6 h-6" />
+                    ) : (
+                        <Confirmed className="w-6 h-6" />
+                    )}
+
+                    <p>
+                        {status === BookingStatus.PENDING
+                            ? "Inväntar bokningsbekräftelse"
+                            : "Aktiv bokning"}
+                    </p>
+                </div>
+            )}
             <div className="flex flex-col flex-grow gap-4 p-2 text-white rounded-md bg-veryDarkBlue">
                 <div className="flex justify-between w-full cursor-pointer gap-x-4">
                     <img
@@ -81,9 +108,14 @@ const RentedCard = ({
                             </div>
                         </div>
                     </div>
-                    <p className="cursor-pointer text-softRed hover:text-hoverRed">
-                        Avbryt bokning
-                    </p>
+                    {status === BookingStatus.PENDING && (
+                        <p
+                            className="cursor-pointer text-softRed hover:text-hoverRed"
+                            onClick={() => deleteBooking(bookingId)}
+                        >
+                            Avbryt bokning
+                        </p>
+                    )}
                 </div>
             </div>
         </div>

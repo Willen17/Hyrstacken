@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { Booking, BookingStatus, Item, User } from "@prisma/client";
 import { forEach } from "lodash";
 import { GetStaticPropsContext, InferGetStaticPropsType, NextPage } from "next";
 import { getSession, signOut, useSession } from "next-auth/react";
@@ -75,11 +76,40 @@ export const getStaticProps = async ({
         where: {
             item: {
                 owner: {
-                    email: session?.user?.email,
+                    id,
                 },
             },
         },
-        include: { item: true, renter: true },
+        include: { item: { include: { owner: true } }, renter: true },
+    });
+
+    const requestCount = await prisma.booking.count({
+        where: {
+            item: {
+                owner: {
+                    id,
+                },
+            },
+            status: BookingStatus.PENDING,
+        },
+    });
+
+    const bookingCount = await prisma.booking.count({
+        where: {
+            renterId: id,
+            OR: [
+                { status: BookingStatus.PENDING },
+                { status: BookingStatus.ACCEPTED },
+            ],
+        },
+    });
+
+    const declinedCount = await prisma.booking.count({
+        where: {
+            renterId: id,
+
+            status: BookingStatus.DECLINED,
+        },
     });
 
     const bookings = await prisma.booking.findMany({
@@ -117,6 +147,9 @@ export const getStaticProps = async ({
             items,
             bookings,
             requests,
+            requestCount,
+            bookingCount,
+            declinedCount,
         },
         revalidate: 1,
     };
@@ -127,6 +160,9 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
     items,
     bookings,
     requests,
+    requestCount,
+    bookingCount,
+    declinedCount,
 }) => {
     const { data: session } = useSession();
     const [formVisible, setFormVisible] = useState(false);
@@ -147,6 +183,28 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
     useEffect(() => {
         console.log(requests);
     }, []);
+
+    const getRequestCount = (
+        requests: (Booking & {
+            renter: User;
+            item: Item & {
+                owner: User;
+            };
+        })[]
+    ) => {
+        let amount = 0;
+        for (let i = 0; i < requests.length; i++) {
+            const currentRequest = requests[i];
+
+            if (
+                currentRequest.status === BookingStatus.PENDING &&
+                currentRequest.item.owner.email === session?.user?.email
+            ) {
+                amount = amount + 1;
+            }
+        }
+        return amount;
+    };
 
     return (
         <>
@@ -248,6 +306,7 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                             : "Annonser"
                     }
                     length={items.length}
+                    disabled={items.length === 0}
                 >
                     <div className="flex flex-col w-full py-10 gap-y-4">
                         {items.map((item, index) => (
@@ -265,30 +324,29 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                 {session && session.user?.email === user.email && (
                     <>
                         {requests && (
-                            <Collapse title="Förfrågningar" length={2}>
+                            <Collapse
+                                title="Förfrågningar"
+                                length={requestCount}
+                                disabled={requestCount === 0}
+                            >
                                 <>
                                     {requests.map((request) => {
                                         return (
-                                            request.status === "PENDING" && (
+                                            request.status ===
+                                                BookingStatus.PENDING && (
                                                 <Fragment key={request.id}>
                                                     <RequestCard
                                                         createdAt={
                                                             request.createdAt
-                                                                .toISOString()
-                                                                .split("T")[0]
                                                         }
                                                         itemName={
                                                             request.item.title
                                                         }
                                                         startDate={
                                                             request.startDate
-                                                                .toISOString()
-                                                                .split("T")[0]
                                                         }
                                                         endDate={
                                                             request.endDate
-                                                                .toISOString()
-                                                                .split("T")[0]
                                                         }
                                                         renter={
                                                             request.renter.name
@@ -297,6 +355,8 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                                                             request.renter.image
                                                         }
                                                         status={request.status}
+                                                        bookingId={request.id}
+                                                        itemId={request.itemId}
                                                     />
                                                 </Fragment>
                                             )
@@ -305,27 +365,82 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                                 </>
                             </Collapse>
                         )}
-                        <Collapse title="Hyrda prylar" length={0}>
+                        <Collapse
+                            title="Hyrda prylar"
+                            length={bookingCount}
+                            disabled={bookingCount === 0}
+                        >
                             <div className="flex flex-col w-full py-10 gap-y-4">
-                                {bookings.map((booking) => (
-                                    <Fragment key={booking.id}>
-                                        <RentedCard
-                                            bookingId={booking.id}
-                                            itemImage={booking.item.imageUrl}
-                                            itemTitle={booking.item.title}
-                                            pricePerDay={
-                                                booking.item.picePerDay
-                                            }
-                                            startDate={booking.startDate}
-                                            endDate={booking.endDate}
-                                            ownerName={booking.item.owner.name}
-                                            ownerImage={
-                                                booking.item.owner.image
-                                            }
-                                            status={booking.status}
-                                        />
-                                    </Fragment>
-                                ))}
+                                {bookings.map(
+                                    (booking) =>
+                                        booking.status !==
+                                            BookingStatus.DECLINED && (
+                                            <Fragment key={booking.id}>
+                                                <RentedCard
+                                                    bookingId={booking.id}
+                                                    itemImage={
+                                                        booking.item.imageUrl
+                                                    }
+                                                    itemTitle={
+                                                        booking.item.title
+                                                    }
+                                                    pricePerDay={
+                                                        booking.item.picePerDay
+                                                    }
+                                                    startDate={
+                                                        booking.startDate
+                                                    }
+                                                    endDate={booking.endDate}
+                                                    ownerName={
+                                                        booking.item.owner.name
+                                                    }
+                                                    ownerImage={
+                                                        booking.item.owner.image
+                                                    }
+                                                    status={booking.status}
+                                                />
+                                            </Fragment>
+                                        )
+                                )}
+                            </div>
+                        </Collapse>
+                        <Collapse
+                            title="Nekade ordrar"
+                            length={declinedCount}
+                            disabled={declinedCount === 0}
+                        >
+                            <div className="flex flex-col w-full py-10 gap-y-4">
+                                {bookings.map(
+                                    (booking) =>
+                                        booking.status ===
+                                            BookingStatus.DECLINED && (
+                                            <Fragment key={booking.id}>
+                                                <RentedCard
+                                                    bookingId={booking.id}
+                                                    itemImage={
+                                                        booking.item.imageUrl
+                                                    }
+                                                    itemTitle={
+                                                        booking.item.title
+                                                    }
+                                                    pricePerDay={
+                                                        booking.item.picePerDay
+                                                    }
+                                                    startDate={
+                                                        booking.startDate
+                                                    }
+                                                    endDate={booking.endDate}
+                                                    ownerName={
+                                                        booking.item.owner.name
+                                                    }
+                                                    ownerImage={
+                                                        booking.item.owner.image
+                                                    }
+                                                    status={booking.status}
+                                                />
+                                            </Fragment>
+                                        )
+                                )}
                             </div>
                         </Collapse>
                     </>

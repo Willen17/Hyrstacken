@@ -51,6 +51,9 @@ export const bookingSchema = z.object({
         .min(new Date(), { message: "Slutdatum får inte vara före idag." }),
     itemId: z.string(),
     renterId: z.string().optional(),
-    status: z.nativeEnum(BookingStatus).optional(),
-    id: z.string().optional(),
+});
+
+export const bookingRequestSchema = z.object({
+    status: z.nativeEnum(BookingStatus),
+    id: z.string(),
 });
