@@ -5,6 +5,7 @@ import Chevron from "../../public/assets/chevron.svg";
 import Waiting from "../../public/assets/waiting.svg";
 import Confirmed from "../../public/assets/confirmed.svg";
 import router from "next/router";
+import Link from "next/link";
 
 type Props = {
     bookingId: string;
@@ -15,6 +16,7 @@ type Props = {
     endDate: Date;
     ownerName: string | null;
     ownerImage: string | null;
+    ownerId: string;
     status: BookingStatus;
 };
 const RentedCard = ({
@@ -26,6 +28,7 @@ const RentedCard = ({
     endDate,
     ownerName,
     ownerImage,
+    ownerId,
     status,
 }: Props) => {
     const deleteBooking = async (bookingId: string) => {
@@ -99,33 +102,36 @@ const RentedCard = ({
 
                     <Chevron className="self-center mr-7 fill-white" />
                 </div>
-                <div className="flex justify-between">
-                    <div className="flex gap-x-2">
-                        <p>
-                            Uthyres av{" "}
-                            <span className="font-bold">{ownerName}</span>
-                        </p>
-                        <div className="avatar">
-                            <div className="w-5 rounded-full">
-                                <img
-                                    alt="Profile picture"
-                                    src={
-                                        ownerImage ||
-                                        "https://placeimg.com/192/192/people"
-                                    }
-                                />
+                <Link href={`/profile/${ownerId}`}>
+
+                    <div className="flex justify-between">
+                        <div className="flex gap-x-2">
+                            <p>
+                                Uthyres av{" "}
+                                <span className="font-bold">{ownerName}</span>
+                            </p>
+                            <div className="avatar">
+                                <div className="w-5 rounded-full">
+                                    <img
+                                        alt="Profile picture"
+                                        src={
+                                            ownerImage ||
+                                            "https://placeimg.com/192/192/people"
+                                        }
+                                    />
+                                </div>
                             </div>
                         </div>
+                        {status === BookingStatus.PENDING && (
+                            <p
+                                className="cursor-pointer text-softRed hover:text-hoverRed"
+                                onClick={() => deleteBooking(bookingId)}
+                            >
+                                Avbryt bokning
+                            </p>
+                        )}
                     </div>
-                    {status === BookingStatus.PENDING && (
-                        <p
-                            className="cursor-pointer text-softRed hover:text-hoverRed"
-                            onClick={() => deleteBooking(bookingId)}
-                        >
-                            Avbryt bokning
-                        </p>
-                    )}
-                </div>
+                </Link>
             </div>
         </div>
     );

@@ -369,6 +369,7 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                                                     ownerImage={
                                                         booking.item.owner.image
                                                     }
+                                                    ownerId={booking.item.owner.id}
                                                     status={booking.status}
                                                 />
                                             </Fragment>
@@ -408,6 +409,7 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                                                     ownerImage={
                                                         booking.item.owner.image
                                                     }
+                                                    ownerId={booking.item.owner.id}
                                                     status={booking.status}
                                                 />
                                             </Fragment>
