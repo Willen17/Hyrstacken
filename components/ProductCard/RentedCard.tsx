@@ -42,6 +42,14 @@ const RentedCard = ({
             .catch((e) => console.log(e));
     };
 
+    const daysBetween = (startDate: Date, endDate: Date) => {
+        const oneDay = 24 * 60 * 60 * 1000;
+        const diffDays = Math.round(
+            Math.abs((startDate.getTime() - endDate.getTime()) / oneDay)
+        );
+        return diffDays;
+    };
+
     return (
         <div key={bookingId} className="relative w-full p-2">
             <span className="absolute left-0 w-full border-t border-white border-opacity-25 bottom-12" />
@@ -78,7 +86,7 @@ const RentedCard = ({
                                 Totalt:
                                 <span className="font-bold">
                                     {" "}
-                                    {pricePerDay} * dagar
+                                    {pricePerDay * daysBetween(startDate, endDate)}{" kr"}
                                 </span>
                             </p>
                         </div>
