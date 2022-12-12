@@ -1,5 +1,3 @@
-import SearchIcon from "../../assets/search.svg";
-
 import PrimaryButton from "../PrimaryButton/PrimaryButton";
 import SecondaryButton from "../PrimaryButton/SecondaryButton";
 
@@ -8,7 +6,15 @@ type Props = {
     itemName: string;
     startDate: string;
     endDate: string;
-    renter: string;
+    renter: string | null;
+    renterImg: string | null;
+    status:
+        | "PENDING"
+        | "ACCEPTED"
+        | "DECLINED"
+        | "EXPIRED"
+        | "CANCELLED"
+        | "DONE";
 };
 
 const RequestCard = ({
@@ -17,6 +23,7 @@ const RequestCard = ({
     startDate,
     endDate,
     renter,
+    status,
 }: Props) => {
     return (
         <div className="flex flex-col w-full p-4 mt-4 text-white rounded-md gap-y-4 bg-veryDarkBlue">
