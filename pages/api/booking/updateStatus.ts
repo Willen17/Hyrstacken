@@ -5,6 +5,7 @@ import SuperJSON from "superjson";
 import { z } from "zod";
 import prisma from "../../../lib/prisma";
 import { bookingRequestSchema } from "../../../lib/schemas";
+import { BookingStatus } from "../../../types";
 
 export default async function handler(
     req: NextApiRequest,
@@ -31,7 +32,7 @@ export default async function handler(
     const updatedBooking = await prisma.booking.update({
         where: { id },
         data: {
-            status: status,
+            status: BookingStatus[status as keyof typeof BookingStatus],
         },
     });
 
