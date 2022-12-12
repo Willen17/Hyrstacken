@@ -26,7 +26,7 @@ export default async function handler(
         return res.status(401).end();
     }
 
-    const updatedItem = await prisma.item.update({
+    const updatedItem = await prisma.booking.update({
         where: { id },
         data: {
             status: status,
