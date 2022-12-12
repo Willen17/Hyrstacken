@@ -9,10 +9,12 @@ export default function BookingForm({
     itemId,
     userId,
     orderSubmitted,
+    setBookingId,
 }: {
     itemId: string;
     userId: string;
     orderSubmitted: Dispatch<SetStateAction<boolean>>;
+    setBookingId: Dispatch<SetStateAction<string | undefined>>;
 }) {
     const {
         register,
@@ -39,7 +41,7 @@ export default function BookingForm({
                     throw new Error("Something went wrong");
                 } else {
                     const result = await res.json();
-                    console.log(result);
+                    setBookingId(result);
                     orderSubmitted(true);
                 }
             } catch (error) {
