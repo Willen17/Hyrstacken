@@ -15,6 +15,6 @@ export default describe("Test to get to verification page when logging in or sig
             .should("have.value", "mail@mail.com");
         cy.get("form").submit();
 
-        cy.url().should("include", "/api/auth/verify-request");
+        cy.url().should("include", "/verify");
     });
 });

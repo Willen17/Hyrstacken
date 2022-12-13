@@ -187,7 +187,7 @@ const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                             <RatingIcon className="self-center" />
                             <p className="pl-1">{4.5} betyg</p>
                         </div>
-                        <Link href={`/profile/${product.owner.id}`}>
+                        <Link href={`/profile/${product.owner.id}`} id="profile-link">
                             <div className="flex items-center px-3 py-1 my-2 bg-veryDarkBlue rounded-3xl ">
                                 <div className="avatar">
                                     <div className="w-5 rounded-full">

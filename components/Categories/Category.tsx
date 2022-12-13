@@ -42,7 +42,6 @@ const Category = ({
     }
 
     return (
-        <div>
             <li
                 onClick={() => {
                     setCategory(category);
@@ -64,7 +63,6 @@ const Category = ({
                     )}
                 </span>
             </li>
-        </div>
     );
 };
 

@@ -75,6 +75,7 @@ export default function BookingForm({
                 type="submit"
                 value={isValid ? "Skicka förfrågan" : "Ange datum"}
                 className="btn btn-primary"
+                id="submit-btn"
             />
         </form>
     );

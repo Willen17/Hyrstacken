@@ -70,10 +70,11 @@ const Layout = (props: Props) => {
                 <>
                     {url.pathname !== "/" && (
                         <div
+                            id="back-btn"
                             onClick={() => router.back()}
                             className="cursor-pointer absolute bg-softRed h-10 w-10 rounded-lg flex items-center justify-center top-[1.2rem] left-[1.2rem] min-[800px]:mt-[92px]"
                         >
-                            <ArrowBackIcon className="text-white" />
+                            <ArrowBackIcon className="text-white"/>
                         </div>
                     )}
                     {props.children}
