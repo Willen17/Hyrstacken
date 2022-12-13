@@ -117,6 +117,7 @@ export const getStaticProps = async ({
         select: {
             item: {
                 select: {
+                    id: true,
                     owner: true,
                     imageUrl: true,
                     picePerDay: true,
@@ -350,6 +351,7 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                                             <Fragment key={booking.id}>
                                                 <RentedCard
                                                     bookingId={booking.id}
+                                                    itemId={booking.item.id}
                                                     itemImage={
                                                         booking.item.imageUrl
                                                     }
@@ -369,6 +371,7 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                                                     ownerImage={
                                                         booking.item.owner.image
                                                     }
+                                                    ownerId={booking.item.owner.id}
                                                     status={booking.status}
                                                 />
                                             </Fragment>
@@ -389,6 +392,8 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                                             <Fragment key={booking.id}>
                                                 <RentedCard
                                                     bookingId={booking.id}
+                                                    itemId={booking.item.id}
+
                                                     itemImage={
                                                         booking.item.imageUrl
                                                     }
@@ -408,6 +413,7 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                                                     ownerImage={
                                                         booking.item.owner.image
                                                     }
+                                                    ownerId={booking.item.owner.id}
                                                     status={booking.status}
                                                 />
                                             </Fragment>
