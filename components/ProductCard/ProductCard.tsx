@@ -22,7 +22,7 @@ const ProductCard = ({ item }: ProductCardProps) => {
 
     return (
         <div className="w-full min-[610px]:w-[270px] md:m-4 py-3 justify-center items-center flex-col flex text-sm text-primary font-semibold relative self-center">
-            <div className="absolute flex justify-center w-24 px-2 py-4 text-xs bg-veryDarkBlue rounded-3xl h-7 top-6 right-3">
+            <div className="absolute flex justify-center px-2 py-4 text-xs bg-veryDarkBlue rounded-3xl h-7 top-6 right-3">
                 <LocationIcon className="self-center" />
                 <p className="self-center pl-1 font-normal text-info">
                     {item.location.name}
@@ -35,7 +35,7 @@ const ProductCard = ({ item }: ProductCardProps) => {
                 </p>
             </div>
             <img
-                className="w-full h-[270px] rounded-md max-[610px]:h-[350px] max-[460px]:h-[275px] max-[610px]:object-cover"
+                className="w-96 h-[270px] rounded-md max-[610px]:h-[350px] max-[460px]:h-[275px] max-[610px]:object-cover"
                 alt="Produktkort"
                 src={imgSrc ?? ""}
                 onError={() =>

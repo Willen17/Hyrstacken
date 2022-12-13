@@ -58,7 +58,7 @@ export default function Home() {
                         <Image
                             src={Logo}
                             alt="logotype"
-                            className="absolute top-[2rem] left-[2rem]"
+                            className="absolute top-[2rem] left-[2rem] z-50"
                         />
                     ) : (
                         ""
@@ -128,7 +128,7 @@ export default function Home() {
                             <div className="w-[100%] lg:w-[auto]">
                                 <Link href={"/searchResults"}>
                                     <PrimaryButton styled={true}>
-                                        Sök product
+                                        Sök produkt
                                         <ArrowRightIcon />
                                     </PrimaryButton>
                                 </Link>

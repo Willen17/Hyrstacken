@@ -74,7 +74,7 @@ export default function BookingForm({
             <input
                 type="submit"
                 value={isValid ? "Skicka förfrågan" : "Ange datum"}
-                className="btn btn-primary"
+                className="mt-4 btn btn-primary"
                 id="submit-btn"
             />
         </form>
