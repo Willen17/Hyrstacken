@@ -54,6 +54,24 @@ const SearchResults: NextPage<
     const [itemsArray, setItemsArray] = useState<typeof items | undefined>(
         items
     );
+    const [searchInput, setSearchInput] = useState<string>("");
+
+    function handleSearchInput(e: React.ChangeEvent<HTMLInputElement>) {
+        setSearchInput(e.target.value);
+    }
+
+    useEffect(() => {
+        if (searchInput.length > 0) {
+            const filteredItems = items.filter((item) =>
+                item.title.toLowerCase().includes(searchInput.toLowerCase())
+            );
+            setItemsArray(filteredItems);
+        } else {
+            setItemsArray(items);
+        }
+    }, [searchInput, items]);
+
+
 
     function openCategories() {
         setIsCategoriesOpen(!isCategoriesOpen);
@@ -136,6 +154,9 @@ const SearchResults: NextPage<
                                         type="text"
                                         placeholder="Sök produkt..."
                                         className="p-[1rem] w-[100%] lg:w-[30rem] rounded-[8px] text-veryDarkBlue"
+                                        onChange={(e) =>
+                                            setSearchInput(e.target.value)
+                                        }
                                     />
                                 </label>
                                 <button

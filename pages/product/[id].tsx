@@ -93,6 +93,7 @@ const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
     const [touched, setTouched] = useState(false);
 
     const [id, setId] = useState<string>();
+    const [bookingId, setBookingId] = useState<string>();
 
     const ownItem = id === product.owner.id;
 
@@ -120,6 +121,22 @@ const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
             .then(async (data) => {
                 const deletedItem = await data.json();
                 router.push(`/profile/${id}`);
+            })
+            .catch((e) => console.log(e));
+    };
+
+    const cancelOrder = async () => {
+        console.log(bookingId, "boknings di");
+        if (!bookingId) return console.log("!!!!!");
+        fetch(`/api/booking/${bookingId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then(async (data) => {
+                const deletedBooking = await data.json();
+                router.reload();
             })
             .catch((e) => console.log(e));
     };
@@ -228,14 +245,13 @@ const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                                     itemId={product.id}
                                     userId={id}
                                     orderSubmitted={setOrderSubmitted}
+                                    setBookingId={setBookingId}
                                 />
                             ) : orderSubmitted ? (
                                 <div className="justify-center pt-5 card-actions">
                                     <button
                                         className={`btn rounded-full font-bold tracking-widest w-full bg-transparent border-softRed border-2 text-softRed `}
-                                        onClick={() =>
-                                            console.log("order cancelled")
-                                        }
+                                        onClick={() => cancelOrder()}
                                     >
                                         Avbryt förfrågan
                                     </button>

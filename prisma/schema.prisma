@@ -7,6 +7,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+ enum BookingStatus {
+   PENDING
+   ACCEPTED
+   DECLINED
+   EXPIRED
+   CANCELLED
+   DONE
+ }
 model Category {
   id        String   @id @default(cuid())
   name      String   @unique
@@ -50,7 +58,7 @@ model Booking {
   endDate   DateTime
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
-  status    BookingStatus @default(pending)
+   status    BookingStatus @default(value: PENDING)
   item      Item          @relation(fields: [itemId], references: [id])
   renter    User          @relation(fields: [renterId], references: [id])
 }
@@ -114,11 +122,4 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-enum BookingStatus {
-  pending
-  accepted
-  declined
-  expired
-  cancelled
-  done
-}
+
