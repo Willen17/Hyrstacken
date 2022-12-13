@@ -160,6 +160,7 @@ const SearchResults: NextPage<
                                     />
                                 </label>
                                 <button
+                                id="filter-btn"
                                     type="button"
                                     className={`min-[1360px]:hidden border-[1px] py-[1rem] px-[2rem] min-[320px]:p-[1rem] rounded-[8px] border-white w-[100%] flex items-center justify-between min-[320px]:w-[auto] ${
                                         isCategoriesOpen
@@ -212,7 +213,7 @@ const SearchResults: NextPage<
                         prylar
                     </p>
                 </div>
-                <div className="flex flex-wrap justify-center gap-2">
+                <div className="flex flex-wrap justify-center gap-2" id="item-container">
                     {itemsArray?.map((item) =>
                         noCategory ? (
                             <Link href={`/product/${item.id}`} key={item.id}>

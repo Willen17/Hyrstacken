@@ -84,7 +84,7 @@ const Header = () => {
             >
                 <div className="py-[2rem] px-[2rem] sm:px-[4rem] flex justify-center items-center text-blue-500 md:py-[1rem]">
                     <div className="w-[100%] flex items-center justify-between">
-                        <Link href={"/"}>
+                        <Link href={"/"} id="logotype-img">
                             <Image src={Logo} alt="Logotype" />
                         </Link>
                         <div
@@ -294,6 +294,7 @@ const Header = () => {
                                 </li>
                             </Link>
                             <Link
+                            id="add-btn"
                                 href={"/searchResults"}
                                 className={
                                     router.pathname == "/searchResults"

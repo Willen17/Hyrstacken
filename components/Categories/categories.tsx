@@ -31,7 +31,7 @@ const Categories = ({
 }: categoriesProps) => {
     return (
         <div className="flex flex-col w-full md:w-full">
-            <ul className="flex-wrap gap-3 flex justify-center min-[1360px]:justify-end flex-row h-[100%]">
+            <ul className="flex-wrap gap-3 flex justify-center min-[1360px]:justify-end flex-row h-[100%]" id="category-btn">
                 {categories.map((category) => (
                     <Category
                         key={category.id}
