@@ -8,12 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         uses: actions/checkout@v2
       # Install NPM dependencies, cache them correctly
       # and run all Cypress tests
       - name: Cypress run
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         uses: cypress-io/github-action@v4.2.0 
         with:
           build: npm run build
