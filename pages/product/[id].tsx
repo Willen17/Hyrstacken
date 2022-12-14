@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import LocationIcon from "../../assets/productPage/location.svg";
 import RatingIcon from "../../assets/productPage/rating.svg";
 import BookingForm from "../../components/Forms/BookingForm";
+import Loader from "../../components/Loader/Loader";
 import prisma from "../../lib/prisma";
 
 // get static paths from api
@@ -91,6 +92,7 @@ const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
     const [endDate, setEndDate] = useState(new Date());
     const [orderSubmitted, setOrderSubmitted] = useState(false);
     const [touched, setTouched] = useState(false);
+    const [isCanceling, setIsCanceling] = useState(false);
 
     const [id, setId] = useState<string>();
     const [bookingId, setBookingId] = useState<string>();
@@ -126,6 +128,7 @@ const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
     };
 
     const cancelOrder = async () => {
+        setIsCanceling(true);
         console.log(bookingId, "boknings di");
         if (!bookingId) return console.log("!!!!!");
         fetch(`/api/booking/${bookingId}`, {
@@ -153,7 +156,7 @@ const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                             Vi meddelar dig så fort annonsören svarat. Du ser
                             alla meddelanden under dina notiser
                         </p>
-                        <button className="w-1/2 mt-10 bg-transparent border-2 rounded-full btn border-softRed">
+                        <button onClick={() => router.push("/")} className="w-1/2 mt-10 bg-transparent border-2 rounded-full btn border-softRed">
                             TILLBAKA HEM
                         </button>
                     </div>
@@ -248,14 +251,19 @@ const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                                     setBookingId={setBookingId}
                                 />
                             ) : orderSubmitted ? (
-                                <div className="justify-center pt-5 card-actions">
-                                    <button
-                                        className={`btn rounded-full font-bold tracking-widest w-full bg-transparent border-softRed border-2 text-softRed `}
-                                        onClick={() => cancelOrder()}
-                                    >
-                                        Avbryt förfrågan
-                                    </button>
-                                </div>
+                                <>
+                                {!isCanceling ? (
+                                    <div className="justify-center pt-5 card-actions">
+                                        <button
+                                            className={`btn rounded-full font-bold tracking-widest w-full bg-transparent border-softRed border-2 text-softRed `}
+                                            onClick={() => cancelOrder()}
+                                        >
+                                            Avbryt förfrågan
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <Loader />)}
+                                </>
                             ) : (
                                 "Logga in för att boka"
                             )}
