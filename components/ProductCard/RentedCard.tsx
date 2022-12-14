@@ -60,6 +60,15 @@ const RentedCard = ({
         return diffDays;
     };
 
+    const daysLeft = (endDate: Date) => {
+        const oneDay = 24 * 60 * 60 * 1000;
+        const today = new Date();
+        const diffDays = Math.round(
+            Math.abs((today.getTime() - endDate.getTime()) / oneDay)
+        );
+        return diffDays;
+    };
+
     return (
         <div key={bookingId} className="relative w-full p-2">
             {isCancel ? <Loader />: (
@@ -81,8 +90,7 @@ const RentedCard = ({
                     </p>
                 </div>
             )}
-            
-            <div className="flex flex-col flex-grow gap-4 p-2 text-white rounded-md bg-veryDarkBlue">
+            <div className="flex flex-col flex-grow gap-4 p-2 pr-4 text-white rounded-md bg-veryDarkBlue">
                 <Link href={`/product/${itemId}`}>
                     <div className="flex justify-between w-full cursor-pointer gap-x-4">
                         <img
@@ -95,29 +103,30 @@ const RentedCard = ({
                         />
                         <div className="flex flex-col flex-grow gap-y-2">
                             <p className="font-bold">{itemTitle}</p>
-                            <div className="flex justify-between w-2/3">
+                            <div className="flex justify-between w-2/3 max-[490px]:flex-col">
                                 <p className="text-sm">{pricePerDay} kr/dag</p>
                                 <p className="text-sm">
                                     Totalt:
                                     <span className="font-bold">
                                         {" "}
-                                        {pricePerDay * daysBetween(startDate, endDate)}{" kr"}
+                                        {pricePerDay *
+                                            daysBetween(startDate, endDate)}
+                                        {" kr"}
                                     </span>
                                 </p>
                             </div>
-                            <div className="flex justify-between w-2/3 text-sm font-light">
+                            <div className="flex flex-wrap text-sm font-light ">
                                 <p>{startDate.toISOString().split("T")[0]}</p>
-                                <p>-</p>
+                                <p className="px-2">-</p>
                                 <p>{endDate.toISOString().split("T")[0]}</p>
                             </div>
                         </div>
-                        <Chevron className="self-center mr-7 fill-white" />
+                        <Chevron className="self-center shrink-0 fill-white" />
                     </div>
                 </Link>
                 <Link href={`/profile/${ownerId}`}>
-
                     <div className="flex justify-between">
-                        <div className="flex gap-x-2">
+                        <div className="flex text-sm gap-x-2">
                             <p>
                                 Uthyres av{" "}
                                 <span className="font-bold">{ownerName}</span>
@@ -134,13 +143,26 @@ const RentedCard = ({
                                 </div>
                             </div>
                         </div>
-                        {status === BookingStatus.PENDING && (
+
+                        {status === BookingStatus.PENDING ? (
                             <p
                                 className="cursor-pointer text-softRed hover:text-hoverRed"
                                 onClick={() => deleteBooking(bookingId)}
                             >
                                 Avbryt bokning
                             </p>
+                        ) : (
+                            <>
+                                {daysLeft(endDate) > 0 ? (
+                                    <p className="self-center text-sm">
+                                        Dagar kvar: {daysLeft(endDate)}
+                                    </p>
+                                ) : (
+                                    <p className="self-center text-sm">
+                                        Uthyrning slut
+                                    </p>
+                                )}
+                            </>
                         )}
                     </div>
                 </Link>
