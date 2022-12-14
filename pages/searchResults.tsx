@@ -1,22 +1,15 @@
-import type { NextPage, InferGetServerSidePropsType } from "next";
+import type { InferGetServerSidePropsType, NextPage } from "next";
 import Image from "next/image";
-import prisma from "../lib/prisma";
 import ProductCard from "../components/ProductCard/ProductCard";
-import SearchBar from "../components/SearchBar/searchBar";
-// import FilterIcon from "../assets/filter.svg";
-import CloseIcon from "../assets/x.svg";
-import { Fragment, useEffect, useState } from "react";
-import { string } from "zod";
-import Categories from "../components/Categories/categories";
+import prisma from "../lib/prisma";
 import Link from "next/link";
+import { Fragment, useEffect, useState } from "react";
+import Categories from "../components/Categories/categories";
 import bg from "../public/assets/bg.png";
-import PrimaryButton from "../components/PrimaryButton/PrimaryButton";
 import FilterIcon from "../public/assets/filter-icon.svg";
-import ArrowRightIcon from "../public/assets/arrow-right.svg";
 import SearchIcon from "../public/assets/search-icon.svg";
 
 export async function getServerSideProps() {
-    const itemCount = await prisma.item.count();
     const items = await prisma.item.findMany({
         select: {
             id: true,
@@ -41,7 +34,6 @@ export async function getServerSideProps() {
     return {
         props: {
             items,
-            itemCount,
             categories,
         },
     };
@@ -49,12 +41,13 @@ export async function getServerSideProps() {
 
 const SearchResults: NextPage<
     InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ items, categories, itemCount }) => {
+> = ({ items, categories }) => {
     const [isCategoriesOpen, setIsCategoriesOpen] = useState<boolean>(false);
     const [itemsArray, setItemsArray] = useState<typeof items | undefined>(
         items
     );
     const [searchInput, setSearchInput] = useState<string>("");
+
 
     function handleSearchInput(e: React.ChangeEvent<HTMLInputElement>) {
         setSearchInput(e.target.value);
@@ -70,8 +63,6 @@ const SearchResults: NextPage<
             setItemsArray(items);
         }
     }, [searchInput, items]);
-
-
 
     function openCategories() {
         setIsCategoriesOpen(!isCategoriesOpen);
@@ -151,6 +142,7 @@ const SearchResults: NextPage<
                                         <SearchIcon />
                                     </div>
                                     <input
+                                        autoFocus
                                         type="text"
                                         placeholder="Sök produkt..."
                                         className="p-[1rem] w-[100%] lg:w-[30rem] rounded-[8px] text-veryDarkBlue"
