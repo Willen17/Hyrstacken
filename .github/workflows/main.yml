@@ -15,8 +15,8 @@ jobs:
               run: npm run format
             - name: Lint
               run: npm run lint
-            - uses: cypress-io/github-action@v4.2.0
             - name: Cypress
+              uses: cypress-io/github-action@v4.2.0
               with:
                   browser: chrome
                   start: npm run dev && npm run cypress:open
