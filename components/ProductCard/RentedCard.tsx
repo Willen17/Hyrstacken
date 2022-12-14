@@ -6,6 +6,8 @@ import Waiting from "../../public/assets/waiting.svg";
 import Confirmed from "../../public/assets/confirmed.svg";
 import router from "next/router";
 import Link from "next/link";
+import Loader from "../Loader/Loader";
+import { useState } from "react";
 
 type Props = {
     bookingId: string;
@@ -33,7 +35,10 @@ const RentedCard = ({
     ownerId,
     status,
 }: Props) => {
+    const [isCancel, setIsCancel] = useState(false);
+
     const deleteBooking = async (bookingId: string) => {
+        setIsCancel(true);
         fetch(`/api/booking/${bookingId}`, {
             method: "DELETE",
             headers: {
@@ -57,7 +62,10 @@ const RentedCard = ({
 
     return (
         <div key={bookingId} className="relative w-full p-2">
+            {isCancel ? <Loader />: (
+            <>
             <span className="absolute left-0 w-full border-t border-white border-opacity-25 bottom-12" />
+            
             {status !== BookingStatus.DECLINED && (
                 <div className="flex items-center mb-4 gap-x-2">
                     {status === BookingStatus.PENDING ? (
@@ -73,6 +81,7 @@ const RentedCard = ({
                     </p>
                 </div>
             )}
+            
             <div className="flex flex-col flex-grow gap-4 p-2 text-white rounded-md bg-veryDarkBlue">
                 <Link href={`/product/${itemId}`}>
                     <div className="flex justify-between w-full cursor-pointer gap-x-4">
@@ -136,6 +145,8 @@ const RentedCard = ({
                     </div>
                 </Link>
             </div>
+            </>
+            )}
         </div>
     );
 };

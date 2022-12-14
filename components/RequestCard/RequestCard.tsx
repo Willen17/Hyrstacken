@@ -1,6 +1,8 @@
 import { BookingStatus } from "@prisma/client";
 import router from "next/router";
+import { useState } from "react";
 import SuperJSON from "superjson";
+import Loader from "../Loader/Loader";
 import PrimaryButton from "../PrimaryButton/PrimaryButton";
 import SecondaryButton from "../PrimaryButton/SecondaryButton";
 
@@ -26,8 +28,13 @@ const RequestCard = ({
     bookingId,
     itemId,
 }: Props) => {
+    const [isCancel, setIsCancel] = useState(false);
+
+
     const updateStatus = (status: BookingStatus, id: string) => {
+        
         if (!status || !id) return console.log("undefineeeeeeeeeeeed");
+        setIsCancel(true);
         const data = { status, id };
         fetch("/api/booking/updateStatus", {
             method: "POST",
@@ -44,6 +51,7 @@ const RequestCard = ({
             .catch((e) => console.log(e));
     };
     return (
+        isCancel ? <Loader />: (
         <div className="flex flex-col w-full p-4 mt-4 text-white rounded-md gap-y-4 bg-veryDarkBlue">
             <p className="text-sm">{createdAt.toISOString().split("T")[0]}</p>
             <p>Ny förfrågan</p>
@@ -83,6 +91,7 @@ const RequestCard = ({
                 </div>
             </div>
         </div>
+        )
     );
 };
 
