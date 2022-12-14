@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import SuperJSON from "superjson";
 import { z } from "zod";
 import { bookingSchema } from "../../lib/schemas";
+import Loader from "../Loader/Loader";
 
 export default function BookingForm({
     itemId,
@@ -20,11 +21,9 @@ export default function BookingForm({
         register,
         handleSubmit,
         formState: { errors, isSubmitting, isValid },
-        watch,
-        setError,
-        control,
     } = useForm<z.infer<typeof bookingSchema>>({
         resolver: zodResolver(bookingSchema),
+        mode: "onChange",
     });
 
     const onSubmit = handleSubmit(async (data) => {
@@ -53,30 +52,35 @@ export default function BookingForm({
     });
 
     return (
-        <form onSubmit={onSubmit}>
-            <input type="hidden" {...register("itemId")} value={itemId} />
-            <div className="flex flex-col">
-                <label htmlFor="startDate">Start Date</label>
+        <>
+        {isSubmitting ? <Loader /> : (
+            <form onSubmit={onSubmit}>
+                <input type="hidden" {...register("itemId")} value={itemId} />
+                <div className="flex flex-col">
+                    <label htmlFor="startDate">Start Date</label>
+                    <input
+                        type="date"
+                        {...register("startDate", { valueAsDate: true })}
+                    />
+                    {errors.startDate && <p className="text-error">{errors.startDate.message}</p>}
+                </div>
+                <div className="flex flex-col">
+                    <label htmlFor="endDate">End Date</label>
+                    <input
+                        type="date"
+                        {...register("endDate", { valueAsDate: true })}
+                    />
+                    {errors.endDate && <p className="text-error">{errors.endDate.message}</p>}
+                </div>
                 <input
-                    type="date"
-                    {...register("startDate", { valueAsDate: true })}
+                    type="submit"
+                    value={isValid ? "Skicka förfrågan" : "Ange datum"}
+                    className="mt-4 btn btn-primary"
+                    id="submit-btn"
+                    disabled={!isValid}
                 />
-                {errors.startDate && <p>{errors.startDate.message}</p>}
-            </div>
-            <div className="flex flex-col">
-                <label htmlFor="endDate">End Date</label>
-                <input
-                    type="date"
-                    {...register("endDate", { valueAsDate: true })}
-                />
-                {errors.endDate && <p>{errors.endDate.message}</p>}
-            </div>
-            <input
-                type="submit"
-                value={isValid ? "Skicka förfrågan" : "Ange datum"}
-                className="mt-4 btn btn-primary"
-                id="submit-btn"
-            />
-        </form>
+            </form>
+        )}
+        </>
     );
 }

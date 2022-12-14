@@ -16,8 +16,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import PrimaryButton from "../components/PrimaryButton/PrimaryButton";
 import SecondaryButton from "../components/PrimaryButton/SecondaryButton";
+import router from "next/router";
 
-let isFirstLoad: boolean = true;
 
 export default function Home() {
     function useWindowWidth() {
@@ -111,19 +111,9 @@ export default function Home() {
                                         type="text"
                                         placeholder="Sök produkt..."
                                         className="p-[1rem] w-[100%] lg:w-[30rem] rounded-[8px] text-veryDarkBlue"
+                                        onClick={() => router.push("/searchResults") }
                                     />
-                                </label>
-                                <button
-                                    type="button"
-                                    className="border-[1px] py-[1rem] px-[2rem] min-[375px]:p-[1rem] rounded-[8px] border-white w-[100%] flex items-center justify-between min-[375px]:w-[auto]"
-                                >
-                                    <FilterIcon />
-                                    {windowWidth && windowWidth < 375 ? (
-                                        <ArrowRightIcon className="rotate-[90deg]" />
-                                    ) : (
-                                        ""
-                                    )}
-                                </button>
+                                </label>                                
                             </div>
                             <div className="w-[100%] lg:w-[auto]">
                                 <Link href={"/searchResults"}>
