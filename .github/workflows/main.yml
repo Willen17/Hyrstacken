@@ -2,7 +2,7 @@ name: Check the source code
 on:
     pull_request:
         branches:
-            - main
+            - master
 jobs:
     test:
         name: Check the source code
@@ -15,3 +15,5 @@ jobs:
               run: npm run format
             - name: Lint
               run: npm run lint
+           
+                 

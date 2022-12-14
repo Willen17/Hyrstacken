@@ -8,13 +8,15 @@
         "start": "next start",
         "lint": "next lint",
         "postinstall": "npx prisma generate",
-        "cypress": "cypress open"
+        "cypress": "cypress open",
+        "format": "prettier --check",
+        "format:fix": "prettier --write"
     },
     "lint-staged": {
-        "src/**/*.{ts,tsx}": [
-            "eslint --ext .tsx --ext .ts ./src --fix"
+        "**/*.{ts,tsx}": [
+            "eslint --ext .tsx --ext .ts --fix"
         ],
-        "./src/**": [
+        "**/*.{js,jsx,ts,tsx}": [
             "prettier --write ."
         ]
     },
@@ -67,6 +69,7 @@
         "husky": "^8.0.2",
         "lint-staged": "^13.1.0",
         "postcss": "^8.4.19",
+        "prettier": "^2.8.1",
         "tailwindcss": "^3.2.4"
     }
 }
