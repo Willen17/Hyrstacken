@@ -4,8 +4,8 @@ import Chevron from "/public/assets/chevron.svg";
 const SmallProductCard = ({ item }: any) => {
     return (
         <>
-            <div className="w-full p-2 cursor-pointer">
-                <div className="flex gap-4 p-2 text-white rounded-md bg-veryDarkBlue">
+            <div className="w-full p-2 cursor-pointer ">
+                <div className="flex gap-4 p-2 text-white transition-all ease-in-out rounded-md bg-veryDarkBlue hover:scale-95">
                     <img
                         className="object-cover w-24 overflow-hidden rounded-lg aspect-square"
                         src={

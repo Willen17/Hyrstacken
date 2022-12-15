@@ -4,7 +4,7 @@ import InstaIcon from "../../public/assets/insta.svg";
 import TikTokIcon from "../../public/assets/tiktok.svg";
 import FbIcon from "../../public/assets/fb.svg";
 import Image from "next/image";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import Link from "next/link";
 
 interface FooterLinks {
@@ -21,19 +21,19 @@ const footerLinks: FooterLinks[] = [
         links: [
             {
                 title: "Vad är det?",
-                href: "#",
+                href: "/wip",
             },
             {
                 title: "Hållbarhet",
-                href: "#",
+                href: "/wip",
             },
             {
                 title: "Framtiden",
-                href: "#",
+                href: "/wip",
             },
             {
                 title: "C2C",
-                href: "#",
+                href: "/wip",
             },
         ],
     },
@@ -42,19 +42,19 @@ const footerLinks: FooterLinks[] = [
         links: [
             {
                 title: "Om oss",
-                href: "#",
+                href: "/wip",
             },
             {
                 title: "Vår vision",
-                href: "#",
+                href: "/wip",
             },
             {
                 title: "Varför oss?",
-                href: "#",
+                href: "/wip",
             },
             {
                 title: "Kontakta oss",
-                href: "#",
+                href: "/wip",
             },
         ],
     },
@@ -63,19 +63,19 @@ const footerLinks: FooterLinks[] = [
         links: [
             {
                 title: "Konsument",
-                href: "#",
+                href: "/wip",
             },
             {
                 title: "Annonsör",
-                href: "#",
+                href: "/wip",
             },
             {
                 title: "Villkor",
-                href: "#",
+                href: "/wip",
             },
             {
                 title: "Säkerhet",
-                href: "#",
+                href: "/wip",
             },
         ],
     },
@@ -84,25 +84,26 @@ const footerLinks: FooterLinks[] = [
         links: [
             {
                 title: "Skapa annons",
-                href: "#",
+                href: "/createItem",
             },
             {
                 title: "Visa produkter",
-                href: "#",
+                href: "/searchResults",
             },
             {
                 title: "Min profil",
-                href: "#",
+                href: "/profile",
             },
             {
                 title: "Hjälp",
-                href: "#",
+                href: "/wip",
             },
         ],
     },
 ];
 
 const Footer = () => {
+    const [isInput, setIsInput] = useState(false);
     return (
         <div className="relative bottom-0 flex lg:flex-col justify-center h-[1300px] lg:h-[700px]">
             <Image
@@ -142,6 +143,8 @@ const Footer = () => {
                                 type="text"
                                 placeholder="John@Example.com"
                                 className="bg-transparent border-b-[1px] w-[15rem] text-lg text-light focus:outline-none"
+                                onFocus={() => setIsInput(true)}
+                                onBlur={() => setIsInput(false)}
                             />
                             <button
                                 type="button"
@@ -149,6 +152,7 @@ const Footer = () => {
                             >
                                 Anmäl
                             </button>
+                            {isInput && <p className="text-sm text-error">Vad kul att du vill prenumerera på vårt nyhetsbrev. Det är dock ännu inte implementerat!</p>}
                         </label>
                     </div>
                 </div>

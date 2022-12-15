@@ -116,9 +116,9 @@ const Header = () => {
                                         </span>
                                     </Link>
                                     <Link
-                                        href={"/#"}
+                                        href={"/wip"}
                                         className={
-                                            router.pathname == "/bla"
+                                            router.pathname == "/wip"
                                                 ? "flex flex-col items-center gap-2 relative before:absolute before:bottom-[calc(100%+1.33rem)] before:w-[3rem] before:h-[2px] before:bg-white before:block"
                                                 : "text-white text-xs flex flex-col items-center gap-2"
                                         }
@@ -131,7 +131,7 @@ const Header = () => {
                                     <Link
                                         href={`/profile/${id}`}
                                         className={
-                                            router.pathname == "/bla"
+                                            router.pathname == "/profile/[id]"
                                                 ? "flex flex-col items-center gap-2 relative before:absolute before:bottom-[calc(100%+1.33rem)] before:w-[3rem] before:h-[2px] before:bg-white before:block"
                                                 : "text-white text-xs flex flex-col items-center gap-2"
                                         }
@@ -232,9 +232,9 @@ const Header = () => {
                                 <p className="text-xs text-white">Ny annons</p>
                             </Link>
                             <Link
-                                href={"/#"}
+                                href={"/wip"}
                                 className={
-                                    router.pathname == "/bla"
+                                    router.pathname == "/wip"
                                         ? "flex flex-col items-center gap-2 relative before:absolute before:bottom-[calc(0%-1.1rem)] before:w-[2rem] before:h-[2px] before:bg-white before:block"
                                         : "text-white text-xs flex flex-col items-center gap-2"
                                 }
@@ -249,7 +249,7 @@ const Header = () => {
                             <Link
                                 href={`/profile/${id}`}
                                 className={
-                                    router.pathname == "/bla"
+                                    router.pathname == "/profile/[id]"
                                         ? "flex flex-col items-center gap-2 relative before:absolute before:bottom-[calc(0%-1.1rem)] before:w-[2rem] before:h-[2px] before:bg-white before:block"
                                         : "text-white text-xs flex flex-col items-center gap-2"
                                 }

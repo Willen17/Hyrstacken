@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import Head from "next/head";
 import Link from "next/link";
 import router from "next/router";
 import {
@@ -145,6 +146,12 @@ const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
     };
 
     return (
+        <>
+            <Head>
+                <title>{`Hyrstacken - Annons ${product.title}`}</title>
+                <meta name="description" content={`Annonssida för ${product.title}`} />
+            </Head>
+
         <div className="w-full h-screen overflow-hidden font-nunito min-[800px]:flex min-[800px]:items-center min-[800px]:mt-[92px] ">
             <div className="h-1/2  bg-white min-[800px]:h-full min-[800px]:w-[60%] min-[800px]:flex min-[800px]:justify-center min-[800px]:items-center">
                 {orderSubmitted ? (
@@ -172,7 +179,7 @@ const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                 )}
             </div>
             <div className="w-full h-fit rounded-t-2xl  absolute top-[45%] bg-white overflow-hidden min-[800px]:relative min-[800px]:rounded-2xl  min-[800px]:h-5/6 min-[800px]:w-1/3 min-[800px]:top-0 min-[800px]:border-veryDarkBlue/[50%] min-[800px]:border-[1px]">
-                <div className="flex flex-col h-full p-8 overflow-hidden justify-evenly">
+                <div className="flex flex-col h-full p-8 overflow-hidden">
                     <h1 className="text-2xl font-bold">{product.title}</h1>
                     <p className="font-bold">
                         {product.picePerDay} kr
@@ -209,7 +216,7 @@ const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                             </div>
                         </Link>
                     </div>
-                    <div className="relative flex items-center justify-between pb-5">
+                    <div className="pb-5 mt-auto">
                         <p className="mr-2 font-bold whitespace-nowrap">
                             {ownItem
                                 ? "Ändra annons"
@@ -272,6 +279,7 @@ const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                 </div>
             </div>
         </div>
+        </>
     );
 };
 
