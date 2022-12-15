@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { watch } from "fs";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import SuperJSON from "superjson";
 import { z } from "zod";
@@ -32,11 +31,14 @@ export default function BookingForm({
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
 
+
+    
+
     function minEndDate() {
         const endDate = new Date();
-        if(watch("startDate")){
-            endDate.setDate(watch("startDate").getDate() + 1);
-        }
+        
+        endDate.setDate(watch("startDate").getDate() + 1);
+        
         return endDate.toISOString().split("T")[0];
 
     }
@@ -94,7 +96,7 @@ export default function BookingForm({
                     <input
                         type="date"
                         {...register("endDate", { valueAsDate: true })}
-                        min={minEndDate()}
+                        min={watch("startDate") ? minEndDate() : undefined}
                     />
                     {errors.endDate && <p className="text-error">{errors.endDate.message}</p>}
                 </div>
