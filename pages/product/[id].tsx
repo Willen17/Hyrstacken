@@ -152,8 +152,8 @@ const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                 <meta name="description" content={`Annonssida för ${product.title}`} />
             </Head>
 
-        <div className="w-full h-screen overflow-hidden font-nunito min-[800px]:flex min-[800px]:items-center min-[800px]:mt-[92px] ">
-            <div className="h-1/2  bg-white min-[800px]:h-full min-[800px]:w-[60%] min-[800px]:flex min-[800px]:justify-center min-[800px]:items-center">
+        <div className="w-full min-[800px]:h-screen overflow-hidden font-nunito min-[800px]:flex min-[800px]:items-center min-[800px]:mt-[92px]">
+            <div className=" bg-white min-[800px]:h-full min-[800px]:w-[60%] min-[800px]:flex min-[800px]:justify-center min-[800px]:items-center">
                 {orderSubmitted ? (
                     <div className="flex flex-col items-center justify-center w-full h-full bg-veryDarkBlue min-[800px]:w-5/6 min-[800px]:h-5/6 min-[800px]:rounded-2xl">
                         <h1 className="text-2xl font-bold text-white">
@@ -174,11 +174,11 @@ const Product: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                             "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
                         }
                         alt={product.title}
-                        className="object-cover object-center w-full h-full min-[800px]:w-5/6 min-[800px]:h-5/6 min-[800px]:rounded-2xl "
+                        className="object-cover object-center w-full h-full  min-[800px]:w-5/6 min-[800px]:h-5/6 min-[800px]:rounded-2xl "
                     />
                 )}
             </div>
-            <div className="w-full h-fit rounded-t-2xl  absolute top-[45%] bg-white overflow-hidden min-[800px]:relative min-[800px]:rounded-2xl  min-[800px]:h-5/6 min-[800px]:w-1/3 min-[800px]:top-0 min-[800px]:border-veryDarkBlue/[50%] min-[800px]:border-[1px]">
+            <div className="w-full h-fit -translate-y-5 rounded-t-2xl top-[45%] bg-white overflow-hidden min-[800px]:relative min-[800px]:rounded-2xl  min-[800px]:h-5/6 min-[800px]:w-1/3 min-[800px]:top-0 min-[800px]:border-veryDarkBlue/[50%] min-[800px]:border-[1px]">
                 <div className="flex flex-col h-full p-8 overflow-hidden">
                     <h1 className="text-2xl font-bold">{product.title}</h1>
                     <p className="font-bold">
