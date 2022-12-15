@@ -3,7 +3,7 @@ import Image from "next/image";
 import ProductCard from "../components/ProductCard/ProductCard";
 import prisma from "../lib/prisma";
 import Link from "next/link";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, Suspense, useEffect, useState } from "react";
 import Categories from "../components/Categories/categories";
 import bg from "../public/assets/bg.png";
 import FilterIcon from "../public/assets/filter-icon.svg";
@@ -115,6 +115,7 @@ const SearchResults: NextPage<
     useWindowWidth();
 
     return (
+        <Suspense fallback={<div>Loading...</div>}>
         <Fragment>
             <Image
                 src={bg}
@@ -228,6 +229,7 @@ const SearchResults: NextPage<
                 </div>
             </div>
         </Fragment>
+        </Suspense>
     );
 };
 

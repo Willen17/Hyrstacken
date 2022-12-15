@@ -62,7 +62,7 @@ const ItemForm = ({ categories, product, locations }: ItemFormProps) => {
         resetField,
         formState: { errors, isSubmitting, isValid },
     } = useForm<z.infer<typeof itemSchema>>({
-        mode: "onBlur",
+        mode: "onChange",
         resolver: zodResolver(itemSchema),
     });
 

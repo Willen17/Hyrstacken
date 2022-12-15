@@ -14,7 +14,7 @@ const Collapse = ({ children, title, length, disabled }: Props) => {
         <div className="flex flex-col items-center justify-between px-2 pb-5 mt-5 ">
             <div
                 onClick={() => !disabled && toggleOpen(!open)}
-                className={`flex items-center w-full pr-2 text-xl font-medium ${
+                className={`flex items-center w-full pr-2 text-xl font-medium${
                     !disabled && "cursor-pointer"
                 }`}
             >

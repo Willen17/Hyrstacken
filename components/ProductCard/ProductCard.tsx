@@ -21,7 +21,7 @@ const ProductCard = ({ item }: ProductCardProps) => {
     let rating = "4.5 Betyg";
 
     return (
-        <div className="w-full min-[610px]:w-[270px] md:m-4 py-3 justify-center items-center flex-col flex text-sm text-primary font-semibold relative self-center">
+        <div className="w-full min-[610px]:w-[270px] md:m-4 py-3 justify-center items-center flex-col flex text-sm text-primary font-semibold relative self-center hover:scale-105 transition-all ease-in-out">
             <div className="absolute flex justify-center px-2 py-4 text-xs bg-veryDarkBlue rounded-3xl h-7 top-6 right-3">
                 <LocationIcon className="self-center" />
                 <p className="self-center pl-1 font-normal text-info">
@@ -35,7 +35,7 @@ const ProductCard = ({ item }: ProductCardProps) => {
                 </p>
             </div>
             <img
-                className="w-96 h-[270px] rounded-md max-[610px]:h-[350px] max-[460px]:h-[275px] max-[610px]:object-cover"
+                className="w-96 h-[270px] rounded-md max-[610px]:h-[350px] max-[460px]:h-[275px] max-[610px]:object-cover object-cover"
                 alt="Produktkort"
                 src={imgSrc ?? ""}
                 onError={() =>
@@ -44,11 +44,11 @@ const ProductCard = ({ item }: ProductCardProps) => {
                     )
                 }
             ></img>
-            <div className="flex flex-row justify-between w-full pt-2">
+            <div className="flex justify-between w-full gap-3 pt-2">
                 <h2 className="ml-3 text-lg font-bold">{item.title}</h2>
-                <p className="mr-3 text-lg font-bold">
-                    {item.picePerDay} kr
-                    <span className="font-normal">/dag</span>
+                <p className="flex mr-3 text-lg font-bold">
+                    {item.picePerDay}
+                    <span className="font-normal">kr/dag</span>
                 </p>
             </div>
         </div>

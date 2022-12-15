@@ -18,8 +18,8 @@ export const itemSchema = z.object({
         .default(0),
     description: z
         .string()
-        .max(250, {
-            message: "Beskrivning får inte vara mer än 250 tecken.",
+        .max(350, {
+            message: "Beskrivning får inte vara mer än 350 tecken.",
         })
         .min(3, {
             message: "Beskrivning måste vara mer än 3 tecken.",

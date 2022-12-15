@@ -1,9 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import SuperJSON from "superjson";
 import { z } from "zod";
 import { bookingSchema } from "../../lib/schemas";
+import FormLabel from "../FormLabel/FormLabel";
 import Loader from "../Loader/Loader";
 
 export default function BookingForm({
@@ -20,11 +21,36 @@ export default function BookingForm({
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting, isValid },
+        formState: { errors, isSubmitting, isValid },watch
     } = useForm<z.infer<typeof bookingSchema>>({
         resolver: zodResolver(bookingSchema),
         mode: "onChange",
     });
+
+    // function get tomorrow's date
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+
+    
+
+    function minEndDate() {
+        const endDate = new Date();
+        
+        endDate.setDate(watch("startDate").getDate() + 1);
+        
+        return endDate.toISOString().split("T")[0];
+
+    }
+
+    
+
+    
+
+   
+
+
+
 
     const onSubmit = handleSubmit(async (data) => {
         if (userId) {
@@ -57,18 +83,20 @@ export default function BookingForm({
             <form onSubmit={onSubmit}>
                 <input type="hidden" {...register("itemId")} value={itemId} />
                 <div className="flex flex-col">
-                    <label htmlFor="startDate">Start Date</label>
+                    <FormLabel required >Startdatum</FormLabel>
                     <input
                         type="date"
                         {...register("startDate", { valueAsDate: true })}
+                        min={tomorrow.toISOString().split("T")[0]}
                     />
                     {errors.startDate && <p className="text-error">{errors.startDate.message}</p>}
                 </div>
                 <div className="flex flex-col">
-                    <label htmlFor="endDate">End Date</label>
+                    <FormLabel required >Slutdatum</FormLabel>
                     <input
                         type="date"
                         {...register("endDate", { valueAsDate: true })}
+                        min={watch("startDate") ? minEndDate() : undefined}
                     />
                     {errors.endDate && <p className="text-error">{errors.endDate.message}</p>}
                 </div>
@@ -78,6 +106,7 @@ export default function BookingForm({
                     className="mt-4 btn btn-primary"
                     id="submit-btn"
                     disabled={!isValid}
+
                 />
             </form>
         )}

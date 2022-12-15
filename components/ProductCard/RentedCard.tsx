@@ -91,8 +91,8 @@ const RentedCard = ({
                 </div>
             )}
             <div className="flex flex-col flex-grow gap-4 p-2 pr-4 text-white rounded-md bg-veryDarkBlue">
-                <Link href={`/product/${itemId}`}>
-                    <div className="flex justify-between w-full cursor-pointer gap-x-4">
+                <Link href={`/product/${itemId}`} className="transition-all ease-in-out hover:scale-95">
+                    <div className="flex justify-between w-full cursor-pointer gap-x-4 ">
                         <img
                             className="object-cover w-24 h-24 overflow-hidden rounded-lg aspect-square"
                             src={
@@ -125,8 +125,8 @@ const RentedCard = ({
                     </div>
                 </Link>
                 <Link href={`/profile/${ownerId}`}>
-                    <div className="flex justify-between">
-                        <div className="flex text-sm gap-x-2">
+                    <div className="flex justify-between ">
+                        <div className="flex text-sm transition-all ease-in-out gap-x-2 hover:scale-95">
                             <p>
                                 Uthyres av{" "}
                                 <span className="font-bold">{ownerName}</span>
@@ -146,7 +146,7 @@ const RentedCard = ({
 
                         {status === BookingStatus.PENDING ? (
                             <p
-                                className="cursor-pointer text-softRed hover:text-hoverRed"
+                                className="transition-all ease-in-out cursor-pointer text-softRed hover:text-hoverRed"
                                 onClick={() => deleteBooking(bookingId)}
                             >
                                 Avbryt bokning

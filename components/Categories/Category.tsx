@@ -46,7 +46,7 @@ const Category = ({
                 onClick={() => {
                     setCategory(category);
                 }}
-                className="cursor-pointer"
+                className="transition-all ease-in-out cursor-pointer hover:bg-mediumBlue"
             >
                 <span
                     className={
