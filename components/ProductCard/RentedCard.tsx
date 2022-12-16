@@ -71,103 +71,128 @@ const RentedCard = ({
 
     return (
         <div key={bookingId} className="relative w-full p-2">
-            {isCancel ? <Loader />: (
-            <>
-            <span className="absolute left-0 w-full border-t border-white border-opacity-25 bottom-12" />
-            
-            {status !== BookingStatus.DECLINED && (
-                <div className="flex items-center mb-4 gap-x-2">
-                    {status === BookingStatus.PENDING ? (
-                        <Waiting className="w-6 h-6" />
-                    ) : (
-                        <Confirmed className="w-6 h-6" />
-                    )}
+            {isCancel ? (
+                <Loader />
+            ) : (
+                <>
+                    <span className="absolute left-0 w-full border-t border-white border-opacity-25 bottom-12" />
 
-                    <p>
-                        {status === BookingStatus.PENDING
-                            ? "Inväntar bokningsbekräftelse"
-                            : "Aktiv bokning"}
-                    </p>
-                </div>
-            )}
-            <div className="flex flex-col flex-grow gap-4 p-2 pr-4 text-white rounded-md bg-veryDarkBlue">
-                <Link href={`/product/${itemId}`} className="transition-all ease-in-out hover:scale-95">
-                    <div className="flex justify-between w-full cursor-pointer gap-x-4 ">
-                        <img
-                            className="object-cover w-24 h-24 overflow-hidden rounded-lg aspect-square"
-                            src={
-                                itemImage ||
-                                "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
-                            }
-                            alt=""
-                        />
-                        <div className="flex flex-col flex-grow gap-y-2">
-                            <p className="font-bold">{itemTitle}</p>
-                            <div className="flex justify-between w-2/3 max-[490px]:flex-col">
-                                <p className="text-sm">{pricePerDay} kr/dag</p>
-                                <p className="text-sm">
-                                    Totalt:
-                                    <span className="font-bold">
-                                        {" "}
-                                        {pricePerDay *
-                                            daysBetween(startDate, endDate)}
-                                        {" kr"}
-                                    </span>
-                                </p>
-                            </div>
-                            <div className="flex flex-wrap text-sm font-light ">
-                                <p>{startDate.toISOString().split("T")[0]}</p>
-                                <p className="px-2">-</p>
-                                <p>{endDate.toISOString().split("T")[0]}</p>
-                            </div>
-                        </div>
-                        <Chevron className="self-center shrink-0 fill-white" />
-                    </div>
-                </Link>
-                <Link href={`/profile/${ownerId}`}>
-                    <div className="flex justify-between ">
-                        <div className="flex text-sm transition-all ease-in-out gap-x-2 hover:scale-95">
+                    {status !== BookingStatus.DECLINED && (
+                        <div className="flex items-center mb-4 gap-x-2">
+                            {status === BookingStatus.PENDING ? (
+                                <Waiting className="w-6 h-6" />
+                            ) : (
+                                <Confirmed className="w-6 h-6" />
+                            )}
+
                             <p>
-                                Uthyres av{" "}
-                                <span className="font-bold">{ownerName}</span>
+                                {status === BookingStatus.PENDING
+                                    ? "Inväntar bokningsbekräftelse"
+                                    : "Aktiv bokning"}
                             </p>
-                            <div className="avatar">
-                                <div className="w-5 rounded-full">
-                                    <img
-                                        alt="Profile picture"
-                                        src={
-                                            ownerImage ||
-                                            "https://placeimg.com/192/192/people"
-                                        }
-                                    />
-                                </div>
-                            </div>
                         </div>
+                    )}
+                    <div className="flex flex-col flex-grow gap-4 p-2 pr-4 text-white rounded-md bg-veryDarkBlue">
+                        <Link
+                            href={`/product/${itemId}`}
+                            className="transition-all ease-in-out hover:scale-95"
+                        >
+                            <div className="flex justify-between w-full cursor-pointer gap-x-4 ">
+                                <img
+                                    className="object-cover w-24 h-24 overflow-hidden rounded-lg aspect-square"
+                                    src={
+                                        itemImage ||
+                                        "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
+                                    }
+                                    alt=""
+                                />
+                                <div className="flex flex-col flex-grow gap-y-2">
+                                    <p className="font-bold">{itemTitle}</p>
+                                    <div className="flex justify-between w-2/3 max-[490px]:flex-col">
+                                        <p className="text-sm">
+                                            {pricePerDay} kr/dag
+                                        </p>
+                                        <p className="text-sm">
+                                            Totalt:
+                                            <span className="font-bold">
+                                                {" "}
+                                                {pricePerDay *
+                                                    daysBetween(
+                                                        startDate,
+                                                        endDate
+                                                    )}
+                                                {" kr"}
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div className="flex flex-wrap text-sm font-light ">
+                                        <p>
+                                            {
+                                                startDate
+                                                    .toISOString()
+                                                    .split("T")[0]
+                                            }
+                                        </p>
+                                        <p className="px-2">-</p>
+                                        <p>
+                                            {
+                                                endDate
+                                                    .toISOString()
+                                                    .split("T")[0]
+                                            }
+                                        </p>
+                                    </div>
+                                </div>
+                                <Chevron className="self-center shrink-0 fill-white" />
+                            </div>
+                        </Link>
 
-                        {status === BookingStatus.PENDING ? (
-                            <p
-                                className="transition-all ease-in-out cursor-pointer text-softRed hover:text-hoverRed"
-                                onClick={() => deleteBooking(bookingId)}
-                            >
-                                Avbryt bokning
-                            </p>
-                        ) : (
-                            <>
-                                {daysLeft(endDate) > 0 ? (
-                                    <p className="self-center text-sm">
-                                        Dagar kvar: {daysLeft(endDate)}
+                        <div className="flex justify-between ">
+                            <Link href={`/profile/${ownerId}`}>
+                                <div className="flex text-sm transition-all ease-in-out gap-x-2 hover:scale-95">
+                                    <p>
+                                        Uthyres av{" "}
+                                        <span className="font-bold">
+                                            {ownerName}
+                                        </span>
                                     </p>
-                                ) : (
-                                    <p className="self-center text-sm">
-                                        Uthyrning slut
-                                    </p>
-                                )}
-                            </>
-                        )}
+                                    <div className="avatar">
+                                        <div className="w-5 rounded-full">
+                                            <img
+                                                alt="Profile picture"
+                                                src={
+                                                    ownerImage ||
+                                                    "https://placeimg.com/192/192/people"
+                                                }
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </Link>
+
+                            {status === BookingStatus.PENDING ? (
+                                <p
+                                    className="transition-all ease-in-out cursor-pointer text-softRed hover:text-hoverRed"
+                                    onClick={() => deleteBooking(bookingId)}
+                                >
+                                    Avbryt bokning
+                                </p>
+                            ) : (
+                                <>
+                                    {daysLeft(endDate) > 0 ? (
+                                        <p className="self-center text-sm">
+                                            Dagar kvar: {daysLeft(endDate)}
+                                        </p>
+                                    ) : (
+                                        <p className="self-center text-sm">
+                                            Uthyrning slut
+                                        </p>
+                                    )}
+                                </>
+                            )}
+                        </div>
                     </div>
-                </Link>
-            </div>
-            </>
+                </>
             )}
         </div>
     );
